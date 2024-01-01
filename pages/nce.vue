@@ -48,7 +48,6 @@ watchEffect(async () => {
     return
   }
 
-  console.log('response', JSON.parse(data.value))
   sentenceBlocks.value = JSON.parse(data.value).data
 })
 
@@ -59,7 +58,6 @@ function onClickPrev() {
 }
 
 function onClickNext() {
-  router.push({ path: route.fullPath, query: { courseId: 2001 } })
   if (hideEnText.value) {
     hideEnText.value = false
     return
@@ -74,7 +72,9 @@ function onClickNext() {
   <div v-if="sentenceBlocks.length > 0" flex="~ col" box-border h-100vh min-h-600px min-w-768px p="x-4 y-4" font-sans>
     <header h-100px>
       <h2>
-        新概念英语1
+        新概念英语 1
+        <br>
+        Lesson {{ Number(lessonId) % 1000 }}
       </h2>
       <div pl-2em text-xl capitalize>
         {{ sentenceBlocks[0].Sentence ?? '-' }}
