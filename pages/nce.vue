@@ -1,8 +1,8 @@
 <script setup lang="ts">
 // todo 0. 完善切换下一课,下一本书的逻辑
 // done 1. 增加 mp3 播放
-// todo 2. 拆分句子, 增加间隔
-// todo 3. 按键映射
+// done 2. 拆分句子, 增加间隔
+// done 3. 按键映射
 // todo 4. 重构代码
 // done 5. 移除 mp3 的 git 同步
 // todo 6. server 异常处理
@@ -22,12 +22,48 @@ const sentenceIndex = ref(0)
 const sentenceList = ref<any>('')
 const currentSentence = computed(() => sentenceList.value[sentenceIndex.value])
 
-const soundEnable = ref(false)
+const soundEnable = ref(true)
 const enTextHidden = ref(true)
 const audioRef = ref<HTMLAudioElement>()
 
+const keymap: Record<string, { name: string, fn: Function }> = {
+  j: {
+    name: '下一步',
+    fn: () => { onClickNextSentence() },
+  },
+  k: {
+    name: '上一句',
+    fn: () => { onClickPrevSentence() },
+  },
+  l: {
+    name: '下一课',
+    fn: () => { stepLesson(1) },
+  },
+  h: {
+    name: '上一课',
+    fn: () => { stepLesson(-1) },
+  },
+  m: {
+    name: '静音切换',
+    fn: () => { soundEnable.value = !soundEnable.value },
+  },
+}
+
 watch(sentenceIndex, () => {
   enTextHidden.value = true
+})
+
+watch(soundEnable, () => {
+  if (!audioRef.value) {
+    return
+  }
+
+  if (soundEnable.value) {
+    audioRef.value.muted = false
+  }
+  else {
+    audioRef.value.muted = true
+  }
 })
 
 watchEffect(() => {
@@ -57,6 +93,21 @@ watchEffect(async () => {
 
   await updateLesson()
 })
+
+onMounted(() => {
+  window.addEventListener('keydown', onKeyDown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeyDown)
+})
+
+function onKeyDown(event: KeyboardEvent) {
+  const key = event.key
+  if (keymap[key]) {
+    keymap[key].fn()
+  }
+}
 
 async function updateLesson() {
   const { data } = await useFetch('/api/nce/lesson', {
@@ -109,11 +160,15 @@ function onClickNextSentence() {
 }
 
 function stepLesson(step: number) {
+  const nextLesson = Number(lessonId.value) + step
+  if (nextLesson % 1000 < 1 || nextLesson % 1000 > lessonList.value.length - 1) {
+    return
+  }
   router.push({
     path: route.path,
     query: {
       book: book.value,
-      lessonId: `${Number(lessonId.value) + step}`,
+      lessonId: nextLesson,
     },
   })
 }
@@ -144,12 +199,15 @@ function playAudio(start: number, end: number) {
       <h2 mt-0>
         新概念英语 1
       </h2>
-      <div w-max pl-2em text="right xl" capitalize>
+      <div text="xl" w-max flex pl-2em capitalize>
         <span mr-4 font-bold>
           {{ `Lesson${Number(lessonId) % 1000}` }}
-        </span> {{ lessonTitle.title }}
-        <br>
-        {{ lessonTitle.title_cn }}
+        </span>
+        <span>
+          {{ lessonTitle.title }}
+          <br>
+          {{ lessonTitle.title_cn }}
+        </span>
       </div>
     </header>
     <main v-if="currentSentence" flex-1>
@@ -162,9 +220,19 @@ function playAudio(start: number, end: number) {
             <span v-else>🔇</span>
           </label>
         </div>
-        <div border-b="4 solid sky-500" pb-2 text-4xl>
-          <span :class="{ 'opacity-0': enTextHidden }" px-2>
-            {{ currentSentence.Sentence }}
+        <div flex gap-2 pb-2 text-4xl>
+          <span
+            v-for="(chunk, index) in currentSentence.Sentence.split(' ')"
+            :key="index"
+            py-1
+            border-b="4 solid sky-500"
+          >
+            <span
+              :class="{ 'opacity-0': enTextHidden }"
+              px-2
+            >
+              {{ chunk }}
+            </span>
           </span>
         </div>
         <div class="control-panel">
@@ -172,7 +240,7 @@ function playAudio(start: number, end: number) {
             上一句
           </button>
           <button class="btn" @click="onClickNextSentence">
-            下一句
+            下一步
           </button>
           <button class="btn" :disabled="Number(lessonId) % 1000 <= 1" @click="stepLesson(-1)">
             上一课
@@ -180,6 +248,9 @@ function playAudio(start: number, end: number) {
           <button class="btn" :disabled="Number(lessonId) % 1000 >= lessonList.length - 1" @click="stepLesson(1)">
             下一课
           </button>
+          <div v-for="({ name }, key) in keymap" :key="key">
+            <span text="center white" mr-2 inline-block w-30px rounded bg-sky-500>{{ key }}</span>{{ name }}
+          </div>
         </div>
       </article>
     </main>
