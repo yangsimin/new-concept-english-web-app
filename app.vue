@@ -6,5 +6,8 @@
   </NuxtLayout>
 </template>
 
-<style scoped>
+<style>
+html {
+  @apply font-sans;
+}
 </style>
