@@ -7,33 +7,30 @@
 // todo 5. 移除 mp3 的 git 同步
 // todo 6. server 异常处理
 
-import type { LocationQueryValue } from 'vue-router'
+import type { LocationQueryValue } from 'vue-router';
 
 const route = useRoute()
 const router = useRouter()
 
-const book = ref<LocationQueryValue>()
-const lessonId = ref<LocationQueryValue>()
-const sentenceBlocks = ref<any>([])
+const book = ref<LocationQueryValue>('1')
+const lessonId = ref<LocationQueryValue>('1001')
+
 const lessonList = ref([])
+const lessonTitle = ref<any>({})
+const sentenceIndex = ref(0)
+const sentenceList = ref<any>([])
+const currentSentence = computed(() => sentenceList.value[sentenceIndex.value])
 
-const validSentenceBlocks = computed(() => sentenceBlocks.value.slice(1))
-const hideEnText = ref(true)
-const lineIndex = ref(0)
-const currentLine = computed(() => validSentenceBlocks.value[lineIndex.value])
+const enTextHidden = ref(true)
 
-watch(lineIndex, () => {
-  hideEnText.value = true
+watch(sentenceIndex, () => {
+  enTextHidden.value = true
 })
 
 // todo update lessonList
 watch(book, async () => {
   console.log('book change', book.value)
-  const { data } = await useFetch('/api/nce/book', {
-    query: {
-      book: book.value,
-    },
-  })
+  await updateBook()
 })
 
 watchEffect(async () => {
@@ -55,6 +52,10 @@ watchEffect(async () => {
     return
   }
 
+  await updateLesson()
+})
+
+async function updateLesson() {
   const { data } = await useFetch('/api/nce/lesson', {
     query: {
       book: book.value,
@@ -63,26 +64,36 @@ watchEffect(async () => {
   })
 
   if (!data.value) {
-    sentenceBlocks.value = []
+    sentenceList.value = []
     return
   }
 
-  sentenceBlocks.value = JSON.parse(data.value).data
-})
+  sentenceList.value = data.value.data.slice(1)
+  lessonTitle.value = data.value.title
+}
+
+async function updateBook() {
+  const { data } = await useFetch('/api/nce/book', {
+    query: {
+      book: book.value,
+    },
+  })
+  lessonList.value = data.value
+}
 
 function onClickPrev() {
-  if (lineIndex.value > 0) {
-    lineIndex.value--
+  if (sentenceIndex.value > 0) {
+    sentenceIndex.value--
   }
 }
 
 function onClickNext() {
-  if (hideEnText.value) {
-    hideEnText.value = false
+  if (enTextHidden.value) {
+    enTextHidden.value = false
     return
   }
-  if (lineIndex.value < validSentenceBlocks.value.length - 1) {
-    lineIndex.value++
+  if (sentenceIndex.value < sentenceList.value.length - 1) {
+    sentenceIndex.value++
   }
 }
 
@@ -98,23 +109,25 @@ function onClickNextLesson() {
 </script>
 
 <template>
-  <div v-if="sentenceBlocks.length > 0" flex="~ col" box-border h-100vh min-h-600px min-w-768px p="x-4 y-4" font-sans>
+  <div v-if="sentenceList.length > 0" flex="~ col" box-border h-100vh min-h-600px min-w-768px p="x-4 y-4" font-sans>
     <header h-100px>
       <h2 mt-0>
         新概念英语 1
       </h2>
       <div w-max pl-2em text="right xl" capitalize>
-        {{ sentenceBlocks[0].Sentence ?? '-' }}
+        <span mr-4 font-bold>
+          {{ `Lesson${Number(lessonId) % 1000}` }}
+        </span> {{ lessonTitle.title ?? '-' }}
         <br>
-        {{ sentenceBlocks[0].Sentence_cn ?? '-' }}
+        {{ lessonTitle.title_cn ?? '-' }}
       </div>
     </header>
-    <main v-if="currentLine" flex-1>
+    <main v-if="currentSentence" flex-1>
       <article flex="~ col" h-full items-center justify-center gap-8 text-4xl>
-        <div>{{ currentLine.Sentence_cn }}</div>
+        <div>{{ currentSentence.Sentence_cn }}</div>
         <div border-b="4 solid sky-500" pb-2>
-          <span :class="{ 'opacity-0': hideEnText }">
-            {{ currentLine.Sentence }}
+          <span :class="{ 'opacity-0': enTextHidden }">
+            {{ currentSentence.Sentence }}
           </span>
         </div>
         <div>
