@@ -7,4 +7,7 @@ export default defineNuxtConfig({
   features: {
     inlineStyles: false,
   },
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' },
+  },
 })
