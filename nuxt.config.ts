@@ -4,4 +4,7 @@ export default defineNuxtConfig({
   modules: [
     '@unocss/nuxt',
   ],
+  features: {
+    inlineStyles: false,
+  },
 })
