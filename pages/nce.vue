@@ -194,10 +194,10 @@ function playAudio(start: number, end: number) {
 </script>
 
 <template>
-  <div flex="~ col" box-border h-100vh min-h-600px min-w-768px p="x-4 y-4" font-sans>
+  <div flex="~ col" box-border h-100vh min-h-600px min-w-768px p="x-4 y-4">
     <header h-100px>
       <h2 mt-0>
-        新概念英语 1
+        新概念英语 {{ book }}
       </h2>
       <div text="xl" w-max flex pl-2em capitalize>
         <span mr-4 font-bold>
