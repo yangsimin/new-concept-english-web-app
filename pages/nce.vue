@@ -1,15 +1,13 @@
 <script setup lang="ts">
 // todo 0. 完善切换下一课,下一本书的逻辑
-// todo 1. 增加 mp3 播放
+// done 1. 增加 mp3 播放
 // todo 2. 拆分句子, 增加间隔
 // todo 3. 按键映射
 // todo 4. 重构代码
-// todo 5. 移除 mp3 的 git 同步
+// done 5. 移除 mp3 的 git 同步
 // todo 6. server 异常处理
 
 import type { LocationQueryValue } from 'vue-router';
-import book1 from '~/assets/nce/book1.json'
-import lesson1 from '~/assets/nce/book1/1001.json';
 
 const route = useRoute()
 const router = useRouter()
@@ -17,13 +15,15 @@ const router = useRouter()
 const book = ref<LocationQueryValue>('1')
 const lessonId = ref<LocationQueryValue>('1001')
 
-const lessonList = ref(book1)
-const lessonTitle = ref<any>(lesson1.title)
+const lessonList = ref([])
+const lessonTitle = ref<any>('')
+const lessonAudioUrl = ref<string>('')
 const sentenceIndex = ref(0)
-const sentenceList = ref<any>(lesson1.data.slice(1))
+const sentenceList = ref<any>('')
 const currentSentence = computed(() => sentenceList.value[sentenceIndex.value])
 
 const enTextHidden = ref(true)
+const audioRef = ref<HTMLAudioElement>()
 
 watch(sentenceIndex, () => {
   enTextHidden.value = true
@@ -72,6 +72,7 @@ async function updateLesson() {
 
   sentenceList.value = data.value.data.slice(1)
   lessonTitle.value = data.value.title
+  lessonAudioUrl.value = data.value.audio_us
 }
 
 async function updateBook() {
@@ -83,15 +84,16 @@ async function updateBook() {
   lessonList.value = data.value
 }
 
-function onClickPrev() {
+function onClickPrevSentence() {
   if (sentenceIndex.value > 0) {
     sentenceIndex.value--
   }
 }
 
-function onClickNext() {
+function onClickNextSentence() {
   if (enTextHidden.value) {
     enTextHidden.value = false
+    playAudio(currentSentence.value.Timing, currentSentence.value.EndTiming)
     return
   }
   if (sentenceIndex.value < sentenceList.value.length - 1) {
@@ -107,6 +109,30 @@ function onClickNextLesson() {
       lessonId: 2021,
     },
   })
+}
+
+let endTimer: NodeJS.Timeout
+
+function playAudio(start: number, end: number) {
+  if (!audioRef.value) {
+    return
+  }
+
+  if (audioRef.value.played) {
+    audioRef.value.pause()
+    clearTimeout(endTimer)
+  }
+
+  setTimeout(() => {
+    if (!audioRef.value) {
+      return
+    }
+    audioRef.value.currentTime = start
+    audioRef.value.play()
+    endTimer = setTimeout(() => {
+      audioRef.value?.pause()
+    }, (end - start) * 1000)
+  }, 300)
 }
 </script>
 
@@ -132,18 +158,24 @@ function onClickNextLesson() {
             {{ currentSentence.Sentence }}
           </span>
         </div>
-        <div>
-          <button @click="onClickPrev">
-            Prev
+        <div class="control-panel">
+          <button @click="onClickPrevSentence">
+            上一句
           </button>
-          <button @click="onClickNext">
-            Next
+          <button @click="onClickNextSentence">
+            下一句
           </button>
-          <br>
           <button @click="onClickNextLesson">
-            Next Lesson
+            上一课
           </button>
+          <button @click="onClickNextLesson">
+            下一课
+          </button>
+          <label />
         </div>
+        <audio ref="audioRef">
+          <source :src="lessonAudioUrl" type="audio/mp3">
+        </audio>
       </article>
     </main>
     <footer h-100px />
@@ -151,4 +183,10 @@ function onClickNextLesson() {
 </template>
 
 <style scoped>
+.control-panel {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(100px, 1fr));
+  grid-template-rows: repeat(2, 30px);
+  gap: 20px;
+}
 </style>
