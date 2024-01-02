@@ -8,6 +8,8 @@
 // todo 6. server 异常处理
 
 import type { LocationQueryValue } from 'vue-router';
+import book1 from '~/assets/nce/book1.json'
+import lesson1 from '~/assets/nce/book1/1001.json';
 
 const route = useRoute()
 const router = useRouter()
@@ -15,10 +17,10 @@ const router = useRouter()
 const book = ref<LocationQueryValue>('1')
 const lessonId = ref<LocationQueryValue>('1001')
 
-const lessonList = ref([])
-const lessonTitle = ref<any>({})
+const lessonList = ref(book1)
+const lessonTitle = ref<any>(lesson1.title)
 const sentenceIndex = ref(0)
-const sentenceList = ref<any>([])
+const sentenceList = ref<any>(lesson1.data.slice(1))
 const currentSentence = computed(() => sentenceList.value[sentenceIndex.value])
 
 const enTextHidden = ref(true)
@@ -109,7 +111,7 @@ function onClickNextLesson() {
 </script>
 
 <template>
-  <div v-if="sentenceList.length > 0" flex="~ col" box-border h-100vh min-h-600px min-w-768px p="x-4 y-4" font-sans>
+  <div flex="~ col" box-border h-100vh min-h-600px min-w-768px p="x-4 y-4" font-sans>
     <header h-100px>
       <h2 mt-0>
         新概念英语 1
@@ -117,9 +119,9 @@ function onClickNextLesson() {
       <div w-max pl-2em text="right xl" capitalize>
         <span mr-4 font-bold>
           {{ `Lesson${Number(lessonId) % 1000}` }}
-        </span> {{ lessonTitle.title ?? '-' }}
+        </span> {{ lessonTitle.title }}
         <br>
-        {{ lessonTitle.title_cn ?? '-' }}
+        {{ lessonTitle.title_cn }}
       </div>
     </header>
     <main v-if="currentSentence" flex-1>
