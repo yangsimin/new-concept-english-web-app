@@ -7,7 +7,7 @@
 // done 5. 移除 mp3 的 git 同步
 // todo 6. server 异常处理
 
-import type { LocationQueryValue } from 'vue-router';
+import type { LocationQueryValue } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
@@ -22,6 +22,7 @@ const sentenceIndex = ref(0)
 const sentenceList = ref<any>('')
 const currentSentence = computed(() => sentenceList.value[sentenceIndex.value])
 
+const soundEnable = ref(false)
 const enTextHidden = ref(true)
 const audioRef = ref<HTMLAudioElement>()
 
@@ -29,10 +30,10 @@ watch(sentenceIndex, () => {
   enTextHidden.value = true
 })
 
-// todo update lessonList
-watch(book, async () => {
-  console.log('book change', book.value)
-  await updateBook()
+watchEffect(() => {
+  if (Number(book.value) >= 1 && Number(book.value) <= 4) {
+    updateBook()
+  }
 })
 
 watchEffect(async () => {
@@ -70,9 +71,13 @@ async function updateLesson() {
     return
   }
 
-  sentenceList.value = data.value.data.slice(1)
   lessonTitle.value = data.value.title
   lessonAudioUrl.value = data.value.audio_us
+  sentenceList.value = data.value.data.slice(1)
+  sentenceIndex.value = 0
+  enTextHidden.value = true
+  await nextTick()
+  audioRef.value?.load()
 }
 
 async function updateBook() {
@@ -93,7 +98,9 @@ function onClickPrevSentence() {
 function onClickNextSentence() {
   if (enTextHidden.value) {
     enTextHidden.value = false
-    playAudio(currentSentence.value.Timing, currentSentence.value.EndTiming)
+    if (soundEnable.value) {
+      playAudio(currentSentence.value.Timing, currentSentence.value.EndTiming)
+    }
     return
   }
   if (sentenceIndex.value < sentenceList.value.length - 1) {
@@ -101,12 +108,12 @@ function onClickNextSentence() {
   }
 }
 
-function onClickNextLesson() {
+function stepLesson(step: number) {
   router.push({
     path: route.path,
     query: {
-      book: 2,
-      lessonId: 2021,
+      book: book.value,
+      lessonId: `${Number(lessonId.value) + step}`,
     },
   })
 }
@@ -123,16 +130,11 @@ function playAudio(start: number, end: number) {
     clearTimeout(endTimer)
   }
 
-  setTimeout(() => {
-    if (!audioRef.value) {
-      return
-    }
-    audioRef.value.currentTime = start
-    audioRef.value.play()
-    endTimer = setTimeout(() => {
-      audioRef.value?.pause()
-    }, (end - start) * 1000)
-  }, 300)
+  audioRef.value.currentTime = start
+  audioRef.value.play()
+  endTimer = setTimeout(() => {
+    audioRef.value?.pause()
+  }, (end - start) * 1000)
 }
 </script>
 
@@ -151,38 +153,48 @@ function playAudio(start: number, end: number) {
       </div>
     </header>
     <main v-if="currentSentence" flex-1>
-      <article flex="~ col" h-full items-center justify-center gap-8 text-4xl>
-        <div>{{ currentSentence.Sentence_cn }}</div>
-        <div border-b="4 solid sky-500" pb-2>
-          <span :class="{ 'opacity-0': enTextHidden }">
+      <article flex="~ col" h-full items-center justify-center gap-8>
+        <div relative flex items-center text-4xl>
+          {{ currentSentence.Sentence_cn }}
+          <label absolute right-0 col-span-2 mr--16 text-3xl>
+            <input v-model="soundEnable" type="checkbox" hidden>
+            <span v-if="soundEnable">🔊</span>
+            <span v-else>🔇</span>
+          </label>
+        </div>
+        <div border-b="4 solid sky-500" pb-2 text-4xl>
+          <span :class="{ 'opacity-0': enTextHidden }" px-2>
             {{ currentSentence.Sentence }}
           </span>
         </div>
         <div class="control-panel">
-          <button @click="onClickPrevSentence">
+          <button class="btn" @click="onClickPrevSentence">
             上一句
           </button>
-          <button @click="onClickNextSentence">
+          <button class="btn" @click="onClickNextSentence">
             下一句
           </button>
-          <button @click="onClickNextLesson">
+          <button class="btn" :disabled="Number(lessonId) % 1000 <= 1" @click="stepLesson(-1)">
             上一课
           </button>
-          <button @click="onClickNextLesson">
+          <button class="btn" :disabled="Number(lessonId) % 1000 >= lessonList.length - 1" @click="stepLesson(1)">
             下一课
           </button>
-          <label />
         </div>
-        <audio ref="audioRef">
-          <source :src="lessonAudioUrl" type="audio/mp3">
-        </audio>
       </article>
     </main>
+    <audio ref="audioRef">
+      <source :src="lessonAudioUrl" type="audio/mp3">
+    </audio>
     <footer h-100px />
   </div>
 </template>
 
 <style scoped>
+.btn {
+  @apply px-4 py-1 rounded border-solid border-sky-700 border-2px bg-sky-500 text-white cursor-pointer hover:bg-sky-600
+  disabled:cursor-default disabled:bg-gray-600 disabled:opacity-50;
+}
 .control-panel {
   display: grid;
   grid-template-columns: repeat(2, minmax(100px, 1fr));
