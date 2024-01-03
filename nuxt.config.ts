@@ -10,5 +10,9 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
   },
-  ssr: false
+  ssr: false,
+  sourcemap: {
+    server: true,
+    client: true,
+  },
 })
