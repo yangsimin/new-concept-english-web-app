@@ -51,6 +51,7 @@ const keymap: Record<string, { name: string, fn: Function }> = {
 
 watch(sentenceIndex, () => {
   enTextHidden.value = true
+  audioRef.value?.pause()
 })
 
 watch(soundEnable, () => {
