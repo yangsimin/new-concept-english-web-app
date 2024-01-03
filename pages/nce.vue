@@ -110,7 +110,7 @@ function onKeyDown(event: KeyboardEvent) {
 }
 
 async function updateLesson() {
-  const { data } = await useFetch('/api/nce/lesson', {
+  const { data } = await useFetch<any>('/api/nce/lesson', {
     query: {
       book: book.value,
       lessonId: lessonId.value,
@@ -132,7 +132,7 @@ async function updateLesson() {
 }
 
 async function updateBook() {
-  const { data } = await useFetch('/api/nce/book', {
+  const { data } = await useFetch<any>('/api/nce/book', {
     query: {
       book: book.value,
     },
