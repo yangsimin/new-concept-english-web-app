@@ -194,7 +194,7 @@ function playAudio(start: number, end: number) {
 </script>
 
 <template>
-  <div flex="~ col" box-border h-100vh min-h-600px min-w-768px p="x-4 y-4">
+  <div flex="~ col" box-border h-100vh min-h-700px min-w-768px p="x-4 y-4">
     <header h-100px>
       <h2 mt-0>
         新概念英语 {{ book }}
