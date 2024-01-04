@@ -20,6 +20,9 @@ devDependencies:
   '@unocss/nuxt':
     specifier: ^0.58.2
     version: 0.58.2(postcss@8.4.32)(vite@5.0.10)(webpack@5.89.0)
+  '@unocss/reset':
+    specifier: ^0.58.3
+    version: 0.58.3
   eslint:
     specifier: ^8.56.0
     version: 8.56.0
@@ -2232,6 +2235,10 @@ packages:
 
   /@unocss/reset@0.58.2:
     resolution: {integrity: sha512-ZzskZzrs7fPoKWrSpF1vehIr8TI7u4eS+MSurE0qUXatg0/nsXAZvaFYu0obu1kWrmnHyzA7G+m6LMX1h1tT7Q==}
+    dev: true
+
+  /@unocss/reset@0.58.3:
+    resolution: {integrity: sha512-Q2KiRQlam2iYsTZgKdvnXEfUN4TA2oVpGIVD9Wa0ggs0XlYj5aOo0g0+4Tgqqn+YaviZQeJKnDs/JWE+ygHhZA==}
     dev: true
 
   /@unocss/rule-utils@0.58.2:

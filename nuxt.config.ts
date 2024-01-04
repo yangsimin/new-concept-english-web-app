@@ -15,4 +15,5 @@ export default defineNuxtConfig({
     server: true,
     client: true,
   },
+  css: ['@unocss/reset/tailwind.css']
 })
