@@ -128,7 +128,6 @@ async function updateLesson() {
   sentenceList.value = data.value.data.slice(1)
   sentenceIndex.value = 0
   enTextHidden.value = true
-  await nextTick()
 }
 
 async function updateBook() {

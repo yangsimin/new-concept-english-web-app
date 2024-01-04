@@ -2,7 +2,7 @@
 
 <template>
   <NuxtLayout>
-    <NuxtPage class="container"/>
+    <NuxtPage class="container" />
   </NuxtLayout>
 </template>
 
