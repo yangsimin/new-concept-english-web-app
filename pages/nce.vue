@@ -24,7 +24,7 @@ const currentSentence = computed(() => sentenceList.value[sentenceIndex.value])
 
 const soundEnable = ref(true)
 const enTextHidden = ref(true)
-const audioRef = ref<HTMLAudioElement>()
+const { audioInstance, play, pause, updateSource } = useAudio()
 
 const keymap: Record<string, { name: string, fn: Function }> = {
   j: {
@@ -51,19 +51,19 @@ const keymap: Record<string, { name: string, fn: Function }> = {
 
 watch(sentenceIndex, () => {
   enTextHidden.value = true
-  audioRef.value?.pause()
+  pause()
+})
+
+watch(lessonAudioUrl, () => {
+  updateSource(lessonAudioUrl.value)
 })
 
 watch(soundEnable, () => {
-  if (!audioRef.value) {
-    return
-  }
-
   if (soundEnable.value) {
-    audioRef.value.muted = false
+    audioInstance.muted = false
   }
   else {
-    audioRef.value.muted = true
+    audioInstance.muted = true
   }
 })
 
@@ -129,7 +129,6 @@ async function updateLesson() {
   sentenceIndex.value = 0
   enTextHidden.value = true
   await nextTick()
-  audioRef.value?.load()
 }
 
 async function updateBook() {
@@ -174,23 +173,13 @@ function stepLesson(step: number) {
   })
 }
 
-let endTimer: NodeJS.Timeout
-
 function playAudio(start: number, end: number) {
-  if (!audioRef.value) {
-    return
+  if (audioInstance.played) {
+    pause()
   }
 
-  if (audioRef.value.played) {
-    audioRef.value.pause()
-    clearTimeout(endTimer)
-  }
-
-  audioRef.value.currentTime = start
-  audioRef.value.play()
-  endTimer = setTimeout(() => {
-    audioRef.value?.pause()
-  }, (end - start) * 1000)
+  audioInstance.currentTime = start
+  play((end - start) * 1000)
 }
 </script>
 
@@ -255,9 +244,6 @@ function playAudio(start: number, end: number) {
         </div>
       </article>
     </main>
-    <audio ref="audioRef">
-      <source :src="lessonAudioUrl" type="audio/mp3">
-    </audio>
     <footer h-100px />
   </div>
 </template>
