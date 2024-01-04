@@ -150,6 +150,7 @@ function onClickNextSentence() {
   if (enTextHidden.value) {
     enTextHidden.value = false
     if (soundEnable.value) {
+      // fixme 删除上一个定时器
       playAudio(currentSentence.value.Timing, currentSentence.value.EndTiming)
     }
     return
@@ -184,79 +185,65 @@ function playAudio(start: number, end: number) {
 </script>
 
 <template>
-  <div flex="~ col" box-border h-100vh min-h-700px min-w-768px p="x-4 y-4">
-    <header h-100px>
-      <h2 mt-0>
-        新概念英语 {{ book }}
-      </h2>
-      <div text="xl" w-max flex pl-2em capitalize>
-        <span mr-4 font-bold>
-          {{ `Lesson${Number(lessonId) % 1000}` }}
-        </span>
+  <div flex="~ col" box-border p="x-4 y-4">
+    <header flex items-center>
+      <div flex text="2xl">
+        <strong mr-4>
+          {{ `${book}-${Number(lessonId) % 1000}` }}
+        </strong>
         <span>
-          {{ lessonTitle.title }}
+          <strong>
+            {{ lessonTitle.title }}
+          </strong>
           <br>
           {{ lessonTitle.title_cn }}
         </span>
       </div>
     </header>
-    <main v-if="currentSentence" flex-1>
-      <article flex="~ col" h-full items-center justify-center gap-8>
-        <div relative flex items-center text-4xl>
+    <main v-if="currentSentence" mt-20>
+      <article flex="~ col" items-center justify-center gap-8>
+        <p relative flex items-center text-4xl>
           {{ currentSentence.Sentence_cn }}
-          <label absolute right-0 col-span-2 mr--16 text-3xl>
+          <label absolute right-0 mr--16 cursor-pointer text-2xl>
             <input v-model="soundEnable" type="checkbox" hidden>
-            <span v-if="soundEnable">🔊</span>
-            <span v-else>🔇</span>
+            <span>{{ soundEnable ? '🔊' : '🔇' }}</span>
           </label>
-        </div>
-        <div flex gap-2 pb-2 text-4xl>
+        </p>
+        <p flex gap-2 text-4xl>
           <span
-            v-for="(chunk, index) in currentSentence.Sentence.split(' ')"
+            v-for="(piece, index) in currentSentence.Sentence.split(' ')"
             :key="index"
             py-1
             border-b="4 solid sky-500"
           >
-            <span
-              :class="{ 'opacity-0': enTextHidden }"
-              px-2
-            >
-              {{ chunk }}
-            </span>
+            <span :class="{ 'opacity-0': enTextHidden }" px-2>{{ piece }}</span>
           </span>
-        </div>
-        <div class="control-panel">
-          <button class="btn" @click="onClickPrevSentence">
-            上一句
-          </button>
-          <button class="btn" @click="onClickNextSentence">
-            下一步
-          </button>
-          <button class="btn" :disabled="Number(lessonId) % 1000 <= 1" @click="stepLesson(-1)">
-            上一课
-          </button>
-          <button class="btn" :disabled="Number(lessonId) % 1000 >= lessonList.length - 1" @click="stepLesson(1)">
-            下一课
-          </button>
-          <div v-for="({ name }, key) in keymap" :key="key">
-            <span text="center white" mr-2 inline-block w-30px rounded bg-sky-500>{{ key }}</span>{{ name }}
-          </div>
-        </div>
+        </p>
       </article>
+      <div grid-cols="[repeat(2,115px)]" grid mt-14 place-content-center gap-20px>
+        <button class="btn" :disabled="sentenceIndex === 0" @click="onClickPrevSentence">
+          上一句
+        </button>
+        <button class="btn" :disabled="sentenceIndex === sentenceList.length - 1 && !enTextHidden" @click="onClickNextSentence">
+          下一步
+        </button>
+        <button class="btn" :disabled="Number(lessonId) % 1000 <= 1" @click="stepLesson(-1)">
+          上一课
+        </button>
+        <button class="btn" :disabled="Number(lessonId) % 1000 >= lessonList.length - 1" @click="stepLesson(1)">
+          下一课
+        </button>
+        <div v-for="({ name }, key) in keymap" :key="key">
+          <span text="center white" mr-2 inline-block w-30px rounded bg-sky-500>{{ key }}</span>{{ name }}
+        </div>
+      </div>
     </main>
-    <footer h-100px />
   </div>
 </template>
 
 <style scoped>
 .btn {
-  @apply px-4 py-1 rounded border-solid border-sky-700 border-2px bg-sky-500 text-white cursor-pointer hover:bg-sky-600
-  disabled:cursor-default disabled:bg-gray-600 disabled:opacity-50;
-}
-.control-panel {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(100px, 1fr));
-  grid-template-rows: repeat(2, 30px);
-  gap: 20px;
+  @apply px-4 py-px rounded bg-sky-500 text-white cursor-pointer border-(sky-700 2px) hover:bg-opacity-80
+  disabled:(cursor-default bg-gray-600 opacity-50 hover:bg-opacity-100);
 }
 </style>
