@@ -206,22 +206,26 @@ function onMenuClick(event: MouseEvent) {
           {{ currentLesson?.titleZh }}
         </span>
       </div>
-      <div relative>
-        <button hover="bg-gray-700/20" rounded p1 text-3xl transition-200 @click="isMenuVisible = !isMenuVisible">
+      <div
+        relative
+      >
+        <button hover="bg-gray-400/20" rounded p1 text-3xl transition-200 @click="isMenuVisible = !isMenuVisible">
           🍞
         </button>
         <ol
-          v-show="isMenuVisible"
-          grid="~ cols-[repeat(auto-fill,minmax(30px,1fr))] gap-1"
-          translate-x="-100%"
-          border="2px sky-500"
-          absolute z-1 max-w-500px w-70vw rounded bg-white text-sky-500 shadow-sm
+          v-if="isMenuVisible"
+          grid="~ cols-[repeat(auto-fill,minmax(2.5rem,1fr))] gap-1"
+          translate-x="-100%" border="2px sky-500" absolute z-1 max-w-500px w-70vw rounded bg-white p-1
+          text-sky-500
+          shadow-sm
           @click="onMenuClick"
         >
           <li
             v-for="(id, index) in lessonIdList" :key="id"
             :data-lesson="id"
-            hover="bg-gray-700/20" table-cell cursor-pointer select-none rounded p-1 text-center align-middle transition-200
+            hover="bg-gray-400/20"
+
+            h-2.5rem table-cell cursor-pointer select-none rounded text-center align-middle leading-2.5rem transition-200
           >
             {{ index + 1 }}
           </li>
