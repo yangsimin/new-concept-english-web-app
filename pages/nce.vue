@@ -7,29 +7,41 @@
 // done 5. 移除 mp3 的 git 同步
 // todo 6. server 异常处理
 
+interface Lesson {
+  id: number
+  titleEn: string
+  titleZh: string
+  sentences: Sentence[]
+  audioUrl: string
+}
+
+interface Sentence {
+  startAt: number
+  stopAt: number
+  en: string
+  zh: string
+}
+
 const route = useRoute()
 const router = useRouter()
 
 const book = ref(1)
 const lessonId = ref(1001)
-
-const lessonList = ref<number[]>([])
-const lessonTitle = ref<any>('')
-const lessonAudioUrl = ref<string>('')
+const lessonIdList = ref<number[]>([])
+const currentLesson = ref<Lesson | undefined>()
 const sentenceIndex = ref(0)
-const sentenceList = ref<any>('')
-const currentSentence = computed(() => sentenceList.value[sentenceIndex.value])
+const sentenceList = computed<Sentence[]>(() => currentLesson.value?.sentences ?? [])
+const currentSentence = ref<Sentence | undefined>()
 
 const isSoundEnable = ref(true)
 const isEnTextHidden = ref(true)
 const { audioInstance, playAudio, pauseAudio, updateSource } = useAudio()
-
 const isMenuVisible = ref(false)
 
 const keyFnMap: Record<string, { name: string, fn: Function }> = {
   j: {
     name: '下一步',
-    fn: () => { onClickNextSentence() },
+    fn: () => { onClickNextStep() },
   },
   k: {
     name: '上一句',
@@ -49,37 +61,7 @@ const keyFnMap: Record<string, { name: string, fn: Function }> = {
   },
 }
 
-watch(sentenceIndex, () => {
-  isEnTextHidden.value = true
-  pauseAudio()
-})
-
-watch(lessonAudioUrl, () => {
-  updateSource(lessonAudioUrl.value)
-})
-
-watch(isSoundEnable, () => {
-  if (isSoundEnable.value) {
-    audioInstance.muted = false
-  }
-  else {
-    audioInstance.muted = true
-  }
-})
-
-watchEffect(() => {
-  if (book.value >= 1 && book.value <= 4) {
-    updateBook()
-  }
-})
-
-watchEffect(() => {
-  if (!book.value || !lessonId.value) {
-    return
-  }
-
-  updateLesson(book.value, lessonId.value)
-})
+addListenKeyDown()
 
 watchEffect(async () => {
   if (!Array.isArray(route.query.book)) {
@@ -97,46 +79,75 @@ watchEffect(async () => {
   }
 })
 
-onMounted(() => {
-  window.addEventListener('keydown', onKeyDown)
+watchEffect(() => {
+  currentSentence.value = sentenceList.value[sentenceIndex.value]
+  isEnTextHidden.value = true
+  pauseAudio()
 })
 
-onUnmounted(() => {
-  window.removeEventListener('keydown', onKeyDown)
+watchEffect(() => {
+  audioInstance.muted = !isSoundEnable.value
 })
 
-function onKeyDown(event: KeyboardEvent) {
-  const key = event.key
-  if (keyFnMap[key]) {
-    keyFnMap[key].fn()
-  }
-}
+watchEffect(async () => {
+  lessonIdList.value = await updateBook(book.value) ?? []
+})
 
-async function updateLesson(book: number, lessonId: number) {
-  const { data } = await useFetch<any>('/api/nce/lesson', {
-    query: { book, lessonId },
-  })
-
-  if (!data.value) {
-    sentenceList.value = []
+watchEffect(async () => {
+  if (!book.value || !lessonId.value) {
     return
   }
 
-  lessonTitle.value = data.value.title
-  lessonAudioUrl.value = data.value.audio_us
-  sentenceList.value = data.value.data.slice(1)
+  currentLesson.value = await requestLesson(book.value, lessonId.value) ?? undefined
+  if (!currentLesson.value) {
+    return
+  }
+
   sentenceIndex.value = 0
   isEnTextHidden.value = true
+  updateSource(currentLesson.value.audioUrl)
+})
+
+function addListenKeyDown() {
+  const onKeyDown = (event: KeyboardEvent) => {
+    const key = event.key
+    if (keyFnMap[key]) {
+      keyFnMap[key].fn()
+    }
+  }
+  onMounted(() => {
+    window.addEventListener('keydown', onKeyDown)
+  })
+  onUnmounted(() => {
+    window.removeEventListener('keydown', onKeyDown)
+  })
 }
 
-async function updateBook() {
+async function requestLesson(book: number, lessonId: number): Promise<Lesson | null> {
+  const { data } = await useFetch('/api/nce/lesson', {
+    query: { book, lessonId },
+    transform: (lesson: any) => ({
+      id: lessonId,
+      titleEn: lesson.title.title,
+      titleZh: lesson.title.title_cn,
+      sentences: lesson.data.slice(1).map((s: any) => ({
+        startAt: Number(s.Timing),
+        stopAt: Number(s.EndTiming),
+        en: s.Sentence,
+        zh: s.Sentence_cn,
+      } satisfies Sentence)),
+      audioUrl: lesson.audio_us,
+    } satisfies Lesson),
+  })
+  return data.value
+}
+
+async function updateBook(book: number): Promise<number[] | null> {
   const { data } = await useFetch('/api/nce/book', {
-    query: {
-      book: book.value,
-    },
+    query: { book },
     transform: (data: any[]) => (data.map(lesson => Number(lesson.voa_id))),
   })
-  lessonList.value = data.value ?? []
+  return data.value
 }
 
 function onClickPrevSentence() {
@@ -145,11 +156,11 @@ function onClickPrevSentence() {
   }
 }
 
-function onClickNextSentence() {
+function onClickNextStep() {
   if (isEnTextHidden.value) {
     isEnTextHidden.value = false
     if (isSoundEnable.value) {
-      playAudio(Number(currentSentence.value.Timing), Number(currentSentence.value.EndTiming))
+      playAudio(Number(currentSentence.value?.startAt), Number(currentSentence.value?.stopAt))
     }
     return
   }
@@ -160,7 +171,7 @@ function onClickNextSentence() {
 
 function stepLesson(step: number) {
   const nextLesson = lessonId.value + step
-  if (nextLesson % 1000 < 1 || nextLesson % 1000 > lessonList.value.length - 1) {
+  if (nextLesson % 1000 < 1 || nextLesson % 1000 > lessonIdList.value.length - 1) {
     return
   }
   router.push({
@@ -190,10 +201,10 @@ function onMenuClick(event: MouseEvent) {
         </strong>
         <span>
           <strong>
-            {{ lessonTitle.title }}
+            {{ currentLesson?.titleEn }}
           </strong>
           <br>
-          {{ lessonTitle.title_cn }}
+          {{ currentLesson?.titleZh }}
         </span>
       </div>
       <div relative>
@@ -209,8 +220,8 @@ function onMenuClick(event: MouseEvent) {
           @click="onMenuClick"
         >
           <li
-            v-for="(lesson, index) in lessonList" :key="lesson"
-            :data-lesson="lesson"
+            v-for="(id, index) in lessonIdList" :key="id"
+            :data-lesson="id"
             hover="bg-gray-700/20" table-cell cursor-pointer select-none rounded p-1 text-center align-middle transition-200
           >
             {{ index + 1 }}
@@ -221,7 +232,7 @@ function onMenuClick(event: MouseEvent) {
     <main v-if="currentSentence" mt-20>
       <article flex="~ col" items-center justify-center gap-8>
         <p relative flex items-center text-4xl>
-          {{ currentSentence.Sentence_cn }}
+          {{ currentSentence.zh }}
           <label absolute right-0 mr--16 cursor-pointer text-2xl>
             <input v-model="isSoundEnable" type="checkbox" hidden>
             <span>{{ isSoundEnable ? '🔊' : '🔇' }}</span>
@@ -229,7 +240,7 @@ function onMenuClick(event: MouseEvent) {
         </p>
         <p flex gap-2 text-4xl>
           <span
-            v-for="(piece, index) in currentSentence.Sentence.trim().split(/\s/)"
+            v-for="(piece, index) in currentSentence.en.trim().split(/\s/)"
             :key="index"
             py-1
             border-b="4 solid sky-500"
@@ -242,13 +253,13 @@ function onMenuClick(event: MouseEvent) {
         <button class="btn" :disabled="sentenceIndex === 0" @click="onClickPrevSentence">
           上一句
         </button>
-        <button class="btn" :disabled="sentenceIndex === sentenceList.length - 1 && !isEnTextHidden" @click="onClickNextSentence">
+        <button class="btn" :disabled="sentenceIndex === sentenceList.length - 1 && !isEnTextHidden" @click="onClickNextStep">
           下一步
         </button>
         <button class="btn" :disabled="lessonId % 1000 <= 1" @click="stepLesson(-1)">
           上一课
         </button>
-        <button class="btn" :disabled="lessonId % 1000 >= lessonList.length - 1" @click="stepLesson(1)">
+        <button class="btn" :disabled="lessonId % 1000 >= lessonIdList.length - 1" @click="stepLesson(1)">
           下一课
         </button>
         <div v-for="({ name }, key) in keyFnMap" :key="key">
