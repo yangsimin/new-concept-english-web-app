@@ -1,16 +1,12 @@
 export function useAudio() {
   const audio = new Audio()
-  let time = 0
+  let _endTimeS: number | undefined
 
-  watchEffect(() => {
-    useEventListener(audio, 'play', () => {
-      console.log('play')
-      if (time) {
-        setTimeout(() => {
-          pause()
-        }, time)
-      }
-    })
+  useEventListener(audio, 'timeupdate', () => {
+    if (_endTimeS && audio.currentTime > _endTimeS) {
+      audio.pause()
+      _endTimeS = undefined
+    }
   })
 
   function updateSource(source: string) {
@@ -18,11 +14,14 @@ export function useAudio() {
     audio.load()
   }
 
-  function play(durationMs?: number) {
-    audio.play()
-    if (durationMs !== undefined) {
-      time = durationMs
+  function play(startTimeS: number, endTimeS?: number) {
+    if (endTimeS !== undefined && endTimeS <= startTimeS) {
+      return
     }
+
+    audio.currentTime = startTimeS
+    _endTimeS = endTimeS
+    audio.play()
   }
 
   function pause() {
@@ -31,8 +30,8 @@ export function useAudio() {
 
   return {
     audioInstance: audio,
-    play,
-    pause,
+    playAudio: play,
+    pauseAudio: pause,
     updateSource,
   }
 }

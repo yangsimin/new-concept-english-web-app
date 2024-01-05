@@ -24,9 +24,9 @@ const currentSentence = computed(() => sentenceList.value[sentenceIndex.value])
 
 const soundEnable = ref(true)
 const enTextHidden = ref(true)
-const { audioInstance, play, pause, updateSource } = useAudio()
+const { audioInstance, playAudio, pauseAudio, updateSource } = useAudio()
 
-const keymap: Record<string, { name: string, fn: Function }> = {
+const keyFnMap: Record<string, { name: string, fn: Function }> = {
   j: {
     name: '下一步',
     fn: () => { onClickNextSentence() },
@@ -51,7 +51,7 @@ const keymap: Record<string, { name: string, fn: Function }> = {
 
 watch(sentenceIndex, () => {
   enTextHidden.value = true
-  pause()
+  pauseAudio()
 })
 
 watch(lessonAudioUrl, () => {
@@ -105,8 +105,8 @@ onUnmounted(() => {
 
 function onKeyDown(event: KeyboardEvent) {
   const key = event.key
-  if (keymap[key]) {
-    keymap[key].fn()
+  if (keyFnMap[key]) {
+    keyFnMap[key].fn()
   }
 }
 
@@ -149,8 +149,7 @@ function onClickNextSentence() {
   if (enTextHidden.value) {
     enTextHidden.value = false
     if (soundEnable.value) {
-      // fixme 删除上一个定时器
-      playAudio(currentSentence.value.Timing, currentSentence.value.EndTiming)
+      playAudio(Number(currentSentence.value.Timing), Number(currentSentence.value.EndTiming))
     }
     return
   }
@@ -171,15 +170,6 @@ function stepLesson(step: number) {
       lessonId: nextLesson,
     },
   })
-}
-
-function playAudio(start: number, end: number) {
-  if (audioInstance.played) {
-    pause()
-  }
-
-  audioInstance.currentTime = start
-  play((end - start) * 1000)
 }
 </script>
 
@@ -210,7 +200,7 @@ function playAudio(start: number, end: number) {
         </p>
         <p flex gap-2 text-4xl>
           <span
-            v-for="(piece, index) in currentSentence.Sentence.split(' ')"
+            v-for="(piece, index) in currentSentence.Sentence.trim().split(/\s/)"
             :key="index"
             py-1
             border-b="4 solid sky-500"
@@ -232,7 +222,7 @@ function playAudio(start: number, end: number) {
         <button class="btn" :disabled="Number(lessonId) % 1000 >= lessonList.length - 1" @click="stepLesson(1)">
           下一课
         </button>
-        <div v-for="({ name }, key) in keymap" :key="key">
+        <div v-for="({ name }, key) in keyFnMap" :key="key">
           <span text="center white" mr-2 inline-block w-30px rounded bg-sky-500>{{ key }}</span>{{ name }}
         </div>
       </div>
