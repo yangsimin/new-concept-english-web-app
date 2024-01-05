@@ -7,24 +7,24 @@
 // done 5. 移除 mp3 的 git 同步
 // todo 6. server 异常处理
 
-import type { LocationQueryValue } from 'vue-router'
-
 const route = useRoute()
 const router = useRouter()
 
-const book = ref<LocationQueryValue>('1')
-const lessonId = ref<LocationQueryValue>('1001')
+const book = ref(1)
+const lessonId = ref(1001)
 
-const lessonList = ref([])
+const lessonList = ref<number[]>([])
 const lessonTitle = ref<any>('')
 const lessonAudioUrl = ref<string>('')
 const sentenceIndex = ref(0)
 const sentenceList = ref<any>('')
 const currentSentence = computed(() => sentenceList.value[sentenceIndex.value])
 
-const soundEnable = ref(true)
-const enTextHidden = ref(true)
+const isSoundEnable = ref(true)
+const isEnTextHidden = ref(true)
 const { audioInstance, playAudio, pauseAudio, updateSource } = useAudio()
+
+const isMenuVisible = ref(false)
 
 const keyFnMap: Record<string, { name: string, fn: Function }> = {
   j: {
@@ -45,12 +45,12 @@ const keyFnMap: Record<string, { name: string, fn: Function }> = {
   },
   m: {
     name: '静音切换',
-    fn: () => { soundEnable.value = !soundEnable.value },
+    fn: () => { isSoundEnable.value = !isSoundEnable.value },
   },
 }
 
 watch(sentenceIndex, () => {
-  enTextHidden.value = true
+  isEnTextHidden.value = true
   pauseAudio()
 })
 
@@ -58,8 +58,8 @@ watch(lessonAudioUrl, () => {
   updateSource(lessonAudioUrl.value)
 })
 
-watch(soundEnable, () => {
-  if (soundEnable.value) {
+watch(isSoundEnable, () => {
+  if (isSoundEnable.value) {
     audioInstance.muted = false
   }
   else {
@@ -68,31 +68,33 @@ watch(soundEnable, () => {
 })
 
 watchEffect(() => {
-  if (Number(book.value) >= 1 && Number(book.value) <= 4) {
+  if (book.value >= 1 && book.value <= 4) {
     updateBook()
   }
 })
 
-watchEffect(async () => {
-  if (!Array.isArray(route.query.book)) {
-    book.value = route.query.book
-  }
-  else {
-    book.value = ''
-  }
-
-  if (!Array.isArray(route.query.lessonId)) {
-    lessonId.value = route.query.lessonId
-  }
-  else {
-    lessonId.value = ''
-  }
-
+watchEffect(() => {
   if (!book.value || !lessonId.value) {
     return
   }
 
-  await updateLesson()
+  updateLesson(book.value, lessonId.value)
+})
+
+watchEffect(async () => {
+  if (!Array.isArray(route.query.book)) {
+    book.value = Number(route.query.book)
+  }
+  else {
+    book.value = 0
+  }
+
+  if (!Array.isArray(route.query.lessonId)) {
+    lessonId.value = Number(route.query.lessonId)
+  }
+  else {
+    lessonId.value = 0
+  }
 })
 
 onMounted(() => {
@@ -110,12 +112,9 @@ function onKeyDown(event: KeyboardEvent) {
   }
 }
 
-async function updateLesson() {
+async function updateLesson(book: number, lessonId: number) {
   const { data } = await useFetch<any>('/api/nce/lesson', {
-    query: {
-      book: book.value,
-      lessonId: lessonId.value,
-    },
+    query: { book, lessonId },
   })
 
   if (!data.value) {
@@ -127,16 +126,17 @@ async function updateLesson() {
   lessonAudioUrl.value = data.value.audio_us
   sentenceList.value = data.value.data.slice(1)
   sentenceIndex.value = 0
-  enTextHidden.value = true
+  isEnTextHidden.value = true
 }
 
 async function updateBook() {
-  const { data } = await useFetch<any>('/api/nce/book', {
+  const { data } = await useFetch('/api/nce/book', {
     query: {
       book: book.value,
     },
+    transform: (data: any[]) => (data.map(lesson => Number(lesson.voa_id))),
   })
-  lessonList.value = data.value
+  lessonList.value = data.value ?? []
 }
 
 function onClickPrevSentence() {
@@ -146,9 +146,9 @@ function onClickPrevSentence() {
 }
 
 function onClickNextSentence() {
-  if (enTextHidden.value) {
-    enTextHidden.value = false
-    if (soundEnable.value) {
+  if (isEnTextHidden.value) {
+    isEnTextHidden.value = false
+    if (isSoundEnable.value) {
       playAudio(Number(currentSentence.value.Timing), Number(currentSentence.value.EndTiming))
     }
     return
@@ -159,7 +159,7 @@ function onClickNextSentence() {
 }
 
 function stepLesson(step: number) {
-  const nextLesson = Number(lessonId.value) + step
+  const nextLesson = lessonId.value + step
   if (nextLesson % 1000 < 1 || nextLesson % 1000 > lessonList.value.length - 1) {
     return
   }
@@ -171,14 +171,22 @@ function stepLesson(step: number) {
     },
   })
 }
+
+function onMenuClick(event: MouseEvent) {
+  const target = event.target as HTMLElement
+  if (target.dataset.lesson) {
+    lessonId.value = Number(target.dataset.lesson)
+    isMenuVisible.value = false
+  }
+}
 </script>
 
 <template>
   <div flex="~ col" box-border p="x-4 y-4">
-    <header flex items-center>
+    <header flex items-center justify-between>
       <div flex text="2xl">
         <strong mr-4>
-          {{ `${book}-${Number(lessonId) % 1000}` }}
+          {{ `${book}-${lessonId % 1000}` }}
         </strong>
         <span>
           <strong>
@@ -188,14 +196,35 @@ function stepLesson(step: number) {
           {{ lessonTitle.title_cn }}
         </span>
       </div>
+      <div relative>
+        <button hover="bg-gray-700/20" rounded p1 text-3xl transition-200 @click="isMenuVisible = !isMenuVisible">
+          🍞
+        </button>
+        <ol
+          v-show="isMenuVisible"
+          grid="~ cols-[repeat(auto-fill,minmax(30px,1fr))] gap-1"
+          translate-x="-100%"
+          border="2px sky-500"
+          absolute z-1 max-w-500px w-70vw rounded bg-white text-sky-500 shadow-sm
+          @click="onMenuClick"
+        >
+          <li
+            v-for="(lesson, index) in lessonList" :key="lesson"
+            :data-lesson="lesson"
+            hover="bg-gray-700/20" table-cell cursor-pointer select-none rounded p-1 text-center align-middle transition-200
+          >
+            {{ index + 1 }}
+          </li>
+        </ol>
+      </div>
     </header>
     <main v-if="currentSentence" mt-20>
       <article flex="~ col" items-center justify-center gap-8>
         <p relative flex items-center text-4xl>
           {{ currentSentence.Sentence_cn }}
           <label absolute right-0 mr--16 cursor-pointer text-2xl>
-            <input v-model="soundEnable" type="checkbox" hidden>
-            <span>{{ soundEnable ? '🔊' : '🔇' }}</span>
+            <input v-model="isSoundEnable" type="checkbox" hidden>
+            <span>{{ isSoundEnable ? '🔊' : '🔇' }}</span>
           </label>
         </p>
         <p flex gap-2 text-4xl>
@@ -205,21 +234,21 @@ function stepLesson(step: number) {
             py-1
             border-b="4 solid sky-500"
           >
-            <span :class="{ 'opacity-0': enTextHidden }" px-2>{{ piece }}</span>
+            <span :class="{ 'opacity-0': isEnTextHidden }" px-2>{{ piece }}</span>
           </span>
         </p>
       </article>
-      <div grid-cols="[repeat(2,115px)]" grid mt-14 place-content-center gap-20px>
+      <div grid="~ cols-[repeat(2,115px)]" mt-14 place-content-center gap-20px>
         <button class="btn" :disabled="sentenceIndex === 0" @click="onClickPrevSentence">
           上一句
         </button>
-        <button class="btn" :disabled="sentenceIndex === sentenceList.length - 1 && !enTextHidden" @click="onClickNextSentence">
+        <button class="btn" :disabled="sentenceIndex === sentenceList.length - 1 && !isEnTextHidden" @click="onClickNextSentence">
           下一步
         </button>
-        <button class="btn" :disabled="Number(lessonId) % 1000 <= 1" @click="stepLesson(-1)">
+        <button class="btn" :disabled="lessonId % 1000 <= 1" @click="stepLesson(-1)">
           上一课
         </button>
-        <button class="btn" :disabled="Number(lessonId) % 1000 >= lessonList.length - 1" @click="stepLesson(1)">
+        <button class="btn" :disabled="lessonId % 1000 >= lessonList.length - 1" @click="stepLesson(1)">
           下一课
         </button>
         <div v-for="({ name }, key) in keyFnMap" :key="key">
@@ -232,7 +261,7 @@ function stepLesson(step: number) {
 
 <style scoped>
 .btn {
-  @apply px-4 py-px rounded bg-sky-500 text-white cursor-pointer border-(sky-700 2px) hover:bg-opacity-80
+  @apply px-4 py-px rounded bg-sky-500 text-white border-(sky-700 2px) hover:bg-opacity-80
   disabled:(cursor-default bg-gray-600 opacity-50 hover:bg-opacity-100);
 }
 </style>
