@@ -1,4 +1,5 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import { appDescription } from './constants/index'
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
@@ -9,6 +10,12 @@ export default defineNuxtConfig({
     inlineStyles: false,
   },
   app: {
+    head: {
+      viewport: 'width=device-width,initial-scale=1',
+      meta: [
+        { name: 'description', content: appDescription },
+      ],
+    },
     pageTransition: { name: 'page', mode: 'out-in' },
   },
   ssr: false,
@@ -16,5 +23,7 @@ export default defineNuxtConfig({
     server: true,
     client: true,
   },
-  css: ['@unocss/reset/tailwind.css'],
+  css: [
+    '@unocss/reset/tailwind.css',
+  ],
 })

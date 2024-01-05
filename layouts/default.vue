@@ -5,6 +5,8 @@
         <a class="nav-link-active" href="javascript:;">课文回译 (逐句)</a>
         <a class="nav-link" href="javascript:;">课文回译 (全文)</a>
       </nav>
+      <DarkToggle />
+      <a i-carbon-logo-github href="https://github.com/antfu/vitesse-nuxt3" target="_blank" />
     </header>
     <main flex-1 class="container">
       <slot />
