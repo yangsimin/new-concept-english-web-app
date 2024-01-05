@@ -7,6 +7,8 @@
 // done 5. 移除 mp3 的 git 同步
 // todo 6. server 异常处理
 
+import { vOnClickOutside } from '@vueuse/components'
+
 interface Lesson {
   id: number
   titleEn: string
@@ -209,27 +211,34 @@ function onMenuClick(event: MouseEvent) {
       <div
         relative
       >
-        <button hover="bg-gray-400/20" rounded p1 text-3xl transition-200 @click="isMenuVisible = !isMenuVisible">
-          🍞
+        <button hover="bg-gray-400/20" rounded p1 text-3xl transition-200 @click="isMenuVisible = true">
+          <span i="carbon-book" />
         </button>
-        <ol
-          v-if="isMenuVisible"
-          grid="~ cols-[repeat(auto-fill,minmax(2.5rem,1fr))] gap-1"
-          translate-x="-100%" border="2px sky-500" absolute z-1 max-w-500px w-70vw rounded bg-white p-1
-          text-sky-500
-          shadow-sm
-          @click="onMenuClick"
-        >
-          <li
-            v-for="(id, index) in lessonIdList" :key="id"
-            :data-lesson="id"
-            hover="bg-gray-400/20"
+        <Transition>
+          <div v-if="isMenuVisible" bg="black/50" fixed bottom-0 left-0 right-0 top-0 z-1 flex items-center justify-center overflow-auto>
+            <ol
+              v-on-click-outside="() => isMenuVisible = false"
+              grid="~ cols-[repeat(auto-fill,minmax(2.5rem,1fr))] gap-1"
+              border="2px sky-500" max-w-500px w-70vw rounded bg-white p="x-10 y-4"
+              text-sky-500
+              shadow-sm
+              @click="onMenuClick"
+            >
+              <li col-span-full text="center xl" font-bold>
+                Lesson
+              </li>
+              <li
+                v-for="(id, index) in lessonIdList" :key="id"
+                :data-lesson="id"
+                hover="bg-gray-400/20"
 
-            h-2.5rem table-cell cursor-pointer select-none rounded text-center align-middle leading-2.5rem transition-200
-          >
-            {{ index + 1 }}
-          </li>
-        </ol>
+                h-2.5rem table-cell cursor-pointer select-none rounded text-center align-middle leading-2.5rem transition-200
+              >
+                {{ index + 1 }}
+              </li>
+            </ol>
+          </div>
+        </Transition>
       </div>
     </header>
     <main v-if="currentSentence" mt-20>
@@ -277,5 +286,15 @@ function onMenuClick(event: MouseEvent) {
 .btn {
   @apply px-4 py-px rounded bg-sky-500 text-white border-(sky-700 2px) hover:bg-opacity-80
   disabled:(cursor-default bg-gray-600 opacity-50 hover:bg-opacity-100);
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.3s;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>
