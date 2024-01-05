@@ -40,5 +40,7 @@
     "jsonc",
     "yaml",
     "toml"
-  ]
+  ],
+
+  "css.lint.unknownAtRules": "ignore"
 }
