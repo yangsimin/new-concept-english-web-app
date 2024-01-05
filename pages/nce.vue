@@ -25,12 +25,11 @@ interface Sentence {
 const route = useRoute()
 const router = useRouter()
 
-const book = ref(1)
+const bookId = ref(1)
 const lessonId = ref(1001)
 const lessonIdList = ref<number[]>([])
 const currentLesson = ref<Lesson | undefined>()
 const sentenceIndex = ref(0)
-const sentenceList = computed<Sentence[]>(() => currentLesson.value?.sentences ?? [])
 const currentSentence = ref<Sentence | undefined>()
 
 const isSoundEnable = ref(true)
@@ -65,10 +64,10 @@ addListenKeyDown()
 
 watchEffect(async () => {
   if (!Array.isArray(route.query.book)) {
-    book.value = Number(route.query.book)
+    bookId.value = Number(route.query.book)
   }
   else {
-    book.value = 0
+    bookId.value = 0
   }
 
   if (!Array.isArray(route.query.lessonId)) {
@@ -80,7 +79,7 @@ watchEffect(async () => {
 })
 
 watchEffect(() => {
-  currentSentence.value = sentenceList.value[sentenceIndex.value]
+  currentSentence.value = currentLesson.value?.sentences[sentenceIndex.value]
   isEnTextHidden.value = true
   pauseAudio()
 })
@@ -90,15 +89,15 @@ watchEffect(() => {
 })
 
 watchEffect(async () => {
-  lessonIdList.value = await updateBook(book.value) ?? []
+  lessonIdList.value = await updateBook(bookId.value) ?? []
 })
 
 watchEffect(async () => {
-  if (!book.value || !lessonId.value) {
+  if (!bookId.value || !lessonId.value) {
     return
   }
 
-  currentLesson.value = await requestLesson(book.value, lessonId.value) ?? undefined
+  currentLesson.value = await requestLesson(bookId.value, lessonId.value) ?? undefined
   if (!currentLesson.value) {
     return
   }
@@ -160,11 +159,11 @@ function onClickNextStep() {
   if (isEnTextHidden.value) {
     isEnTextHidden.value = false
     if (isSoundEnable.value) {
-      playAudio(Number(currentSentence.value?.startAt), Number(currentSentence.value?.stopAt))
+      playAudio(Number(currentSentence.value!.startAt), Number(currentSentence.value!.stopAt))
     }
     return
   }
-  if (sentenceIndex.value < sentenceList.value.length - 1) {
+  if (sentenceIndex.value < currentLesson.value!.sentences.length - 1) {
     sentenceIndex.value++
   }
 }
@@ -177,7 +176,7 @@ function stepLesson(step: number) {
   router.push({
     path: route.path,
     query: {
-      book: book.value,
+      book: bookId.value,
       lessonId: nextLesson,
     },
   })
@@ -197,7 +196,7 @@ function onMenuClick(event: MouseEvent) {
     <header flex items-center justify-between>
       <div flex text="2xl">
         <strong mr-4>
-          {{ `${book}-${lessonId % 1000}` }}
+          {{ `${bookId}-${lessonId % 1000}` }}
         </strong>
         <span>
           <strong>
@@ -253,7 +252,7 @@ function onMenuClick(event: MouseEvent) {
         <button class="btn" :disabled="sentenceIndex === 0" @click="onClickPrevSentence">
           上一句
         </button>
-        <button class="btn" :disabled="sentenceIndex === sentenceList.length - 1 && !isEnTextHidden" @click="onClickNextStep">
+        <button class="btn" :disabled="sentenceIndex === currentLesson!.sentences.length - 1 && !isEnTextHidden" @click="onClickNextStep">
           下一步
         </button>
         <button class="btn" :disabled="lessonId % 1000 <= 1" @click="stepLesson(-1)">
