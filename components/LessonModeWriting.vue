@@ -1,0 +1,12 @@
+<script setup lang="ts">
+
+</script>
+
+<template>
+  <div />
+  Hello World
+</template>
+
+<style scoped>
+
+</style>
