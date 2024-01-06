@@ -7,8 +7,6 @@
 // done 5. 移除 mp3 的 git 同步
 // todo 6. server 异常处理
 
-import { vOnClickOutside } from '@vueuse/components'
-
 interface Lesson {
   id: number
   titleEn: string
@@ -37,7 +35,6 @@ const currentSentence = ref<Sentence | undefined>()
 const isSoundEnable = ref(true)
 const isEnTextHidden = ref(true)
 const { audioInstance, playAudio, pauseAudio, updateSource } = useAudio()
-const isMenuVisible = ref(false)
 
 const keyFnMap: Record<string, { name: string, fn: Function }> = {
   j: {
@@ -188,14 +185,6 @@ function stepLesson(step: number) {
     },
   })
 }
-
-function onMenuClick(event: MouseEvent) {
-  const target = event.target as HTMLElement
-  if (target.dataset.lesson && Number(target.dataset.lesson) !== lessonId.value) {
-    lessonId.value = Number(target.dataset.lesson)
-    isMenuVisible.value = false
-  }
-}
 </script>
 
 <template>
@@ -213,36 +202,11 @@ function onMenuClick(event: MouseEvent) {
           {{ currentLesson?.titleZh }}
         </span>
       </div>
-      <div
-        relative
-      >
-        <button hover="bg-gray-400/20" rounded p1 text-3xl transition-200 @click="isMenuVisible = true">
-          <span i="carbon-book" />
-        </button>
-        <Transition>
-          <div v-if="isMenuVisible" bg="black/50" fixed bottom-0 left-0 right-0 top-0 z-1 flex items-center justify-center overflow-auto>
-            <ol
-              v-on-click-outside="() => isMenuVisible = false"
-              grid="~ cols-[repeat(auto-fill,minmax(2.5rem,1fr))] gap-1"
-              border="2px sky-500" p="x-10 y-4"
-              max-w-500px w-70vw rounded bg-white text-sky-500 shadow-sm dark:bg-hex-222
-              @click="onMenuClick"
-            >
-              <li col-span-full text="center xl" font-bold>
-                Lesson
-              </li>
-              <li
-                v-for="id in lessonIdList" :key="id"
-                :data-lesson="id"
-                h-2.5rem table-cell cursor-pointer select-none rounded text-center align-middle leading-2.5rem transition-200
-                :class="{ 'bg-sky-500 text-white': id === lessonId, 'hover:bg-sky-400/20': id !== lessonId }"
-              >
-                {{ id % 1000 }}
-              </li>
-            </ol>
-          </div>
-        </Transition>
-      </div>
+      <LessonMenu
+        :current-lesson-id="lessonId"
+        :lesson-id-list="lessonIdList"
+        @select-lesson-id="lessonId = $event"
+      />
     </header>
     <main v-if="currentSentence" mt-20>
       <article flex="~ col" items-center justify-center gap-8>
