@@ -2,6 +2,10 @@
   "name": "nuxt-app",
   "type": "module",
   "private": true,
+  "repository": {
+    "type": "https",
+    "url": "https://github.com/yangsimin/new-concept-english-web-app.git"
+  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",

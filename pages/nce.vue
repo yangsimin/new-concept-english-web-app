@@ -91,11 +91,16 @@ watchEffect(() => {
 })
 
 watchEffect(async () => {
-  lessonIdList.value = await updateBook(bookId.value) ?? []
+  const lessonIds = await requestBook(bookId.value) ?? []
+  lessonIdList.value = lessonIds.filter(id => id % 2)
 })
 
 watchEffect(async () => {
   if (!bookId.value || !lessonId.value) {
+    return
+  }
+
+  if (lessonIdList.value.findIndex(id => id === lessonId.value) < 0) {
     return
   }
 
@@ -143,7 +148,7 @@ async function requestLesson(book: number, lessonId: number): Promise<Lesson | n
   return data.value
 }
 
-async function updateBook(book: number): Promise<number[] | null> {
+async function requestBook(book: number): Promise<number[] | null> {
   const { data } = await useFetch('/api/nce/book', {
     query: { book },
     transform: (data: any[]) => (data.map(lesson => Number(lesson.voa_id))),
@@ -171,22 +176,22 @@ function onClickNextStep() {
 }
 
 function stepLesson(step: number) {
-  const nextLesson = lessonId.value + step
-  if (nextLesson % 1000 < 1 || nextLesson % 1000 > lessonIdList.value.length - 1) {
+  const nextLessonIndex = lessonIdList.value.findIndex(id => id === lessonId.value) + step
+  if (nextLessonIndex < 0 || nextLessonIndex > lessonIdList.value.length - 1) {
     return
   }
   router.push({
     path: route.path,
     query: {
       book: bookId.value,
-      lessonId: nextLesson,
+      lessonId: lessonIdList.value[nextLessonIndex],
     },
   })
 }
 
 function onMenuClick(event: MouseEvent) {
   const target = event.target as HTMLElement
-  if (target.dataset.lesson) {
+  if (target.dataset.lesson && Number(target.dataset.lesson) !== lessonId.value) {
     lessonId.value = Number(target.dataset.lesson)
     isMenuVisible.value = false
   }
@@ -219,22 +224,20 @@ function onMenuClick(event: MouseEvent) {
             <ol
               v-on-click-outside="() => isMenuVisible = false"
               grid="~ cols-[repeat(auto-fill,minmax(2.5rem,1fr))] gap-1"
-              border="2px sky-500" max-w-500px w-70vw rounded bg-white p="x-10 y-4"
-              text-sky-500
-              shadow-sm
+              border="2px sky-500" p="x-10 y-4"
+              max-w-500px w-70vw rounded bg-white text-sky-500 shadow-sm dark:bg-hex-222
               @click="onMenuClick"
             >
               <li col-span-full text="center xl" font-bold>
                 Lesson
               </li>
               <li
-                v-for="(id, index) in lessonIdList" :key="id"
+                v-for="id in lessonIdList" :key="id"
                 :data-lesson="id"
-                hover="bg-gray-400/20"
-
                 h-2.5rem table-cell cursor-pointer select-none rounded text-center align-middle leading-2.5rem transition-200
+                :class="{ 'bg-sky-500 text-white': id === lessonId, 'hover:bg-sky-400/20': id !== lessonId }"
               >
-                {{ index + 1 }}
+                {{ id % 1000 }}
               </li>
             </ol>
           </div>
