@@ -1,12 +1,4 @@
 <script setup lang="ts">
-// todo 0. 完善切换下一课,下一本书的逻辑
-// done 1. 增加 mp3 播放
-// done 2. 拆分句子, 增加间隔
-// done 3. 按键映射
-// todo 4. 重构代码
-// done 5. 移除 mp3 的 git 同步
-// todo 6. server 异常处理
-
 export interface Lesson {
   id: number
   titleEn: string
@@ -29,6 +21,8 @@ const bookId = ref(1)
 const lessonId = ref(1001)
 const lessonIdList = ref<number[]>([])
 const currentLesson = ref<Lesson | undefined>()
+
+const [isListeningMode, toggleLessonMode] = useToggle(false)
 
 watchEffect(async () => {
   if (!Array.isArray(route.query.book)) {
@@ -103,10 +97,6 @@ function stepLesson(step: number) {
     },
   })
 }
-
-function toggleLessonMode() {
-
-}
 </script>
 
 <template>
@@ -124,7 +114,7 @@ function toggleLessonMode() {
           {{ currentLesson?.titleZh }}
         </span>
       </div>
-      <button hover="bg-gray-400/20" rounded p1 text-3xl transition-200 @click="toggleLessonMode">
+      <button hover="bg-gray-400/20" rounded p1 text-3xl transition-200 @click="() => toggleLessonMode()">
         <span i="carbon-apple" />
       </button>
       <LessonMenu
@@ -133,13 +123,14 @@ function toggleLessonMode() {
         @select-lesson-id="lessonId = $event"
       />
     </header>
-    <main mt-20>
+    <main v-if="currentLesson" mt-20>
       <LessonModeListening
-        v-if="currentLesson"
+        v-if="isListeningMode"
         :current-lesson="currentLesson"
         @next-lesson="stepLesson(1)"
         @prev-lesson="stepLesson(-1)"
       />
+      <LessonModeWriting v-else />
     </main>
   </div>
 </template>
