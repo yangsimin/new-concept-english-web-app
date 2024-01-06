@@ -20,6 +20,7 @@ export default defineConfig({
         'display': 'inline-block',
         'vertical-align': 'middle',
       },
+      prefix: 'icon-',
     }),
     presetWebFonts({
       fonts: {

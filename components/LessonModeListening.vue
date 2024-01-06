@@ -100,7 +100,7 @@ function onClickNextStep() {
       {{ currentSentence.zh }}
       <label absolute right-0 mr--16 cursor-pointer text-2xl>
         <input v-model="isSoundEnable" type="checkbox" hidden>
-        <span>{{ isSoundEnable ? '🔊' : '🔇' }}</span>
+        <span :icon="isSoundEnable ? 'carbon-volume-up-filled' : 'carbon-volume-mute-filled'" />
       </label>
     </p>
     <p flex gap-2 text-4xl>
