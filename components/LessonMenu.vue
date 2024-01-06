@@ -22,9 +22,9 @@ function onMenuClick(event: MouseEvent) {
   <div
     relative
   >
-    <button hover="bg-gray-400/20" rounded p1 text-3xl transition-200 @click="isMenuVisible = true">
-      <span i="carbon-book" />
-    </button>
+    <div inline-block @click="isMenuVisible = true">
+      <slot />
+    </div>
     <Transition>
       <div v-if="isMenuVisible" bg="black/50" fixed bottom-0 left-0 right-0 top-0 z-1 flex items-center justify-center overflow-auto>
         <ol

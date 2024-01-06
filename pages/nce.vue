@@ -114,14 +114,18 @@ function stepLesson(step: number) {
           {{ currentLesson?.titleZh }}
         </span>
       </div>
-      <button hover="bg-gray-400/20" rounded p1 text-3xl transition-200 @click="() => toggleLessonMode()">
-        <span i="carbon-apple" />
+      <button hover="bg-gray-400/20" rounded p1 text-2xl transition-200 title="切换模式" @click="() => toggleLessonMode()">
+        <span :icon="isListeningMode ? 'carbon-edit' : 'carbon-headphones'" />
       </button>
       <LessonMenu
         :current-lesson-id="lessonId"
         :lesson-id-list="lessonIdList"
         @select-lesson-id="lessonId = $event"
-      />
+      >
+        <button hover="bg-gray-400/20" rounded p1 text-2xl transition-200 title="打开目录">
+          <span icon="carbon-book" />
+        </button>
+      </LessonMenu>
     </header>
     <main v-if="currentLesson" mt-20>
       <LessonModeListening
