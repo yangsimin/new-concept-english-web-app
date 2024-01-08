@@ -134,7 +134,10 @@ function stepLesson(step: number) {
         @next-lesson="stepLesson(1)"
         @prev-lesson="stepLesson(-1)"
       />
-      <LessonModeWriting v-else />
+      <LessonModeWriting
+        v-else
+        :current-lesson="currentLesson"
+      />
     </main>
   </div>
 </template>
