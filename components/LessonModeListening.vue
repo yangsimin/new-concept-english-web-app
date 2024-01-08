@@ -116,16 +116,16 @@ function onClickNextStep() {
     </p>
   </article>
   <div grid="~ cols-[repeat(2,115px)]" mt-14 place-content-center gap-20px>
-    <button class="btn" :disabled="sentenceIndex === 0" @click="onClickPrevSentence">
+    <button class="btn-primary" :disabled="sentenceIndex === 0" @click="onClickPrevSentence">
       上一句
     </button>
-    <button class="btn" :disabled="sentenceIndex === currentLesson!.sentences.length - 1 && !isEnTextHidden" @click="onClickNextStep">
+    <button class="btn-primary" :disabled="sentenceIndex === currentLesson!.sentences.length - 1 && !isEnTextHidden" @click="onClickNextStep">
       下一步
     </button>
-    <button class="btn" @click="emits('prevLesson')">
+    <button class="btn-primary" @click="emits('prevLesson')">
       上一课
     </button>
-    <button class="btn" @click="emits('nextLesson')">
+    <button class="btn-primary" @click="emits('nextLesson')">
       下一课
     </button>
     <div v-for="({ name }, key) in keyFnMap" :key="key">
