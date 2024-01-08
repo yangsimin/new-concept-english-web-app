@@ -72,7 +72,7 @@ function checkResult(item: SentenceInfo): SentenceInfo['status'] {
 </script>
 
 <template>
-  <article grid grid-cols-2 mx-auto min-w-300px w-fit gap-2rem>
+  <article grid grid-cols-1 mx-auto min-w-300px w-fit gap-2rem lg:grid-cols-2>
     <div v-for="(eachItem, index) of formData" :key="eachItem.sentence.startAt">
       <p flex items-center>
         {{ index + 1 }}. {{ eachItem.sentence.zh }}
