@@ -71,6 +71,7 @@ function addListenKeyDown() {
   })
   onUnmounted(() => {
     window.removeEventListener('keydown', onKeyDown)
+    pauseAudio()
   })
 }
 
@@ -132,10 +133,3 @@ function onClickNextStep() {
     </div>
   </div>
 </template>
-
-<style scoped>
-.btn {
-  @apply px-4 py-px rounded bg-sky-500 text-white border-(sky-700 2px) hover:bg-opacity-80
-  disabled:(cursor-default bg-gray-600 opacity-50 hover:bg-opacity-100);
-}
-</style>
