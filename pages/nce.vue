@@ -89,11 +89,16 @@ function stepLesson(step: number) {
   if (nextLessonIndex < 0 || nextLessonIndex > lessonIdList.value.length - 1) {
     return
   }
+
+  selectLesson(lessonIdList.value[nextLessonIndex])
+}
+
+function selectLesson(lessonId: number) {
   router.push({
     path: route.path,
     query: {
       book: bookId.value,
-      lessonId: lessonIdList.value[nextLessonIndex],
+      lessonId,
     },
   })
 }
@@ -120,7 +125,7 @@ function stepLesson(step: number) {
       <LessonMenu
         :current-lesson-id="lessonId"
         :lesson-id-list="lessonIdList"
-        @select-lesson-id="lessonId = $event"
+        @select-lesson-id="selectLesson($event)"
       >
         <button hover="bg-gray-400/20" rounded p1 text-2xl transition-200 title="打开目录">
           <span icon="carbon-book" />

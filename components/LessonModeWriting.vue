@@ -1,19 +1,74 @@
 <script setup lang="ts">
-import type { Lesson } from '~/pages/nce.vue'
+import type { Lesson, Sentence } from '~/pages/nce.vue'
+
+interface SentenceInfo {
+  isAnswerVisible: boolean
+  inputText: string
+  sentence: Sentence
+  status: 'pass' | 'fail' | 'unknown'
+}
 
 const props = defineProps<{
   currentLesson: Lesson
 }>()
+
+const statusColor: Record<SentenceInfo['status'], string> = {
+  pass: 'text-green-500',
+  fail: 'text-red-500',
+  unknown: '',
+}
+
 const { currentLesson } = toRefs(props)
 
-const formData = ref<any[]>([])
-formData.value = currentLesson.value.sentences.map((sentence) => {
-  return {
-    isAnswerVisible: false,
-    inputText: '',
-    sentence,
-  }
+const formData = ref<SentenceInfo[]>([])
+const isSubmited = ref(false)
+
+watchEffect(() => {
+  formData.value = currentLesson.value.sentences.map((sentence) => {
+    return {
+      isAnswerVisible: false,
+      inputText: '',
+      sentence,
+      status: 'unknown',
+    }
+  })
 })
+
+function onSubmit() {
+  isSubmited.value = true
+  formData.value = formData.value.map((item) => {
+    item.isAnswerVisible = true
+    item.status = checkResult(item)
+    return item
+  })
+}
+
+function onReset() {
+  isSubmited.value = false
+  formData.value = formData.value.map((item) => {
+    item.isAnswerVisible = false
+    return item
+  })
+}
+
+function onClear() {
+  isSubmited.value = false
+  formData.value = formData.value.map((item) => {
+    item.isAnswerVisible = false
+    item.inputText = ''
+    item.status = 'unknown'
+    return item
+  })
+}
+
+function checkResult(item: SentenceInfo): SentenceInfo['status'] {
+  if (item.inputText === item.sentence.en) {
+    return 'pass'
+  }
+  else {
+    return 'fail'
+  }
+}
 </script>
 
 <template>
@@ -22,19 +77,31 @@ formData.value = currentLesson.value.sentences.map((sentence) => {
       <p flex items-center>
         {{ index + 1 }}. {{ eachItem.sentence.zh }}
         <span ml-2 cursor-pointer icon="carbon-volume-up-filled" />
-        <span :icon="eachItem.isAnswerVisible ? 'carbon-view-filled' : ' carbon-view-off-filled'" ml-2 @mouseenter="eachItem.isAnswerVisible = true" @mouseout="eachItem.isAnswerVisible = false" />
+        <span
+          :icon="eachItem.isAnswerVisible ? 'carbon-view-filled' : ' carbon-view-off-filled'" ml-2
+          @mouseenter="!isSubmited && (eachItem.isAnswerVisible = true)"
+          @mouseout="!isSubmited && (eachItem.isAnswerVisible = false)"
+        />
       </p>
       <div border-b="2px black" p-1 focus-within-border-b-sky-500>
-        <input type="text" w-full outline-none>
+        <input v-model="eachItem.inputText" type="text" w-full outline-none>
       </div>
-      <p p-1 :opacity="eachItem.isAnswerVisible ? 100 : 0">
+      <p p-1 :opacity="eachItem.isAnswerVisible ? 100 : 0" :class="[statusColor[eachItem.status]]">
         {{ eachItem.sentence.en }}
       </p>
     </div>
   </article>
-  <button class="btn" mx-auto block text-center>
-    提交
-  </button>
+  <footer flex justify-center gap-4>
+    <button class="btn-primary" @click="onSubmit">
+      提交
+    </button>
+    <button class="btn-primary" @click="onReset">
+      隐藏
+    </button>
+    <button class="btn-primary" @click="onClear">
+      清除
+    </button>
+  </footer>
 </template>
 
 <style scoped>
