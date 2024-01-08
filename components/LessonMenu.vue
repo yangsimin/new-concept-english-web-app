@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import { vOnClickOutside } from '@vueuse/components'
 
-const { lessonIdList, currentLessonId } = defineProps<{
+const props = defineProps<{
   lessonIdList: number[]
   currentLessonId: number
 }>()
 const emits = defineEmits(['selectLessonId'])
 
+const { lessonIdList, currentLessonId } = toRefs(props)
+
 const isMenuVisible = ref(false)
 
 function onMenuClick(event: MouseEvent) {
   const target = event.target as HTMLElement
-  if (target.dataset.lesson && Number(target.dataset.lesson) !== currentLessonId) {
+  if (target.dataset.lesson && Number(target.dataset.lesson) !== currentLessonId.value) {
     emits('selectLessonId', Number(target.dataset.lesson))
     isMenuVisible.value = false
   }
