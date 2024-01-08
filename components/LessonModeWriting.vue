@@ -62,7 +62,7 @@ function onClear() {
 }
 
 function checkResult(item: SentenceInfo): SentenceInfo['status'] {
-  if (item.inputText === item.sentence.en) {
+  if (item.inputText.trim() === item.sentence.en.trim()) {
     return 'pass'
   }
   else {
