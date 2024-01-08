@@ -22,7 +22,7 @@ const lessonId = ref(1001)
 const lessonIdList = ref<number[]>([])
 const currentLesson = ref<Lesson | undefined>()
 
-const [isListeningMode, toggleLessonMode] = useToggle(false)
+const [isListeningMode, toggleLessonMode] = useToggle(true)
 
 watchEffect(async () => {
   if (!Array.isArray(route.query.book)) {

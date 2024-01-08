@@ -40,7 +40,7 @@ function onMenuClick(event: MouseEvent) {
           <li
             v-for="id in lessonIdList" :key="id"
             :data-lesson="id"
-            h-2.5rem table-cell cursor-pointer select-none rounded text-center align-middle leading-2.5rem transition-200
+            h-2.5rem cursor-pointer select-none rounded text-center leading-2.5rem transition-200
             :class="{ 'bg-sky-500 text-white': id === currentLessonId, 'hover:bg-sky-400/20': id !== currentLessonId }"
           >
             {{ id % 1000 }}

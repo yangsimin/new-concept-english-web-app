@@ -10,7 +10,7 @@ const { currentLesson } = toRefs(props)
 const sentenceIndex = ref(0)
 const currentSentence = ref<Sentence | undefined>()
 
-const isSoundEnable = ref(true)
+const isSoundEnable = useLocalStorage('sound', true)
 const isEnTextHidden = ref(true)
 const { audioInstance, playAudio, pauseAudio, updateSource } = useAudio()
 

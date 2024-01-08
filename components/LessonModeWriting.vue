@@ -76,7 +76,6 @@ function checkResult(item: SentenceInfo): SentenceInfo['status'] {
     <div v-for="(eachItem, index) of formData" :key="eachItem.sentence.startAt">
       <p flex items-center>
         {{ index + 1 }}. {{ eachItem.sentence.zh }}
-        <span ml-2 cursor-pointer icon="carbon-volume-up-filled" />
         <span
           :icon="eachItem.isAnswerVisible ? 'carbon-view-filled' : ' carbon-view-off-filled'" ml-2
           @mouseenter="!isSubmited && (eachItem.isAnswerVisible = true)"
