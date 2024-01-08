@@ -96,15 +96,14 @@ function onClickNextStep() {
 </script>
 
 <template>
-  <article v-if="currentSentence" flex="~ col" items-center justify-center gap-8>
-    <p relative flex items-center text-4xl>
+  <article v-if="currentSentence" flex="~ col" min-h-14rem items-center justify-center gap-2 text-lg sm="text-4xl gap-8">
+    <p relative flex items-center>
       {{ currentSentence.zh }}
-      <label absolute right-0 mr--16 cursor-pointer text-2xl>
-        <input v-model="isSoundEnable" type="checkbox" hidden>
-        <span :icon="isSoundEnable ? 'carbon-volume-up-filled' : 'carbon-volume-mute-filled'" />
+      <label absolute right-0 mr--8 cursor-pointer sm="mr--16 text-2xl">
+        <span :icon="isSoundEnable ? 'carbon-volume-up-filled' : 'carbon-volume-mute-filled'" @click="isSoundEnable = !isSoundEnable" />
       </label>
     </p>
-    <p flex gap-2 text-4xl>
+    <p flex flex-wrap justify-center gap-2>
       <span
         v-for="(piece, index) in currentSentence.en.trim().split(/\s/)"
         :key="index"
@@ -115,7 +114,7 @@ function onClickNextStep() {
       </span>
     </p>
   </article>
-  <div grid="~ cols-[repeat(2,115px)]" mt-14 place-content-center gap-20px>
+  <div grid="~ cols-[repeat(2,115px)]" mt-14 place-content-center gap-20px text-sm sm:text-base>
     <button class="btn-primary" :disabled="sentenceIndex === 0" @click="onClickPrevSentence">
       上一句
     </button>

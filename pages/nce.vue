@@ -106,8 +106,8 @@ function selectLesson(lessonId: number) {
 
 <template>
   <div flex="~ col" box-border p="x-4 y-4">
-    <header flex items-center justify-start gap-2>
-      <div flex text="2xl" flex-1>
+    <header flex items-center justify-start gap-2 text-xl sm:text-2xl>
+      <div flex flex-1>
         <strong mr-4>
           {{ `${bookId}-${lessonId % 1000}` }}
         </strong>
@@ -119,7 +119,7 @@ function selectLesson(lessonId: number) {
           {{ currentLesson?.titleZh }}
         </span>
       </div>
-      <button hover="bg-gray-400/20" rounded p1 text-2xl transition-200 title="切换模式" @click="() => toggleLessonMode()">
+      <button hover="bg-gray-400/20" rounded p1 transition-200 title="切换模式" @click="() => toggleLessonMode()">
         <span :icon="isListeningMode ? 'carbon-edit' : 'carbon-headphones'" />
       </button>
       <LessonMenu
@@ -127,7 +127,7 @@ function selectLesson(lessonId: number) {
         :lesson-id-list="lessonIdList"
         @select-lesson-id="selectLesson($event)"
       >
-        <button hover="bg-gray-400/20" rounded p1 text-2xl transition-200 title="打开目录">
+        <button hover="bg-gray-400/20" rounded p1 transition-200 title="打开目录">
           <span icon="carbon-book" />
         </button>
       </LessonMenu>
