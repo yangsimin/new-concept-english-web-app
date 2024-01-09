@@ -61,7 +61,7 @@ function checkResult(item: SentenceInfo): Diff.Change[] {
 </script>
 
 <template>
-  <article grid grid-cols-1 mx-auto min-w-300px w-max gap-2rem text-lg xl:grid-cols-2>
+  <article grid grid-cols-2 mx-auto min-w-300px w-max gap-2rem text-lg lt-xl:grid-cols-1>
     <div v-for="(eachItem, index) of formData" :key="eachItem.sentence.startAt">
       <p flex items-center>
         {{ index + 1 }}. {{ eachItem.sentence.zh }}
