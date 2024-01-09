@@ -16,7 +16,7 @@ const props = defineProps<{
 const { currentLesson } = toRefs(props)
 
 const formData = ref<SentenceInfo[]>([])
-const isSubmited = ref(false)
+const isSubmitted = ref(false)
 const [isAllVisible, toggleVisible] = useToggle(false)
 
 watchEffect(() => {
@@ -37,7 +37,7 @@ watch(isAllVisible, () => {
 })
 
 function onSubmit() {
-  isSubmited.value = true
+  isSubmitted.value = true
   isAllVisible.value = true
   formData.value = formData.value.map((item) => {
     item.diffChanges = checkResult(item)
@@ -46,7 +46,7 @@ function onSubmit() {
 }
 
 function onClear() {
-  isSubmited.value = false
+  isSubmitted.value = false
   isAllVisible.value = false
   formData.value = formData.value.map((item) => {
     item.inputText = ''
@@ -68,8 +68,8 @@ function checkResult(item: SentenceInfo): Diff.Change[] {
         <span
           :icon="eachItem.isAnswerVisible ? 'carbon-view-filled' : ' carbon-view-off-filled'"
           ml-2
-          @mouseenter="!isSubmited && (eachItem.isAnswerVisible = true)"
-          @mouseout="!isSubmited && (eachItem.isAnswerVisible = false)"
+          @mouseenter="!isSubmitted && (eachItem.isAnswerVisible = true)"
+          @mouseout="!isSubmitted && (eachItem.isAnswerVisible = false)"
         />
       </p>
       <div border-b="2px black" pl-1 focus-within-border-b-sky-500>
