@@ -13,10 +13,11 @@ const props = defineProps<{
   currentLesson: Lesson
 }>()
 
+const emits = defineEmits(['nextLesson', 'prevLesson'])
 const { currentLesson } = toRefs(props)
 
 const formData = ref<SentenceInfo[]>([])
-const isSubmitted = ref(false)
+const isSubmited = ref(false)
 const [isAllVisible, toggleVisible] = useToggle(false)
 
 watchEffect(() => {
@@ -27,6 +28,8 @@ watchEffect(() => {
       sentence,
     }
   })
+  isSubmited.value = false
+  isAllVisible.value = false
 })
 
 watch(isAllVisible, () => {
@@ -37,16 +40,16 @@ watch(isAllVisible, () => {
 })
 
 function onSubmit() {
-  isSubmitted.value = true
-  isAllVisible.value = true
   formData.value = formData.value.map((item) => {
     item.diffChanges = checkResult(item)
     return item
   })
+  isSubmited.value = true
+  isAllVisible.value = true
 }
 
 function onClear() {
-  isSubmitted.value = false
+  isSubmited.value = false
   isAllVisible.value = false
   formData.value = formData.value.map((item) => {
     item.inputText = ''
@@ -68,8 +71,8 @@ function checkResult(item: SentenceInfo): Diff.Change[] {
         <span
           :icon="eachItem.isAnswerVisible ? 'carbon-view-filled' : ' carbon-view-off-filled'"
           ml-2
-          @mouseenter="!isSubmitted && (eachItem.isAnswerVisible = true)"
-          @mouseout="!isSubmitted && (eachItem.isAnswerVisible = false)"
+          @mouseenter="!isSubmited && (eachItem.isAnswerVisible = true)"
+          @mouseout="!isSubmited && (eachItem.isAnswerVisible = false)"
         />
       </p>
       <div border-b="2px black" pl-1 focus-within-border-b-sky-500>
@@ -90,16 +93,26 @@ function checkResult(item: SentenceInfo): Diff.Change[] {
       </div>
     </div>
   </article>
-  <footer mt-10 flex justify-center gap-4>
-    <button class="btn-primary" @click="onSubmit">
-      提交
-    </button>
-    <button class="btn-primary" @click="toggleVisible()">
-      {{ isAllVisible ? '隐藏' : '显示' }}
-    </button>
-    <button class="btn-primary" @click="onClear">
-      清除
-    </button>
+  <footer mt-10 flex flex-col items-center justify-center gap-4>
+    <div space-x-4>
+      <button class="btn-primary" @click="onSubmit">
+        提交
+      </button>
+      <button class="btn-primary" @click="toggleVisible()">
+        {{ isAllVisible ? '隐藏' : '显示' }}
+      </button>
+      <button class="btn-primary" @click="onClear">
+        清除
+      </button>
+    </div>
+    <div space-x-4>
+      <button class="btn-primary" @click="emits('prevLesson')">
+        上一课
+      </button>
+      <button class="btn-primary" @click="emits('nextLesson')">
+        下一课
+      </button>
+    </div>
   </footer>
 </template>
 
