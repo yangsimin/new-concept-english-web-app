@@ -20,6 +20,41 @@ const formData = ref<SentenceInfo[]>([])
 const isSubmited = ref(false)
 const [isAllVisible, toggleVisible] = useToggle(false)
 
+const keyFnMap: Record<string, { name: string, fn: Function }> = {
+  Tab: {
+    name: '下一句',
+    fn: () => {
+      setTimeout(() => {
+        const activeEl = window.document.activeElement
+        if (!activeEl) {
+          return
+        }
+        const { y } = activeEl.getBoundingClientRect()
+        if (y > window.innerHeight * 0.4) {
+          window.scrollBy({
+            top: y - window.innerHeight / 4,
+            behavior: 'smooth',
+          })
+        }
+      })
+    },
+  },
+  Enter: {
+    name: '提交',
+    fn: () => {
+      if (!isSubmited.value) {
+        onSubmit()
+      }
+      else {
+        toggleVisible()
+        isSubmited.value = false
+      }
+    },
+  },
+}
+
+addListenKeyDown()
+
 watchEffect(() => {
   formData.value = currentLesson.value.sentences.map((sentence) => {
     return {
@@ -60,6 +95,21 @@ function onClear() {
 
 function checkResult(item: SentenceInfo): Diff.Change[] {
   return Diff.diffWords(item.inputText.trim(), item.sentence.en.trim())
+}
+
+function addListenKeyDown() {
+  const onKeyDown = (event: KeyboardEvent) => {
+    const key = event.key
+    if (keyFnMap[key]) {
+      keyFnMap[key].fn()
+    }
+  }
+  onMounted(() => {
+    window.addEventListener('keydown', onKeyDown)
+  })
+  onUnmounted(() => {
+    window.removeEventListener('keydown', onKeyDown)
+  })
 }
 </script>
 
