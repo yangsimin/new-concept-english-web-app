@@ -91,6 +91,7 @@ function stepLesson(step: number) {
   }
 
   selectLesson(lessonIdList.value[nextLessonIndex])
+  window.scrollTo(0, 0)
 }
 
 function selectLesson(lessonId: number) {
@@ -142,6 +143,8 @@ function selectLesson(lessonId: number) {
       <LessonModeWriting
         v-else
         :current-lesson="currentLesson"
+        @next-lesson="stepLesson(1)"
+        @prev-lesson="stepLesson(-1)"
       />
     </main>
   </div>
