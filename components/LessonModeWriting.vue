@@ -42,13 +42,7 @@ const keyFnMap: Record<string, { name: string, fn: Function }> = {
   Enter: {
     name: '提交',
     fn: () => {
-      if (!isSubmited.value) {
-        onSubmit()
-      }
-      else {
-        toggleVisible()
-        isSubmited.value = false
-      }
+      onSubmit()
     },
   },
 }
