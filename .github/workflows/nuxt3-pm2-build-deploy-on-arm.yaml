@@ -23,7 +23,7 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           ARGS: -rlgoDzvc -i --delete
-          SOURCE: .output fonts src
+          SOURCE: .output
           REMOTE_HOST: ${{ vars.REMOTE_HOST }}
           REMOTE_USER: ${{ vars.REMOTE_USER }}
           TARGET: ${{ vars.REMOTE_TARGET }}
