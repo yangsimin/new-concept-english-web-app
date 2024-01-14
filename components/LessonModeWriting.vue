@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import * as Diff from 'diff'
+import type { MessageType } from './MessageBox.vue'
 import { copyToClipboard } from '~/composables/utils'
 import type { Lesson, Sentence } from '~/pages/nce.vue'
 
@@ -20,6 +21,12 @@ const { currentLesson } = toRefs(props)
 const formData = ref<SentenceInfo[]>([])
 const isSubmitted = ref(false)
 const [isAllVisible, toggleVisible] = useToggle(false)
+const messageBoxProps = reactive({
+  visible: false,
+  message: '',
+  type: 'info' as MessageType,
+  html: false,
+})
 
 const keyFnMap: Record<string, { name: string, fn: Function }> = {
   Tab: {
@@ -124,13 +131,32 @@ async function copySentencePrompt({ sentence, inputText }: SentenceInfo) {
   await copyToClipboard(promptTemplate)
 
   const url = 'https://tongyi.aliyun.com/qianwen/'
-  // eslint-disable-next-line no-alert
-  alert(`已拷贝，请前往《通义千问》提问 ${url}`)
+
+  toast({
+    message: `已拷贝，请前往 <a 
+          href="${url}" target="_blank" 
+          style="text-decoration:underline; margin:0 4px;"
+        >《通义千问》</a>提问
+    `,
+    type: 'success',
+    duration: 3000,
+    html: true,
+  })
+}
+
+function toast({ message, duration = 1000, type = 'info', html = false }: { message: string, duration?: number, type?: MessageType, html?: boolean }) {
+  messageBoxProps.message = message
+  messageBoxProps.type = type
+  messageBoxProps.visible = true
+  messageBoxProps.html = html
+  setTimeout(() => {
+    messageBoxProps.visible = false
+  }, duration)
 }
 </script>
 
 <template>
-  <article grid grid-cols-2 mx-auto min-w-300px w-max gap-2rem text-lg lt-xl:grid-cols-1>
+  <article grid grid-cols-1 mx-auto min-w-300px w-max gap-2rem text-lg>
     <div v-for="(eachItem, index) of formData" :key="eachItem.sentence.startAt">
       <div flex items-center>
         {{ index + 1 }}. {{ eachItem.sentence.zh }}
@@ -182,6 +208,7 @@ async function copySentencePrompt({ sentence, inputText }: SentenceInfo) {
       </button>
     </div>
   </footer>
+  <MessageBox v-bind="messageBoxProps" />
 </template>
 
 <style scoped>
