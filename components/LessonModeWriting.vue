@@ -116,17 +116,17 @@ function addListenKeyDown() {
 
 async function copySentencePrompt({ sentence, inputText }: SentenceInfo) {
   const promptTemplate = `
-  请你扮演一位资深的英语教育者，下面请看下面三段文字：
+  你扮演一位资深的英语教育者，请看下面三段文字：
 
     1. ${sentence.zh}。
     2. ${inputText}
     3. ${sentence.en}
 
-  第一句是需要被翻译成英文的中文句子。
-  第二句是我所翻译的英文。
-  第三句是新概念教材的英语原文。
+  第一句,是中文原文。
+  第二句,是我所翻译的英文。
+  第三句,是新概念教材的英语原文。
 
-  先重复这三句话，然后对比我的翻译和新概念的原文的差异，分析差异点，并告诉我我的英语哪些方面薄弱，并指导我改进`
+  先重复这三句话，然后对比我的翻译和新概念的原文的差异，对差异点、薄弱点和建议这三个维度进行分析和阐述，并指导我改进。最后，给出你认为更好更地道的英文表达方式。`
 
   await copyToClipboard(promptTemplate)
 
