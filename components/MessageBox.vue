@@ -38,14 +38,16 @@ const styleMap: Record<MessageType, { color: string, icon: string }> = {
 
 <template>
   <Transition>
-    <div v-if="visible" fixed left-0 right-0 top="[10%]" text-center>
+    <div v-if="visible" fixed left-0 right-0 top="[5%]" text-center>
       <div
         :class="[styleMap[type].color]"
-        mx-auto w-max flex items-center gap-2 rounded-md px-8 py-4
+        mx-auto w-max flex items-center gap-2 rounded-md px-4 py-2
       >
-        <div v-if="html" v-html="message" />
+        <span :class="`${styleMap[type].icon}`" />
+        <template v-if="html">
+          <div v-html="message" />
+        </template>
         <template v-else>
-          <span :class="`${styleMap[type].icon}`" />
           {{ message }}
         </template>
       </div>
