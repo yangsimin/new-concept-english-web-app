@@ -18,7 +18,7 @@ const emits = defineEmits(['nextLesson', 'prevLesson'])
 const { currentLesson } = toRefs(props)
 
 const formData = ref<SentenceInfo[]>([])
-const isSubmited = ref(false)
+const isSubmitted = ref(false)
 const [isAllVisible, toggleVisible] = useToggle(false)
 
 const keyFnMap: Record<string, { name: string, fn: Function }> = {
@@ -58,7 +58,7 @@ watchEffect(() => {
       sentence,
     }
   })
-  isSubmited.value = false
+  isSubmitted.value = false
   isAllVisible.value = false
 })
 
@@ -74,12 +74,12 @@ function onSubmit() {
     item.diffChanges = checkResult(item)
     return item
   })
-  isSubmited.value = true
+  isSubmitted.value = true
   isAllVisible.value = true
 }
 
 function onClear() {
-  isSubmited.value = false
+  isSubmitted.value = false
   isAllVisible.value = false
   formData.value = formData.value.map((item) => {
     item.inputText = ''
@@ -137,8 +137,8 @@ async function copySentencePrompt({ sentence, inputText }: SentenceInfo) {
         <div ml-2 flex items-center gap-2>
           <span
             :icon="eachItem.isAnswerVisible ? 'carbon-view-filled' : ' carbon-view-off-filled'"
-            @mouseenter="!isSubmited && (eachItem.isAnswerVisible = true)"
-            @mouseout="!isSubmited && (eachItem.isAnswerVisible = false)"
+            @mouseenter="!isSubmitted && (eachItem.isAnswerVisible = true)"
+            @mouseout="!isSubmitted && (eachItem.isAnswerVisible = false)"
           />
           <span icon="carbon-chat-bot" cursor-pointer title="复制提示词" @click="copySentencePrompt(eachItem)" />
         </div>
