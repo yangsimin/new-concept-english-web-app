@@ -119,7 +119,7 @@ async function copySentencePrompt({ sentence, inputText }: SentenceInfo) {
   第二句是我所翻译的英文。
   第三句是新概念教材的英语原文。
 
-  请对比我的翻译和新概念的原文的差异，分析差异点，并告诉我我的英语哪些方面薄弱，并指导我改进`
+  先重复这三句话，然后对比我的翻译和新概念的原文的差异，分析差异点，并告诉我我的英语哪些方面薄弱，并指导我改进`
 
   await copyToClipboard(promptTemplate)
 
