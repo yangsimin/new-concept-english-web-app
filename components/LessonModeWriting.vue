@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import * as Diff from 'diff'
 import type { MessageType } from './MessageBox.vue'
-import { copyToClipboard } from '~/composables/utils'
 import type { Lesson, Sentence } from '~/pages/nce.vue'
 
 interface SentenceInfo {
@@ -27,6 +26,7 @@ const messageBoxProps = reactive({
   type: 'info' as MessageType,
   html: false,
 })
+const { copy: copyToClipboard } = useClipboard()
 
 const keyFnMap: Record<string, { name: string, fn: Function }> = {
   Tab: {
