@@ -158,9 +158,9 @@ function toast({ message, duration = 1000, type = 'info', html = false }: { mess
 <template>
   <article grid grid-cols-1 mx-auto min-w-300px w-max gap-2rem text-lg>
     <div v-for="(eachItem, index) of formData" :key="eachItem.sentence.startAt">
-      <div flex items-center>
+      <div flex items-center justify-between>
         {{ index + 1 }}. {{ eachItem.sentence.zh }}
-        <div ml-2 flex items-center gap-2>
+        <div mx-2 flex items-center gap-2>
           <span
             :icon="eachItem.isAnswerVisible ? 'carbon-view-filled' : ' carbon-view-off-filled'"
             @mouseenter="!isSubmitted && (eachItem.isAnswerVisible = true)"
