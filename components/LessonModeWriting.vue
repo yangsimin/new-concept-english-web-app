@@ -26,7 +26,7 @@ const messageBoxProps = reactive({
   type: 'info' as MessageType,
   html: false,
 })
-const { copy: copyToClipboard } = useClipboard()
+const { copy: copyToClipboard } = useClipboard({ legacy: true })
 
 const keyFnMap: Record<string, { name: string, fn: Function }> = {
   Tab: {
