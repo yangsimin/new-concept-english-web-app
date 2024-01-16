@@ -47,12 +47,6 @@ const keyFnMap: Record<string, { name: string, fn: Function }> = {
       })
     },
   },
-  Enter: {
-    name: '提交',
-    fn: () => {
-      onSubmit()
-    },
-  },
 }
 
 addListenKeyDown()
@@ -91,6 +85,16 @@ function onClear() {
   formData.value = formData.value.map((item) => {
     item.inputText = ''
     item.diffChanges = []
+    return item
+  })
+}
+
+function onSubmitSingle(i: SentenceInfo) {
+  formData.value = formData.value.map((item) => {
+    if (i.sentence.zh === item.sentence.zh) {
+      item.diffChanges = checkResult(item)
+      item.isAnswerVisible = true
+    }
     return item
   })
 }
@@ -170,7 +174,7 @@ function toast({ message, duration = 1000, type = 'info', html = false }: { mess
         </div>
       </div>
       <div border-b="2px black" pl-1 focus-within-border-b-sky-500>
-        <input v-model="eachItem.inputText" type="text" w-full outline-none>
+        <input v-model="eachItem.inputText" type="text" w-full outline-none @keydown.enter="onSubmitSingle(eachItem)">
       </div>
       <div pl-1 pr-20 :opacity="eachItem.isAnswerVisible ? 100 : 0">
         <p v-if="!eachItem.diffChanges?.length">
