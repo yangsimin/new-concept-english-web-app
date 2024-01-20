@@ -10,12 +10,6 @@ interface SentenceInfo {
   diffChanges?: Diff.Change[]
 }
 
-interface Cache {
-  formData: SentenceInfo[]
-  isSubmitted: boolean
-  isAllVisible: boolean
-}
-
 const props = defineProps<{
   currentLesson: Lesson
 }>()
