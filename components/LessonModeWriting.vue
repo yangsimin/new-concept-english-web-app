@@ -10,6 +10,12 @@ interface SentenceInfo {
   diffChanges?: Diff.Change[]
 }
 
+interface Cache {
+  formData: SentenceInfo[]
+  isSubmitted: boolean
+  isAllVisible: boolean
+}
+
 const props = defineProps<{
   currentLesson: Lesson
 }>()
@@ -17,9 +23,13 @@ const props = defineProps<{
 const emits = defineEmits(['nextLesson', 'prevLesson'])
 const { currentLesson } = toRefs(props)
 
-const formData = ref<SentenceInfo[]>([])
-const isSubmitted = ref(false)
-const [isAllVisible, toggleVisible] = useToggle(false)
+const storageKey = `nce-lessonId-${currentLesson.value.id}`
+const { formData, isSubmitted, isAllVisible } = toRefs(useLocalStorage(storageKey, {
+  formData: [] as SentenceInfo[],
+  isSubmitted: false,
+  isAllVisible: false,
+}).value)
+
 const messageBoxProps = reactive({
   visible: false,
   message: '',
@@ -51,7 +61,7 @@ const keyFnMap: Record<string, { name: string, fn: Function }> = {
 
 addListenKeyDown()
 
-watchEffect(() => {
+if (!formData.value.length) {
   formData.value = currentLesson.value.sentences.map((sentence) => {
     return {
       isAnswerVisible: false,
@@ -59,9 +69,7 @@ watchEffect(() => {
       sentence,
     }
   })
-  isSubmitted.value = false
-  isAllVisible.value = false
-})
+}
 
 watch(isAllVisible, () => {
   formData.value = formData.value.map((item) => {
@@ -196,7 +204,7 @@ function toast({ message, duration = 1000, type = 'info', html = false }: { mess
       <button class="btn-primary" @click="onSubmit">
         提交
       </button>
-      <button class="btn-primary" @click="toggleVisible()">
+      <button class="btn-primary" @click="isAllVisible = !isAllVisible">
         {{ isAllVisible ? '隐藏' : '显示' }}
       </button>
       <button class="btn-primary" @click="onClear">
