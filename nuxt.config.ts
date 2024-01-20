@@ -1,7 +1,7 @@
 import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   modules: [
     '@unocss/nuxt',
     '@vueuse/nuxt',
