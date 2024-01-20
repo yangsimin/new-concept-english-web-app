@@ -22,7 +22,7 @@ const lessonId = ref(1001)
 const lessonIdList = ref<number[]>([])
 const currentLesson = ref<Lesson | undefined>()
 
-const [isListeningMode, toggleLessonMode] = useToggle(true)
+const isListeningMode = useLocalStorage('nce-listening-mode', true)
 
 watchEffect(async () => {
   if (!Array.isArray(route.query.book)) {
@@ -120,7 +120,7 @@ function selectLesson(lessonId: number) {
           {{ currentLesson?.titleZh }}
         </span>
       </div>
-      <button hover="bg-gray-400/20" rounded p1 transition-200 title="切换模式" @click="() => toggleLessonMode()">
+      <button hover="bg-gray-400/20" rounded p1 transition-200 title="切换模式" @click="() => isListeningMode = !isListeningMode">
         <span :icon="isListeningMode ? 'carbon-edit' : 'carbon-headphones'" />
       </button>
       <LessonMenu
@@ -142,6 +142,7 @@ function selectLesson(lessonId: number) {
       />
       <LessonModeWriting
         v-else
+        :key="currentLesson.id"
         :current-lesson="currentLesson"
         @next-lesson="stepLesson(1)"
         @prev-lesson="stepLesson(-1)"
