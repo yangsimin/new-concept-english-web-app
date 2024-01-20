@@ -15,6 +15,10 @@ const isEnTextHidden = ref(true)
 const { audioInstance, playAudio, pauseAudio, updateSource } = useAudio()
 
 const keyFnMap: Record<string, { name: string, fn: Function }> = {
+  h: {
+    name: '上一课',
+    fn: () => { emits('prevLesson') },
+  },
   j: {
     name: '下一步',
     fn: () => { onClickNextStep() },
@@ -27,17 +31,15 @@ const keyFnMap: Record<string, { name: string, fn: Function }> = {
     name: '下一课',
     fn: () => { emits('nextLesson') },
   },
-  h: {
-    name: '上一课',
-    fn: () => { emits('prevLesson') },
-  },
   m: {
     name: '静音切换',
     fn: () => { isSoundEnable.value = !isSoundEnable.value },
   },
 }
 
-addListenKeyDown()
+onUnmounted(() => {
+  pauseAudio()
+})
 
 watchEffect(() => {
   currentSentence.value = currentLesson.value.sentences[sentenceIndex.value]
@@ -58,22 +60,6 @@ watchEffect(() => {
   isEnTextHidden.value = true
   updateSource(currentLesson.value.audioUrl)
 })
-
-function addListenKeyDown() {
-  const onKeyDown = (event: KeyboardEvent) => {
-    const key = event.key
-    if (keyFnMap[key]) {
-      keyFnMap[key].fn()
-    }
-  }
-  onMounted(() => {
-    window.addEventListener('keydown', onKeyDown)
-  })
-  onUnmounted(() => {
-    window.removeEventListener('keydown', onKeyDown)
-    pauseAudio()
-  })
-}
 
 function onClickPrevSentence() {
   if (sentenceIndex.value > 0) {
@@ -127,8 +113,6 @@ function onClickNextStep() {
     <button class="btn-primary" @click="emits('nextLesson')">
       下一课
     </button>
-    <div v-for="({ name }, key) in keyFnMap" :key="key">
-      <span text="center white" mr-2 inline-block w-30px rounded bg-sky-500>{{ key }}</span>{{ name }}
-    </div>
   </div>
+  <ShortcutKey :key-fn-map="keyFnMap" />
 </template>
