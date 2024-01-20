@@ -19,9 +19,9 @@ function onKeyDown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div fixed bottom-0 left-0 right-0 my-4 flex items-center justify-center gap-10 opacity-80>
+  <div fixed bottom-0 left-0 right-0 my-4 flex items-center justify-center gap-10 opacity-70>
     <div v-for="({ name }, key) in keyFnMap" :key="key">
-      <span text="center white" mr-2 inline-block w-30px rounded bg-sky-500>{{ key }}</span>{{ name }}
+      <span text="center white" mr-2 inline-block rounded bg-sky-500 px-2>{{ key }}</span>{{ name }}
     </div>
   </div>
 </template>

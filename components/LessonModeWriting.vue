@@ -33,6 +33,14 @@ const messageBoxProps = reactive({
 const { copy: copyToClipboard } = useClipboard({ legacy: true })
 
 const keyFnMap: Record<string, { name: string, fn: Function }> = {
+  h: {
+    name: '上一课',
+    fn: () => { emits('prevLesson') },
+  },
+  l: {
+    name: '下一课',
+    fn: () => { emits('nextLesson') },
+  },
   Tab: {
     name: '下一句',
     fn: () => {
@@ -53,8 +61,6 @@ const keyFnMap: Record<string, { name: string, fn: Function }> = {
   },
 }
 
-addListenKeyDown()
-
 if (!formData.value.length) {
   formData.value = currentLesson.value.sentences.map((sentence) => {
     return {
@@ -70,7 +76,7 @@ watch(isAllVisible, () => {
     item.isAnswerVisible = isAllVisible.value
     return item
   })
-})
+}, { immediate: true })
 
 function onSubmit() {
   formData.value = formData.value.map((item) => {
@@ -103,21 +109,6 @@ function onSubmitSingle(i: SentenceInfo) {
 
 function checkResult(item: SentenceInfo): Diff.Change[] {
   return Diff.diffWords(item.inputText.trim(), item.sentence.en.trim())
-}
-
-function addListenKeyDown() {
-  const onKeyDown = (event: KeyboardEvent) => {
-    const key = event.key
-    if (keyFnMap[key]) {
-      keyFnMap[key].fn()
-    }
-  }
-  onMounted(() => {
-    window.addEventListener('keydown', onKeyDown)
-  })
-  onUnmounted(() => {
-    window.removeEventListener('keydown', onKeyDown)
-  })
 }
 
 async function copySentencePrompt({ sentence, inputText }: SentenceInfo) {
@@ -176,7 +167,15 @@ function toast({ message, duration = 1000, type = 'info', html = false }: { mess
         </div>
       </div>
       <div border-b="2px black" pl-1 focus-within-border-b-sky-500>
-        <input v-model="eachItem.inputText" type="text" w-full outline-none @keydown.enter="onSubmitSingle(eachItem)">
+        <input
+          v-model="eachItem.inputText"
+          type="text"
+          w-full
+          outline-none
+          @keydown.enter="onSubmitSingle(eachItem)"
+          @keydown.tab="keyFnMap.Tab.fn"
+          @keydown.stop
+        >
       </div>
       <div pl-1 pr-20 :opacity="eachItem.isAnswerVisible ? 100 : 0">
         <p v-if="!eachItem.diffChanges?.length">
@@ -193,7 +192,7 @@ function toast({ message, duration = 1000, type = 'info', html = false }: { mess
       </div>
     </div>
   </article>
-  <footer mt-10 flex flex-col items-center justify-center gap-4>
+  <footer my-10 flex flex-col items-center justify-center gap-4>
     <div space-x-4>
       <button class="btn-primary" @click="onSubmit">
         提交
@@ -215,6 +214,7 @@ function toast({ message, duration = 1000, type = 'info', html = false }: { mess
     </div>
   </footer>
   <MessageBox v-bind="messageBoxProps" />
+  <ShortcutKey :key-fn-map="keyFnMap" />
 </template>
 
 <style scoped>
