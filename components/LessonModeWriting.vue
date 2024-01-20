@@ -33,15 +33,31 @@ const messageBoxProps = reactive({
 const { copy: copyToClipboard } = useClipboard({ legacy: true })
 
 const keyFnMap: Record<string, { name: string, fn: Function }> = {
-  h: {
+  'h': {
     name: '上一课',
     fn: () => { emits('prevLesson') },
   },
-  l: {
+  'l': {
     name: '下一课',
     fn: () => { emits('nextLesson') },
   },
-  Tab: {
+  'v': {
+    name: '显示/隐藏答案',
+    fn: () => { isAllVisible.value = !isAllVisible.value },
+  },
+  'z': {
+    name: '重置',
+    fn: onClear,
+  },
+  'enter': {
+    name: '提交',
+    fn: () => {},
+  },
+  'shift+enter': {
+    name: '提交所有',
+    fn: () => {},
+  },
+  'Tab': {
     name: '下一句',
     fn: () => {
       setTimeout(() => {
@@ -172,9 +188,10 @@ function toast({ message, duration = 1000, type = 'info', html = false }: { mess
           type="text"
           w-full
           outline-none
-          @keydown.enter="onSubmitSingle(eachItem)"
+          @keydown.enter.exact="onSubmitSingle(eachItem)"
           @keydown.tab="keyFnMap.Tab.fn"
-          @keydown.stop
+          @keydown.stop.exact
+          @keydown.enter.shift="onSubmit"
         >
       </div>
       <div pl-1 pr-20 :opacity="eachItem.isAnswerVisible ? 100 : 0">
@@ -201,7 +218,7 @@ function toast({ message, duration = 1000, type = 'info', html = false }: { mess
         {{ isAllVisible ? '隐藏' : '显示' }}
       </button>
       <button class="btn-primary" @click="onClear">
-        清除
+        重置
       </button>
     </div>
     <div space-x-4>
