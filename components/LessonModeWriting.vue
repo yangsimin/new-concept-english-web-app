@@ -109,6 +109,7 @@ function onClear() {
   formData.value = formData.value.map((item) => {
     item.inputText = ''
     item.diffChanges = []
+    item.isAnswerVisible = false
     return item
   })
 }
