@@ -175,11 +175,6 @@ function toast({ message, duration = 1000, type = 'info', html = false }: { mess
       <div flex items-center justify-between>
         {{ index + 1 }}. {{ eachItem.sentence.zh }}
         <div mx-2 flex items-center gap-2>
-          <span
-            :icon="eachItem.isAnswerVisible ? 'carbon-view-filled' : ' carbon-view-off-filled'"
-            @mouseenter="!isSubmitted && (eachItem.isAnswerVisible = true)"
-            @mouseout="!isSubmitted && (eachItem.isAnswerVisible = false)"
-          />
           <span icon="carbon-chat-bot" cursor-pointer title="复制提示词" @click="copySentencePrompt(eachItem)" />
         </div>
       </div>
@@ -193,6 +188,7 @@ function toast({ message, duration = 1000, type = 'info', html = false }: { mess
           @keydown.tab="keyFnMap.Tab.fn"
           @keydown.stop.exact
           @keydown.enter.shift="onSubmit"
+          @keydown.esc.exact="($event.target as HTMLElement).blur()"
         >
       </div>
       <div pl-1 pr-20 :opacity="eachItem.isAnswerVisible ? 100 : 0">
