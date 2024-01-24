@@ -54,7 +54,7 @@ const keyFnMap: Record<string, { name: string, fn: Function }> = {
   },
   'shift+enter': {
     name: '提交所有',
-    fn: () => {},
+    fn: onSubmit,
   },
   'Tab': {
     name: '下一句',
@@ -185,7 +185,7 @@ function toast({ message, duration = 1000, type = 'info', html = false }: { mess
           @keydown.enter.exact="onSubmitSingle(eachItem)"
           @keydown.tab="keyFnMap.Tab.fn"
           @keydown.stop.exact
-          @keydown.enter.shift="onSubmit"
+          @keydown.enter.shift="keyFnMap['shift+enter'].fn"
           @keydown.esc.exact="($event.target as HTMLElement).blur()"
         >
       </div>
@@ -206,21 +206,21 @@ function toast({ message, duration = 1000, type = 'info', html = false }: { mess
   </article>
   <footer my-10 flex flex-col items-center justify-center gap-4>
     <div space-x-4>
-      <button class="btn-primary" @click="onSubmit">
+      <button class="btn-primary" @click="keyFnMap['shift+enter'].fn">
         提交
       </button>
-      <button class="btn-primary" @click="setAllVisible(!isAllVisible)">
+      <button class="btn-primary" @click="keyFnMap.v.fn">
         {{ isAllVisible ? '隐藏' : '显示' }}
       </button>
-      <button class="btn-primary" @click="onClear">
+      <button class="btn-primary" @click="keyFnMap.z.fn">
         重置
       </button>
     </div>
     <div space-x-4>
-      <button class="btn-primary" @click="emits('prevLesson')">
+      <button class="btn-primary" @click="keyFnMap.l.fn">
         上一课
       </button>
-      <button class="btn-primary" @click="emits('nextLesson')">
+      <button class="btn-primary" @click="keyFnMap.l.fn">
         下一课
       </button>
     </div>
