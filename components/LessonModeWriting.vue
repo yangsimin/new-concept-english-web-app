@@ -18,9 +18,8 @@ const emits = defineEmits(['nextLesson', 'prevLesson'])
 const { currentLesson } = toRefs(props)
 
 const storageKey = `nce-lessonId-${currentLesson.value.id}`
-const { formData, isSubmitted, isAllVisible } = toRefs(useLocalStorage(storageKey, {
+const { formData, isAllVisible } = toRefs(useLocalStorage(storageKey, {
   formData: [] as SentenceInfo[],
-  isSubmitted: false,
   isAllVisible: false,
 }).value)
 
@@ -43,7 +42,7 @@ const keyFnMap: Record<string, { name: string, fn: Function }> = {
   },
   'v': {
     name: '显示/隐藏答案',
-    fn: () => { isAllVisible.value = !isAllVisible.value },
+    fn: () => { setAllVisible(!isAllVisible.value) },
   },
   'z': {
     name: '重置',
@@ -87,25 +86,24 @@ if (!formData.value.length) {
   })
 }
 
-watch(isAllVisible, () => {
+function setAllVisible(visible: boolean) {
   formData.value = formData.value.map((item) => {
-    item.isAnswerVisible = isAllVisible.value
+    item.isAnswerVisible = visible
     return item
   })
-}, { immediate: true })
+  isAllVisible.value = visible
+}
 
 function onSubmit() {
   formData.value = formData.value.map((item) => {
     item.diffChanges = checkResult(item)
     return item
   })
-  isSubmitted.value = true
-  isAllVisible.value = true
+  setAllVisible(true)
 }
 
 function onClear() {
-  isSubmitted.value = false
-  isAllVisible.value = false
+  setAllVisible(false)
   formData.value = formData.value.map((item) => {
     item.inputText = ''
     item.diffChanges = []
@@ -211,7 +209,7 @@ function toast({ message, duration = 1000, type = 'info', html = false }: { mess
       <button class="btn-primary" @click="onSubmit">
         提交
       </button>
-      <button class="btn-primary" @click="isAllVisible = !isAllVisible">
+      <button class="btn-primary" @click="setAllVisible(!isAllVisible)">
         {{ isAllVisible ? '隐藏' : '显示' }}
       </button>
       <button class="btn-primary" @click="onClear">
