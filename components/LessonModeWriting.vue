@@ -217,7 +217,7 @@ function toast({ message, duration = 1000, type = 'info', html = false }: { mess
       </button>
     </div>
     <div space-x-4>
-      <button class="btn-primary" @click="keyFnMap.l.fn">
+      <button class="btn-primary" @click="keyFnMap.h.fn">
         上一课
       </button>
       <button class="btn-primary" @click="keyFnMap.l.fn">
