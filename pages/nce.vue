@@ -8,6 +8,8 @@ export interface Lesson {
 }
 
 export interface Sentence {
+  lessonId: number
+  sentenceId: number
   startAt: number
   stopAt: number
   en: string
@@ -69,6 +71,8 @@ async function requestLesson(book: number, lessonId: number): Promise<Lesson | n
         stopAt: Number(s.EndTiming),
         en: s.Sentence,
         zh: s.Sentence_cn,
+        lessonId,
+        sentenceId: s.IdIndex,
       } satisfies Sentence)),
       audioUrl: lesson.audio_us,
     } satisfies Lesson),
