@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { storageKeyLastLesson, storageKeyListenMode } from '~/constants'
+
 export interface Lesson {
   id: number
   titleEn: string
@@ -24,7 +26,7 @@ const lessonId = ref(1001)
 const lessonIdList = ref<number[]>([])
 const currentLesson = ref<Lesson | undefined>()
 
-const isListeningMode = useLocalStorage('nce-listening-mode', true)
+const isListeningMode = useLocalStorage(storageKeyListenMode, true)
 
 watchEffect(async () => {
   if (!Array.isArray(route.query.book)) {
@@ -57,7 +59,16 @@ watchEffect(async () => {
   }
 
   currentLesson.value = await requestLesson(bookId.value, lessonId.value) ?? undefined
+  updateCache()
 })
+
+function updateCache() {
+  const cache = JSON.parse(localStorage.getItem(storageKeyLastLesson) ?? '')
+  localStorage.setItem(storageKeyLastLesson, JSON.stringify({
+    ...cache,
+    [bookId.value]: lessonId.value,
+  }))
+}
 
 async function requestLesson(book: number, lessonId: number): Promise<Lesson | null> {
   const { data } = await useFetch('/api/nce/lesson', {

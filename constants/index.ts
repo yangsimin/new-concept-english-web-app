@@ -1,2 +1,5 @@
 export const appName = 'New Concept English Learning App'
 export const appDescription = 'New Concept English Learning App'
+export const storageKeySoundEnable = 'nce-sound-enable'
+export const storageKeyListenMode = 'nce-listening-mode'
+export const storageKeyLastLesson = 'nce-last-lesson'

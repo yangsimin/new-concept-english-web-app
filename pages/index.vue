@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import { storageKeyLastLesson } from '~/constants'
+
 const router = useRouter()
 
 function onBookClick(index: number) {
+  const cache = JSON.parse(localStorage.getItem(storageKeyLastLesson) ?? '')
   router.push({
     path: '/nce',
     query: {
       book: index,
-      lessonId: index * 1000 + 1,
+      lessonId: cache[index] ?? index * 1000 + 1,
     },
   })
 }

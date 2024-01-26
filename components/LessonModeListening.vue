@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Lesson, Sentence } from '~/pages/nce.vue'
+import { storageKeySoundEnable } from '~/constants'
 
 const props = defineProps<{
   currentLesson: Lesson
@@ -10,7 +11,7 @@ const { currentLesson } = toRefs(props)
 const sentenceIndex = ref(0)
 const currentSentence = ref<Sentence | undefined>()
 
-const isSoundEnable = useLocalStorage('sound', true)
+const isSoundEnable = useLocalStorage(storageKeySoundEnable, true)
 const isEnTextHidden = ref(true)
 const { audioInstance, playAudio, pauseAudio, updateSource } = useAudio()
 
