@@ -58,7 +58,7 @@ function onMarkClick({ sentence, isMarked }: { sentence: Sentence, isMarked: boo
         <template #index="{ sentenceInfo, index }">
           <span mr--8>
             {{ index + 1 }}.
-            <NuxtLink :to="`/nce/?book=${Math.floor(sentenceInfo.sentence.lessonId / 1000)}&lessonId=${sentenceInfo.sentence.lessonId}`" underline>
+            <NuxtLink tabindex="-1" :to="`/nce/?book=${Math.floor(sentenceInfo.sentence.lessonId / 1000)}&lessonId=${sentenceInfo.sentence.lessonId}`" underline>
               [{{ Math.floor(sentenceInfo.sentence.lessonId / 1000) }}-{{ sentenceInfo.sentence.lessonId % 1000 }}]
             </NuxtLink>
           </span>
