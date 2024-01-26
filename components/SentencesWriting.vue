@@ -11,8 +11,10 @@ export interface SentenceInfo {
   diffChanges?: Diff.Change[]
 }
 
+const emits = defineEmits<{
+  (e: 'markClick', value: { sentence: Sentence, isMarked: boolean }): void
+}>()
 const formData = defineModel<SentenceInfo[]>({ default: [] })
-
 const keyFnMap: Record<string, { name: string, fn: Function }> = {
   'v': {
     name: '隐藏答案',
@@ -162,6 +164,11 @@ function usePromptIcon() {
   }
 }
 
+function handleMarkClick(info: SentenceInfo) {
+  info.isMarked = !info.isMarked
+  emits('markClick', { sentence: info.sentence, isMarked: info.isMarked })
+}
+
 defineExpose({
   keyFnMap,
 })
@@ -176,7 +183,7 @@ defineExpose({
           <span
             :icon="eachItem.isMarked ? 'carbon-star-filled' : 'carbon-star'" cursor-pointer title="加入收藏"
             :class="eachItem.isMarked ? 'text-yellow' : ''"
-            @click="eachItem.isMarked = !eachItem.isMarked"
+            @click="handleMarkClick(eachItem)"
           />
           <span
             icon="carbon-chat-bot" cursor-pointer title="复制提示词"

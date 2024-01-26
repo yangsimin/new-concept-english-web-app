@@ -4,6 +4,9 @@
       <strong mr-auto cursor-pointer uppercase @click="$router.push('/')">
         New Concept English
       </strong>
+      <NuxtLink to="/choice">
+        <span icon="carbon-star-review" title="精选句子练习" />
+      </NuxtLink>
       <DarkToggle />
       <a icon="carbon-logo-github" href="https://github.com/yangsimin/new-concept-english-web-app" target="_blank" />
     </header>
