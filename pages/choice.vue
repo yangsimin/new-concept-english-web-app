@@ -49,7 +49,21 @@ function onMarkClick({ sentence, isMarked }: { sentence: Sentence, isMarked: boo
       </h1>
     </header>
     <main mt-20>
-      <SentencesWriting v-if="formData.length" ref="sentencesWritingRef" v-model="formData" @mark-click="onMarkClick" />
+      <SentencesWriting
+        v-if="formData.length"
+        ref="sentencesWritingRef"
+        v-model="formData"
+        @mark-click="onMarkClick"
+      >
+        <template #index="{ sentenceInfo, index }">
+          <span mr--8>
+            {{ index + 1 }}.
+            <NuxtLink :to="`/nce/?book=${Math.floor(sentenceInfo.sentence.lessonId / 1000)}&lessonId=${sentenceInfo.sentence.lessonId}`" underline>
+              [{{ Math.floor(sentenceInfo.sentence.lessonId / 1000) }}-{{ sentenceInfo.sentence.lessonId % 1000 }}]
+            </NuxtLink>
+          </span>
+        </template>
+      </SentencesWriting>
       <div v-else text-center text-xl uppercase>
         Empty
       </div>

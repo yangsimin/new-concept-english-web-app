@@ -178,7 +178,10 @@ defineExpose({
   <article grid grid-cols-1 mx-auto min-w-300px w-max gap-2rem text-lg>
     <div v-for="(eachItem, index) of formData" :key="eachItem.sentence.startAt">
       <div flex items-center justify-between>
-        {{ index + 1 }}. {{ eachItem.sentence.zh }}
+        <slot name="index" :index="index" :sentence-info="eachItem">
+          {{ index + 1 }}.
+        </slot>
+        {{ eachItem.sentence.zh }}
         <div mx-2 flex items-center gap-2>
           <span
             :icon="eachItem.isMarked ? 'carbon-star-filled' : 'carbon-star'" cursor-pointer title="加入收藏"
