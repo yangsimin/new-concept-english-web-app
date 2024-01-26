@@ -1,7 +1,8 @@
 <script setup lang="ts">
-const { keyFnMap } = defineProps<{
+const props = defineProps<{
   keyFnMap: Record<string, { name: string, fn: Function }>
 }>()
+const { keyFnMap } = toRefs(props)
 
 onMounted(() => {
   window.addEventListener('keydown', onKeyDown)
@@ -12,8 +13,8 @@ onUnmounted(() => {
 
 function onKeyDown(event: KeyboardEvent) {
   const key = event.key
-  if (keyFnMap[key]) {
-    keyFnMap[key].fn()
+  if (keyFnMap.value[key]) {
+    keyFnMap.value[key].fn()
   }
 }
 </script>
