@@ -13,15 +13,6 @@ export interface SentenceInfo {
 
 const formData = defineModel<SentenceInfo[]>({ default: [] })
 
-const { copy: copyToClipboard } = useClipboard({ legacy: true })
-
-const messageBoxProps = reactive({
-  visible: false,
-  message: '',
-  type: 'info' as MessageType,
-  html: false,
-})
-
 const keyFnMap: Record<string, { name: string, fn: Function }> = {
   'v': {
     name: '隐藏答案',
@@ -76,6 +67,8 @@ const keyFnMap: Record<string, { name: string, fn: Function }> = {
   },
 }
 
+const { messageBoxProps, copySentencePrompt } = usePromptIcon()
+
 function submitSingle(i: SentenceInfo) {
   formData.value = formData.value.map((item) => {
     if (i.sentence.zh === item.sentence.zh) {
@@ -115,8 +108,16 @@ function checkResult(item: SentenceInfo): Diff.Change[] {
   return Diff.diffWords(item.inputText.trim(), item.sentence.en.trim())
 }
 
-async function copySentencePrompt({ sentence, inputText }: SentenceInfo) {
-  const promptTemplate = `
+function usePromptIcon() {
+  const { copy: copyToClipboard } = useClipboard({ legacy: true })
+  const messageBoxProps = reactive({
+    visible: false,
+    message: '',
+    type: 'info' as MessageType,
+    html: false,
+  })
+  async function copySentencePrompt({ sentence, inputText }: SentenceInfo) {
+    const promptTemplate = `
   你扮演一位资深的英语教育者，请看下面三段文字：
 
     1. ${sentence.zh}。
@@ -129,30 +130,36 @@ async function copySentencePrompt({ sentence, inputText }: SentenceInfo) {
 
   先丝毫不修改地重复这三句话，然后对比我的翻译和新概念的原文的差异，对差异点、薄弱点和建议这三个维度进行分析和阐述，并指导我改进。最后，给出你认为更好更地道的英文表达方式。`
 
-  await copyToClipboard(promptTemplate)
+    await copyToClipboard(promptTemplate)
 
-  const url = 'https://tongyi.aliyun.com/qianwen/'
+    const url = 'https://tongyi.aliyun.com/qianwen/'
 
-  toast({
-    message: `已拷贝，请前往 <a 
+    toast({
+      message: `已拷贝，请前往 <a 
           href="${url}" target="_blank" 
           style="text-decoration:underline; margin:0 4px;"
         >《通义千问》</a>提问
     `,
-    type: 'success',
-    duration: 3000,
-    html: true,
-  })
-}
+      type: 'success',
+      duration: 3000,
+      html: true,
+    })
+  }
 
-function toast({ message, duration = 1000, type = 'info', html = false }: { message: string, duration?: number, type?: MessageType, html?: boolean }) {
-  messageBoxProps.message = message
-  messageBoxProps.type = type
-  messageBoxProps.visible = true
-  messageBoxProps.html = html
-  setTimeout(() => {
-    messageBoxProps.visible = false
-  }, duration)
+  function toast({ message, duration = 1000, type = 'info', html = false }: { message: string, duration?: number, type?: MessageType, html?: boolean }) {
+    messageBoxProps.message = message
+    messageBoxProps.type = type
+    messageBoxProps.visible = true
+    messageBoxProps.html = html
+    setTimeout(() => {
+      messageBoxProps.visible = false
+    }, duration)
+  }
+
+  return {
+    messageBoxProps,
+    copySentencePrompt,
+  }
 }
 
 defineExpose({
