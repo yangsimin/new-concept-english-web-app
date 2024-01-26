@@ -63,11 +63,11 @@ watchEffect(async () => {
 })
 
 function updateCache() {
-  const cache = JSON.parse(localStorage.getItem(storageKeyLastLesson) ?? '')
-  localStorage.setItem(storageKeyLastLesson, JSON.stringify({
+  const cache = getLocalStorageJson<any>(storageKeyLastLesson, {})
+  setLocalStorageJson(storageKeyLastLesson, {
     ...cache,
     [bookId.value]: lessonId.value,
-  }))
+  })
 }
 
 async function requestLesson(book: number, lessonId: number): Promise<Lesson | null> {

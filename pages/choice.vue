@@ -9,10 +9,10 @@ const formData = ref(queryMarkedSentences())
 function queryMarkedSentences(): SentenceInfo[] {
   const lessonKeys = Object.keys(localStorage).filter(key => key.startsWith('nce-lesson'))
   return lessonKeys.map((key) => {
-    if (!localStorage[key]) {
+    const cache = getLocalStorageJson<any>(key)
+    if (!cache) {
       return []
     }
-    const cache = JSON.parse(localStorage[key])
     return cache.formData
       .filter((each: SentenceInfo) => each.isMarked)
       .map((each: SentenceInfo) => ({
@@ -26,18 +26,18 @@ function queryMarkedSentences(): SentenceInfo[] {
 
 function onMarkClick({ sentence, isMarked }: { sentence: Sentence, isMarked: boolean }) {
   const storageKey = `nce-lessonId-${sentence.lessonId}`
-  const cache = localStorage.getItem(storageKey)
+  const cache = getLocalStorageJson<any>(storageKey)
   if (!cache) {
     return
   }
-  const sentenceInfoList: SentenceInfo[] = JSON.parse(cache).formData
+  const sentenceInfoList: SentenceInfo[] = cache.formData
   sentenceInfoList.forEach((info) => {
     if (info.sentence.sentenceId !== sentence.sentenceId) {
       return
     }
     info.isMarked = isMarked
   })
-  localStorage.setItem(storageKey, JSON.stringify({ formData: sentenceInfoList }))
+  setLocalStorageJson(storageKey, { formData: sentenceInfoList })
 }
 </script>
 

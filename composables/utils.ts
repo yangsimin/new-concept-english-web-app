@@ -11,3 +11,18 @@ export function throttle(fn: Function, delay: number) {
     }, delay)
   }
 }
+
+export function getLocalStorageJson<T>(key: string, defaultValue: any = undefined): T {
+  if (!localStorage[key]) {
+    return defaultValue as T
+  }
+  return JSON.parse(localStorage[key]) as T
+}
+
+export function setLocalStorageJson(key: string, value: any) {
+  if (value === undefined || value === null) {
+    localStorage[key] = ''
+    return
+  }
+  localStorage[key] = JSON.stringify(value)
+}
