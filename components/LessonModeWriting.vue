@@ -41,7 +41,7 @@ const keyFnMap: Record<string, { name: string, fn: Function }> = {
     fn: () => { emits('nextLesson') },
   },
   'v': {
-    name: '显示/隐藏答案',
+    name: '显/隐答案',
     fn: () => { setAllVisible(!isAllVisible.value) },
   },
   'z': {
@@ -53,7 +53,7 @@ const keyFnMap: Record<string, { name: string, fn: Function }> = {
     fn: () => {},
   },
   'shift+enter': {
-    name: '提交所有',
+    name: '提交全部',
     fn: onSubmit,
   },
   'Tab': {
@@ -68,11 +68,26 @@ const keyFnMap: Record<string, { name: string, fn: Function }> = {
         if (y > window.innerHeight * 0.4) {
           window.scrollBy({
             top: y - window.innerHeight / 4,
-            behavior: 'smooth',
           })
         }
       })
     },
+  },
+  'j': {
+    name: '下移',
+    fn: throttle(() => {
+      window.scrollBy({
+        top: 300,
+      })
+    }, 200),
+  },
+  'k': {
+    name: '上移',
+    fn: throttle(() => {
+      window.scrollBy({
+        top: -300,
+      })
+    }, 200),
   },
 }
 
