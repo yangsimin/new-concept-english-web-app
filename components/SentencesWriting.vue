@@ -26,7 +26,6 @@ const keyFnMap: Record<string, { name: string, fn: Function }> = {
   'v': {
     name: '隐藏答案',
     fn: () => {
-      console.log('v')
       setAllVisible(false)
     },
   },
@@ -167,7 +166,15 @@ defineExpose({
       <div flex items-center justify-between>
         {{ index + 1 }}. {{ eachItem.sentence.zh }}
         <div mx-2 flex items-center gap-2>
-          <span icon="carbon-chat-bot" cursor-pointer title="复制提示词" @click="copySentencePrompt(eachItem)" />
+          <span
+            :icon="eachItem.isMarked ? 'carbon-star-filled' : 'carbon-star'" cursor-pointer title="加入收藏"
+            :class="eachItem.isMarked ? 'text-yellow' : ''"
+            @click="eachItem.isMarked = !eachItem.isMarked"
+          />
+          <span
+            icon="carbon-chat-bot" cursor-pointer title="复制提示词"
+            @click="copySentencePrompt(eachItem)"
+          />
         </div>
       </div>
       <div border-b="2px black" pl-1 focus-within-border-b-sky-500>
