@@ -4,7 +4,7 @@ import { storageKeyLastLesson } from '~/constants'
 const router = useRouter()
 
 function onBookClick(index: number) {
-  const cache = JSON.parse(localStorage.getItem(storageKeyLastLesson) ?? '')
+  const cache: Record<string, number> = getLocalStorageJson(storageKeyLastLesson, {})
   router.push({
     path: '/nce',
     query: {
