@@ -48,6 +48,7 @@ if (!formData.value.length) {
       isMarked: false,
       inputText: '',
       sentence,
+      audioUrl: currentLesson.value.audioUrl,
     }
   })
 }
