@@ -12,7 +12,10 @@ updateCache()
 
 function updateCache() {
   const latestMarkedSentences = queryMarkedSentences()
-  markedSentences.value = latestMarkedSentences.map((latestItem) => {
+  markedSentences.value = latestMarkedSentences.sort((a, b) => {
+    return (a.sentence.lessonId + a.sentence.sentenceId)
+      - (b.sentence.lessonId + b.sentence.sentenceId)
+  }).map((latestItem) => {
     const cacheItem = markedSentences.value.find((cacheItem) => {
       if (cacheItem.sentence.lessonId === latestItem.sentence.lessonId
         && cacheItem.sentence.sentenceId === latestItem.sentence.sentenceId) {
@@ -56,6 +59,10 @@ function onMarkClick({ sentence, isMarked }: { sentence: Sentence, isMarked: boo
     info.isMarked = isMarked
   })
   setLocalStorageJson(storageKey, { formData: sentenceInfoList })
+}
+
+function shuffle() {
+  markedSentences.value = markedSentences.value.sort(() => Math.random() - 0.5)
 }
 </script>
 
@@ -101,6 +108,9 @@ function onMarkClick({ sentence, isMarked }: { sentence: Sentence, isMarked: boo
         </button>
         <button class="btn-primary" @click="sentencesWritingRef.keyFnMap.z.fn">
           重置
+        </button>
+        <button class="btn-primary" @click="shuffle">
+          乱序
         </button>
       </div>
     </footer>
