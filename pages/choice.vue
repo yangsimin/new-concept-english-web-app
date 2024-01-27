@@ -2,11 +2,27 @@
 import type { Sentence } from './nce.vue'
 import type { SentenceInfo } from '~/components/SentencesWriting.vue'
 import SentencesWriting from '~/components/SentencesWriting.vue'
-
-const sentencesWritingRef = ref<InstanceType<typeof SentencesWriting>>()
-const formData = ref(queryMarkedSentences())
+import { storageKeyChoice } from '~/constants'
 
 const router = useRouter()
+const sentencesWritingRef = ref<InstanceType<typeof SentencesWriting>>()
+const markedSentences = useLocalStorage<SentenceInfo[]>(storageKeyChoice, [])
+
+updateCache()
+
+function updateCache() {
+  const latestMarkedSentences = queryMarkedSentences()
+  markedSentences.value = latestMarkedSentences.map((latestItem) => {
+    const cacheItem = markedSentences.value.find((cacheItem) => {
+      if (cacheItem.sentence.lessonId === latestItem.sentence.lessonId
+        && cacheItem.sentence.sentenceId === latestItem.sentence.sentenceId) {
+        return true
+      }
+      return false
+    })
+    return cacheItem || latestItem
+  })
+}
 
 function queryMarkedSentences(): SentenceInfo[] {
   const lessonKeys = Object.keys(localStorage).filter(key => key.startsWith('nce-lesson'))
@@ -50,16 +66,16 @@ function onMarkClick({ sentence, isMarked }: { sentence: Sentence, isMarked: boo
         精选句子练习
       </h1>
       <div>
-        <span class="btn-primary py-8" @click="router.go(-1)">
+        <button class="btn-primary py-8" @click="router.go(-1)">
           返回
-        </span>
+        </button>
       </div>
     </header>
     <main mt-20>
       <SentencesWriting
-        v-if="formData.length"
+        v-if="markedSentences.length"
         ref="sentencesWritingRef"
-        v-model="formData"
+        v-model="markedSentences"
         @mark-click="onMarkClick"
       >
         <template #index="{ sentenceInfo, index }">
@@ -75,7 +91,7 @@ function onMarkClick({ sentence, isMarked }: { sentence: Sentence, isMarked: boo
         Empty
       </div>
     </main>
-    <footer v-if="formData.length" my-10 flex flex-col items-center justify-center>
+    <footer v-if="markedSentences.length" my-10 flex flex-col items-center justify-center>
       <div v-if="sentencesWritingRef" space-x-4>
         <button class="btn-primary" @click="sentencesWritingRef.keyFnMap['shift+enter'].fn">
           提交
