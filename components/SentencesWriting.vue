@@ -181,7 +181,9 @@ defineExpose({
         <slot name="index" :index="index" :sentence-info="eachItem">
           {{ index + 1 }}.
         </slot>
-        {{ eachItem.sentence.zh }}
+        <div mr-auto>
+          {{ eachItem.sentence.zh }}
+        </div>
         <div mx-2 flex items-center gap-2>
           <span
             :icon="eachItem.isMarked ? 'carbon-star-filled' : 'carbon-star'" cursor-pointer title="加入收藏"
