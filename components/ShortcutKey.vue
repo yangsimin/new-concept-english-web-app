@@ -20,12 +20,14 @@ function onKeyDown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div gap="x-10 y-4" fixed bottom-0 left-0 right-0 flex flex-wrap items-center justify-center bg-sky-100 py-4 dark:bg-sky-800>
-    <div v-for="({ name }, key) in keyFnMap" :key="key">
-      <span text="center white" mr-2 inline-block rounded bg-sky-500 px-2>{{ key }}</span>
-      {{ name }}
+  <Teleport to="body">
+    <div gap="x-10 y-4" fixed bottom-0 left-0 right-0 flex flex-wrap items-center justify-center bg-sky-100 py-4 dark:bg-sky-800>
+      <div v-for="({ name }, key) in keyFnMap" :key="key">
+        <span text="center white" mr-2 inline-block rounded bg-sky-500 px-2>{{ key }}</span>
+        {{ name }}
+      </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <style scoped>
