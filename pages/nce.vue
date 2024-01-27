@@ -46,7 +46,12 @@ watchEffect(async () => {
 
 watchEffect(async () => {
   const lessonIds = await requestBook(bookId.value) ?? []
-  lessonIdList.value = lessonIds.filter(id => id % 2)
+  if (bookId.value === 1) {
+    lessonIdList.value = lessonIds.filter(id => id % 2)
+  }
+  else {
+    lessonIdList.value = lessonIds
+  }
 })
 
 watchEffect(async () => {
