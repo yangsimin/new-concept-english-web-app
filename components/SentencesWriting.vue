@@ -71,7 +71,11 @@ const keyFnMap: Record<string, { name: string, fn: Function }> = {
 }
 
 const { messageBoxProps, copySentencePrompt } = usePromptIcon()
-const { playSound } = useSound()
+const { playSound, pauseSound } = useSound()
+
+onUnmounted(() => {
+  pauseSound()
+})
 
 function submitSingle(i: SentenceInfo) {
   formData.value = formData.value.map((item) => {
@@ -168,7 +172,7 @@ function usePromptIcon() {
 }
 
 function useSound() {
-  const { playAudio, updateSource } = useAudio()
+  const { playAudio, pauseAudio, updateSource } = useAudio()
 
   function playSound(i: SentenceInfo) {
     if (i.audioUrl) {
@@ -179,6 +183,7 @@ function useSound() {
 
   return {
     playSound,
+    pauseSound: pauseAudio,
   }
 }
 
