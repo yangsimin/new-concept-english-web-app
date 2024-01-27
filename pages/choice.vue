@@ -6,6 +6,8 @@ import SentencesWriting from '~/components/SentencesWriting.vue'
 const sentencesWritingRef = ref<InstanceType<typeof SentencesWriting>>()
 const formData = ref(queryMarkedSentences())
 
+const router = useRouter()
+
 function queryMarkedSentences(): SentenceInfo[] {
   const lessonKeys = Object.keys(localStorage).filter(key => key.startsWith('nce-lesson'))
   return lessonKeys.map((key) => {
@@ -43,10 +45,15 @@ function onMarkClick({ sentence, isMarked }: { sentence: Sentence, isMarked: boo
 
 <template>
   <div box-border p="x-4 y-4">
-    <header>
+    <header flex items-center justify-between>
       <h1 text-2xl>
         精选句子练习
       </h1>
+      <div>
+        <span class="btn-primary py-8" @click="router.go(-1)">
+          返回
+        </span>
+      </div>
     </header>
     <main mt-20>
       <SentencesWriting
@@ -56,7 +63,7 @@ function onMarkClick({ sentence, isMarked }: { sentence: Sentence, isMarked: boo
         @mark-click="onMarkClick"
       >
         <template #index="{ sentenceInfo, index }">
-          <span mr--8>
+          <span mr-2>
             {{ index + 1 }}.
             <NuxtLink tabindex="-1" :to="`/nce/?book=${Math.floor(sentenceInfo.sentence.lessonId / 1000)}&lessonId=${sentenceInfo.sentence.lessonId}`" underline>
               [{{ Math.floor(sentenceInfo.sentence.lessonId / 1000) }}-{{ sentenceInfo.sentence.lessonId % 1000 }}]
