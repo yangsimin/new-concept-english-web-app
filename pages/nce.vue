@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { storageKeyLastLesson, storageKeyListenMode } from '~/constants'
+import { HOST, storageKeyLastLesson, storageKeyListenMode } from '~/constants'
 
 export interface Lesson {
   id: number
@@ -90,7 +90,7 @@ async function requestLesson(book: number, lessonId: number): Promise<Lesson | n
         lessonId,
         sentenceId: s.IdIndex,
       } satisfies Sentence)),
-      audioUrl: lesson.audio_us,
+      audioUrl: `${HOST}/book${book}/${lessonId}.mp3`,
     } satisfies Lesson),
   })
   return data.value
