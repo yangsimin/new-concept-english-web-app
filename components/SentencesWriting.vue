@@ -9,6 +9,7 @@ export interface SentenceInfo {
   inputText: string
   sentence: Sentence
   diffChanges?: Diff.Change[]
+  audioUrl: string
 }
 
 const emits = defineEmits<{
@@ -70,6 +71,7 @@ const keyFnMap: Record<string, { name: string, fn: Function }> = {
 }
 
 const { messageBoxProps, copySentencePrompt } = usePromptIcon()
+const { playSound } = useSound()
 
 function submitSingle(i: SentenceInfo) {
   formData.value = formData.value.map((item) => {
@@ -79,6 +81,7 @@ function submitSingle(i: SentenceInfo) {
     }
     return item
   })
+  playSound(i)
 }
 
 function submit() {
@@ -164,6 +167,21 @@ function usePromptIcon() {
   }
 }
 
+function useSound() {
+  const { playAudio, updateSource } = useAudio()
+
+  function playSound(i: SentenceInfo) {
+    if (i.audioUrl) {
+      updateSource(i.audioUrl)
+      playAudio(i.sentence.startAt, i.sentence.stopAt)
+    }
+  }
+
+  return {
+    playSound,
+  }
+}
+
 function handleMarkClick(info: SentenceInfo) {
   info.isMarked = !info.isMarked
   emits('markClick', { sentence: info.sentence, isMarked: info.isMarked })
@@ -185,6 +203,11 @@ defineExpose({
           {{ eachItem.sentence.zh }}
         </div>
         <div mx-2 flex items-center gap-2>
+          <span
+            icon="carbon-volume-up-filled"
+            cursor-pointer
+            @click="playSound(eachItem)"
+          />
           <span
             :icon="eachItem.isMarked ? 'carbon-star-filled' : 'carbon-star'" cursor-pointer title="加入收藏"
             :class="eachItem.isMarked ? 'text-yellow' : ''"
