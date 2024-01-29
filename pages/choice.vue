@@ -13,8 +13,8 @@ updateCache()
 function updateCache() {
   const latestMarkedSentences = queryMarkedSentences()
   markedSentences.value = latestMarkedSentences.sort((a, b) => {
-    return (a.sentence.lessonId + a.sentence.sentenceId)
-      - (b.sentence.lessonId + b.sentence.sentenceId)
+    return (a.sentence.lessonId * 100 + Number(a.sentence.sentenceId))
+      - (b.sentence.lessonId * 100 + Number(b.sentence.sentenceId))
   }).map((latestItem) => {
     const cacheItem = markedSentences.value.find((cacheItem) => {
       if (cacheItem.sentence.lessonId === latestItem.sentence.lessonId
