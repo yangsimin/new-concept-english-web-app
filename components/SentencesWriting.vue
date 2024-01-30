@@ -96,6 +96,17 @@ function submit() {
   setAllVisible(true)
 }
 
+function clearSingle(i: SentenceInfo) {
+  formData.value = formData.value.map((item) => {
+    if (i.sentence.zh === item.sentence.zh) {
+      item.inputText = ''
+      item.diffChanges = []
+      item.isAnswerVisible = false
+    }
+    return item
+  })
+}
+
 function clear() {
   setAllVisible(false)
   formData.value = formData.value.map((item) => {
@@ -209,8 +220,15 @@ defineExpose({
         </div>
         <div mx-2 flex items-center gap-2>
           <span
+            icon="carbon-clean"
+            cursor-pointer
+            title="清除文本"
+            @click="clearSingle(eachItem)"
+          />
+          <span
             icon="carbon-volume-up-filled"
             cursor-pointer
+            title="播放语音"
             @click="playSound(eachItem)"
           />
           <span
