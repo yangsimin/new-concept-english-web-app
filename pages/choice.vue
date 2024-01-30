@@ -23,6 +23,9 @@ function updateCache() {
       }
       return false
     })
+    if (cacheItem && !cacheItem.audioUrl) {
+      cacheItem.audioUrl = latestItem.audioUrl
+    }
     return cacheItem || latestItem
   })
 }
@@ -37,10 +40,10 @@ function queryMarkedSentences(): SentenceInfo[] {
     return cache.formData
       .filter((each: SentenceInfo) => each.isMarked)
       .map((each: SentenceInfo) => ({
+        ...each,
         isAnswerVisible: false,
         isMarked: true,
         inputText: '',
-        sentence: each.sentence,
       }))
   }).flat()
 }
