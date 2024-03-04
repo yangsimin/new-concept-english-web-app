@@ -1,3 +1,4 @@
+<!-- eslint-disable no-alert -->
 <script setup lang="ts">
 function handleImportCache(event: Event) {
   const input = event.target as HTMLInputElement
@@ -19,9 +20,10 @@ function handleImportCache(event: Event) {
             localStorage.setItem(key, value as string)
           }
         })
+        alert('导入完成，页面将会刷新。')
+        location.reload()
       }
       catch (error) {
-        // eslint-disable-next-line no-alert
         alert('无效的 JSON 文件！')
       }
     }
