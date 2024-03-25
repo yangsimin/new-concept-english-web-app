@@ -226,7 +226,7 @@ defineExpose({
           <span
             icon="carbon-clean"
             cursor-pointer
-            title="清除文本"
+            title="清除文本(ctrl+r)"
             @click="clearSingle(eachItem)"
           />
           <span
@@ -236,12 +236,12 @@ defineExpose({
             @click="playSound(eachItem)"
           />
           <span
-            :icon="eachItem.isMarked ? 'carbon-star-filled' : 'carbon-star'" cursor-pointer title="加入收藏"
+            :icon="eachItem.isMarked ? 'carbon-star-filled' : 'carbon-star'" cursor-pointer title="加入收藏(ctrl+m)"
             :class="eachItem.isMarked ? 'text-yellow' : ''"
             @click="handleMarkClick(eachItem)"
           />
           <span
-            icon="carbon-chat-bot" cursor-pointer title="复制提示词"
+            icon="carbon-chat-bot" cursor-pointer title="复制提示词(ctrl+y)"
             @click="copySentencePrompt(eachItem)"
           />
         </div>
@@ -257,6 +257,9 @@ defineExpose({
           @keydown.stop.exact
           @keydown.enter.shift="keyFnMap['shift+enter'].fn"
           @keydown.esc.exact="($event.target as HTMLElement).blur()"
+          @keydown.r.ctrl="clearSingle(eachItem)"
+          @keydown.m.ctrl="handleMarkClick(eachItem)"
+          @keydown.y.ctrl="copySentencePrompt(eachItem)"
         >
       </div>
       <div pl-1 pr-20 :opacity="eachItem.isAnswerVisible ? 100 : 0">
