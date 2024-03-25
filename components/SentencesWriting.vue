@@ -241,7 +241,7 @@ defineExpose({
             @click="handleMarkClick(eachItem)"
           />
           <span
-            icon="carbon-chat-bot" cursor-pointer title="复制提示词(ctrl+y)"
+            icon="carbon-chat-bot" cursor-pointer title="复制提示词(ctrl+p)"
             @click="copySentencePrompt(eachItem)"
           />
         </div>
@@ -259,7 +259,7 @@ defineExpose({
           @keydown.esc.exact="($event.target as HTMLElement).blur()"
           @keydown.r.ctrl="clearSingle(eachItem)"
           @keydown.m.ctrl="handleMarkClick(eachItem)"
-          @keydown.y.ctrl="copySentencePrompt(eachItem)"
+          @keydown.p.ctrl="copySentencePrompt(eachItem)"
         >
       </div>
       <div pl-1 pr-20 :opacity="eachItem.isAnswerVisible ? 100 : 0">
