@@ -151,7 +151,7 @@ function usePromptIcon() {
   并做一下几件事
   1. 丝毫不修改地重复这三句话
   2. 对比我的翻译和新概念的原文的差异，需要逐词对比，对有差异的词组，进行对比分析差异，并以表格的形式输出。
-  3. 进行整体表达的对比，对差异点、薄弱点和建议这三个维度进行分析和阐述，并更正我的表达。
+  3. 进行整体表达的对比，对差异点、薄弱点和建议这三个维度进行分析和阐述，并在尽量不修改原文正确用词的基础上更正我的表达。
   4. 给出你认为更好更地道的英文表达方式。`
 
     await copyToClipboard(promptTemplate)
@@ -213,7 +213,7 @@ defineExpose({
 </script>
 
 <template>
-  <article grid grid-cols-1 mx-auto min-w-300px w-max gap-2rem text-lg>
+  <article left="[50%]" translate-x="[-50%]" relative grid grid-cols-1 min-w-300px w-max gap-2rem text-lg>
     <div v-for="(eachItem, index) of formData" :key="eachItem.sentence.startAt">
       <div flex items-center justify-between>
         <slot name="index" :index="index" :sentence-info="eachItem">
@@ -247,20 +247,20 @@ defineExpose({
         </div>
       </div>
       <div border-b="2px black" pl-1 focus-within-border-b-sky-500>
-        <input
+        <textarea
           v-model="eachItem.inputText"
           type="text"
-          w-full
-          outline-none
-          @keydown.enter.exact="submitSingle(eachItem)"
+          rows="1"
+          w-full resize-none outline-none
+          @keydown.enter.exact.prevent="submitSingle(eachItem)"
           @keydown.tab="keyFnMap.Tab.fn"
           @keydown.stop.exact
-          @keydown.enter.shift="keyFnMap['shift+enter'].fn"
+          @keydown.enter.shift.prevent="keyFnMap['shift+enter'].fn"
           @keydown.esc.exact="($event.target as HTMLElement).blur()"
           @keydown.r.ctrl="clearSingle(eachItem)"
           @keydown.m.ctrl="handleMarkClick(eachItem)"
           @keydown.p.ctrl="copySentencePrompt(eachItem)"
-        >
+        />
       </div>
       <div pl-1 pr-20 :opacity="eachItem.isAnswerVisible ? 100 : 0">
         <p v-if="!eachItem.diffChanges?.length">
