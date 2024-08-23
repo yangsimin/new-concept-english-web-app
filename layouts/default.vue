@@ -1,14 +1,31 @@
 <template>
   <div flex flex-col>
-    <header class="nav-header container" h-4rem flex items-center justify-end gap-4 text-xl>
-      <strong mr-auto cursor-pointer uppercase @click="$router.push('/')">
+    <header class="nav-header container" h-4rem flex items-center justify-end gap-2 text-xl>
+      <UButton
+        variant="ghost"
+        size="xl"
+        mr-auto font-bold uppercase
+        @click="$router.push('/')"
+      >
         New Concept English
-      </strong>
+      </UButton>
       <NuxtLink to="/choice">
-        <span icon="carbon-star-review" title="精选句子练习" />
+        <UButton
+          icon="solar-list-heart-bold"
+          title="精选句子练习"
+          variant="ghost"
+          color="gray"
+        />
       </NuxtLink>
       <DarkToggle />
-      <a icon="carbon-logo-github" href="https://github.com/yangsimin/new-concept-english-web-app" target="_blank" />
+      <UButton
+        type="button"
+        variant="ghost"
+        icon="carbon-logo-github"
+        color="gray"
+        to="https://github.com/yangsimin/new-concept-english-web-app"
+        target="_blank"
+      />
     </header>
     <main flex-1 class="container">
       <slot />
