@@ -9,7 +9,8 @@ import {
 
 export default defineConfig({
   shortcuts: {
-    container: 'max-w-1280px w-full mx-auto px-2rem',
+    'container': 'max-w-1280px w-full mx-auto px-2rem',
+    'flex-center': 'justify-center items-center',
   },
   presets: [
     presetUno(),
