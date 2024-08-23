@@ -16,7 +16,7 @@ const emits = defineEmits<{
   (e: 'markClick', value: { sentence: Sentence, isMarked: boolean }): void
 }>()
 const formData = defineModel<SentenceInfo[]>({ default: [] })
-const keyFnMap: Record<string, { name: string, fn: Function }> = {
+const keyFnMap: Record<string, { name: string, fn: () => void }> = {
   'v': {
     name: '隐藏答案',
     fn: () => {
@@ -209,45 +209,44 @@ defineExpose({
 </script>
 
 <template>
-  <article grid grid-cols-1 mx-auto min-w-300px w-max gap-2rem text-lg>
+  <article class="grid grid-cols-1 mx-auto min-w-300px w-max gap-2rem text-lg">
     <div v-for="(eachItem, index) of formData" :key="eachItem.sentence.startAt">
-      <div flex items-center justify-between>
+      <div class="flex items-center justify-between">
         <slot name="index" :index="index" :sentence-info="eachItem">
           {{ index + 1 }}.
         </slot>
-        <div mr-auto>
+        <div class="mr-auto">
           {{ eachItem.sentence.zh }}
         </div>
-        <div mx-2 flex items-center gap-2>
-          <span
+        <div class="mx-2 flex items-center gap-2">
+          <UButton
             icon="carbon-clean"
-            cursor-pointer
+            class="cursor-pointer"
             title="清除文本"
             @click="clearSingle(eachItem)"
           />
-          <span
+          <UButton
             icon="carbon-volume-up-filled"
-            cursor-pointer
+            class="cursor-pointer"
             title="播放语音"
             @click="playSound(eachItem)"
           />
-          <span
+          <UButton
             :icon="eachItem.isMarked ? 'carbon-star-filled' : 'carbon-star'" cursor-pointer title="加入收藏"
             :class="eachItem.isMarked ? 'text-yellow' : ''"
             @click="handleMarkClick(eachItem)"
           />
-          <span
+          <UButton
             icon="carbon-chat-bot" cursor-pointer title="复制提示词"
             @click="copySentencePrompt(eachItem)"
           />
         </div>
       </div>
-      <div border-b="2px black" pl-1 focus-within-border-b-sky-500>
+      <div class="border-b-[2px] border-b-black pl-1 focus-within-border-b-sky-500">
         <input
           v-model="eachItem.inputText"
           type="text"
-          w-full
-          outline-none
+          class="w-full outline-none"
           @keydown.enter.exact="submitSingle(eachItem)"
           @keydown.tab="keyFnMap.Tab.fn"
           @keydown.stop.exact
@@ -255,7 +254,7 @@ defineExpose({
           @keydown.esc.exact="($event.target as HTMLElement).blur()"
         >
       </div>
-      <div pl-1 pr-20 :opacity="eachItem.isAnswerVisible ? 100 : 0">
+      <div class="pl-1 pr-20" :class="{ opacity: 'eachItem.isAnswerVisible ? 100 : 0' }">
         <p v-if="!eachItem.diffChanges?.length">
           {{ eachItem.sentence.en }}
         </p>

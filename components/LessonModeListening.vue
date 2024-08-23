@@ -15,7 +15,7 @@ const isSoundEnable = useLocalStorage(storageKeySoundEnable, true)
 const isEnTextHidden = ref(true)
 const { audioInstance, playAudio, pauseAudio, updateSource } = useAudio()
 
-const keyFnMap: Record<string, { name: string, fn: Function }> = {
+const keyFnMap: Record<string, { name: string, fn: () => void }> = {
   h: {
     name: '上一课',
     fn: () => { emits('prevLesson') },
@@ -83,25 +83,24 @@ function onClickNextStep() {
 </script>
 
 <template>
-  <article v-if="currentSentence" flex="~ col" lt-sm="text-lg gap-2" min-h-14rem items-center justify-center gap-8 text-4xl>
-    <p relative flex items-center>
+  <article v-if="currentSentence" class="min-h-[14rem] flex flex-col items-center justify-center gap-8 text-[4xl] lt-sm:gap-2 lt-sm:text-lg">
+    <p class="relative flex items-center">
       {{ currentSentence.zh }}
-      <label lt-sm="mr--8 text-base" absolute right-0 mr--16 cursor-pointer text-2xl>
+      <label class="absolute right-0 mr--16 cursor-pointer text-2xl lt-sm:mr--8 lt-sm:text-base">
         <span :icon="isSoundEnable ? 'carbon-volume-up-filled' : 'carbon-volume-mute-filled'" @click="isSoundEnable = !isSoundEnable" />
       </label>
     </p>
-    <p flex flex-wrap justify-center gap-2>
+    <p class="flex flex-wrap justify-center gap-2">
       <span
         v-for="(piece, index) in currentSentence.en.trim().split(/\s/)"
         :key="index"
-        py-1
-        border-b="4 solid sky-500"
+        class="border-b-4 border-b-sky-500 border-b-solid py-1"
       >
-        <span :class="{ 'opacity-0': isEnTextHidden }" px-2>{{ piece }}</span>
+        <span :class="{ 'opacity-0': isEnTextHidden }" class="px-2">{{ piece }}</span>
       </span>
     </p>
   </article>
-  <div grid="~ cols-[repeat(2,115px)]" mt-14 place-content-center gap-20px lt-sm="text-sm" text-base>
+  <div class="grid grid-cols-[repeat(2,115px)] mt-14 place-content-center gap-[20px] text-base lt-sm:text-sm">
     <button class="btn-primary" :disabled="sentenceIndex === 0" @click="onClickPrevSentence">
       上一句
     </button>
