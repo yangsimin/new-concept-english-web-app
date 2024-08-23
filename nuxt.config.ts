@@ -21,7 +21,12 @@ export default defineNuxtConfig({
     client: true,
   },
   css: [
-    // '@unocss/reset/tailwind.css',
+    '@unocss/reset/tailwind.css',
   ],
   compatibilityDate: '2024-08-22',
+  unocss: {
+    uno: false,
+    preflight: false,
+    icons: true,
+  },
 })

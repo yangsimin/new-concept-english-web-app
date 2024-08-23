@@ -16,7 +16,7 @@ const { formData } = toRefs(useLocalStorage(storageKey, {
   formData: [] as SentenceInfo[],
 }).value)
 
-const keyFnMap = ref<Record<string, { name: string, fn: Function }>>({
+const keyFnMap = ref<Record<string, { name: string, fn: () => void }>>({
   h: {
     name: '上一课',
     fn: () => { emits('prevLesson') },
@@ -56,7 +56,7 @@ if (!formData.value.length) {
 
 <template>
   <SentencesWriting ref="sentencesWritingRef" v-model="formData" />
-  <footer my-10 flex flex-col items-center justify-center gap-4>
+  <footer class="my-10 flex flex-col items-center justify-center gap-4">
     <div v-if="sentencesWritingRef" space-x-4>
       <button class="btn-primary" @click="keyFnMap.enter.fn">
         提交

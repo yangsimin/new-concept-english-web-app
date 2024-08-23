@@ -24,25 +24,23 @@ function onMenuClick(event: MouseEvent) {
   <div
     relative
   >
-    <div inline-block @click="isMenuVisible = true">
+    <div class="inline-block" @click="isMenuVisible = true">
       <slot />
     </div>
     <Transition>
-      <div v-if="isMenuVisible" bg="black/50" fixed bottom-0 left-0 right-0 top-0 z-1 flex items-center justify-center overflow-auto>
+      <div v-if="isMenuVisible" class="fixed bottom-0 left-0 right-0 top-0 z-1 flex items-center justify-center overflow-auto bg-black/50">
         <ol
           v-on-click-outside="() => isMenuVisible = false"
-          grid="~ cols-[repeat(auto-fill,minmax(2.5rem,1fr))] gap-1"
-          border="2px sky-500" p="x-10 y-4"
-          max-w-500px w-70vw rounded bg-white text-sky-500 shadow-sm dark:bg-hex-222
+          class="grid grid-cols-[repeat(auto-fill,minmax(2.5rem,1fr))] max-w-[500px] w-[70vw] gap-1 border-2px border-sky-500 rounded bg-white px-10 py-4 text-sky-500 shadow-sm dark:bg-hex-222"
           @click="onMenuClick"
         >
-          <li col-span-full text="center xl" font-bold>
+          <li class="col-span-full text-center text-xl font-bold">
             Lesson
           </li>
           <li
             v-for="id in lessonIdList" :key="id"
             :data-lesson="id"
-            h-2.5rem cursor-pointer select-none rounded text-center leading-2.5rem transition-200
+            class="h-[2.5rem] cursor-pointer select-none rounded text-center leading-[2.5rem] transition-200"
             :class="{ 'bg-sky-500 text-white': id === currentLessonId, 'hover:bg-sky-400/20': id !== currentLessonId }"
           >
             {{ id % 1000 }}
