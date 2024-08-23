@@ -1,13 +1,17 @@
 <script setup lang="ts">
-const color = useColorMode()
-
-function toggleDark() {
-  color.value = color.value === 'dark' ? 'light' : 'dark'
-}
+const colorMode = useColorMode()
+const isDark = computed({
+  get() {
+    return colorMode.value === 'dark'
+  },
+  set() {
+    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+  },
+})
 </script>
 
 <template>
-  <button outline-none @click="toggleDark">
+  <UButton outline-none variant="ghost" color="gray" @click="isDark = !isDark">
     <div icon="carbon-sun" dark-icon="carbon-moon" />
-  </button>
+  </UButton>
 </template>
