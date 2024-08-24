@@ -9,8 +9,13 @@ useHead({
 
 <template>
   <NuxtLayout>
-    <NuxtPage class="container" />
+    <NuxtPage />
   </NuxtLayout>
+  <UNotifications :ui="{ strategy: 'override', position: 'top-0 right-0' }">
+    <template #description="{ description }">
+      <span v-html="description" />
+    </template>
+  </UNotifications>
 </template>
 
 <style>
