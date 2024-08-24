@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const toast = useToast()
 function handleImportCache(event: Event) {
   const input = event.target as HTMLInputElement
   const file = input.files?.[0]
@@ -19,11 +20,14 @@ function handleImportCache(event: Event) {
             localStorage.setItem(key, value as string)
           }
         })
-        alert('导入完成，页面将会刷新。')
-        location.reload()
+        toast.add({ description: '导入完成，页面将会刷新。', color: 'green' })
+        setTimeout(() => {
+          location.reload()
+        }, 2000)
       }
       catch (error) {
-        alert('无效的 JSON 文件！')
+        console.error(error)
+        toast.add({ description: '无效的 JSON 文件！', color: 'red' })
       }
     }
   }
@@ -60,17 +64,25 @@ function handleExportCache() {
     </NuxtLink>
     <LayoutDarkToggle />
     <UButton
-      type="button"
       variant="ghost"
       icon="simple-icons-github"
       color="gray"
       to="https://github.com/yangsimin/new-concept-english-web-app"
       target="_blank"
+      title="Github"
     />
-    <span icon="carbon-download" title="导出缓存" cursor-pointer @click="handleExportCache" />
-    <label>
-      <span icon="carbon-upload" title="导入缓存" cursor-pointer />
-      <input id="fileInput" type="file" accept=".json" hidden @change="handleImportCache">
-    </label>
+    <UButton
+      icon="uil-export"
+      title="导出缓存"
+      variant="ghost"
+      color="gray"
+      @click="handleExportCache"
+    />
+    <UButton variant="ghost" color="gray" class="px-1.5">
+      <label class="cursor-pointer h-5">
+        <UIcon name="uil-import" title="导入缓存" class="w-5 h-5" />
+        <input type="file" accept=".json" class="hidden" @change="handleImportCache">
+      </label>
+    </UButton>
   </header>
 </template>

@@ -15,6 +15,7 @@ const isDark = computed({
     variant="ghost"
     color="gray"
     :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
+    title="切换主题"
     @click="isDark = !isDark"
   />
 </template>
