@@ -110,34 +110,36 @@ function selectLesson(lessonId: number) {
 </script>
 
 <template>
-  <div flex="~ col" box-border p="x-4 y-4">
-    <header flex items-center justify-start gap-2 lt-sm="text-xl" text-2xl>
-      <div flex flex-1>
-        <strong mr-4>
-          {{ `${bookId}-${lessonId % 1000}` }}
-        </strong>
-        <span>
-          <strong>
-            {{ currentLesson?.titleEn }}
-          </strong>
-          <br>
-          {{ currentLesson?.titleZh }}
-        </span>
-      </div>
-      <button hover="bg-gray-400/20" rounded p1 transition-200 title="切换模式" @click="() => isListeningMode = !isListeningMode">
-        <span :icon="isListeningMode ? 'carbon-edit' : 'carbon-headphones'" />
-      </button>
+  <div class="flex flex-col box-border px-4 py-4">
+    <header class="flex items-center justify-start lt-sm:text-xl text-2xl">
+      <h4 class="flex mr-auto">
+        <strong class="mr-4">{{ `${bookId}-${lessonId % 1000}` }}</strong>
+        <div>
+          <strong> {{ currentLesson?.titleEn }} </strong>
+          <br> {{ currentLesson?.titleZh }}
+        </div>
+      </h4>
+      <UButton
+        variant="ghost"
+        color="gray"
+        title="切换模式"
+        :icon="isListeningMode ? 'carbon-edit' : 'carbon-headphones'"
+        @click="() => isListeningMode = !isListeningMode"
+      />
       <LessonMenu
         :current-lesson-id="lessonId"
         :lesson-id-list="lessonIdList"
         @select-lesson-id="selectLesson($event)"
       >
-        <button hover="bg-gray-400/20" rounded p1 transition-200 title="打开目录">
-          <span icon="carbon-book" />
-        </button>
+        <UButton
+          variant="ghost"
+          color="gray"
+          title="打开目录"
+          icon="carbon-book"
+        />
       </LessonMenu>
     </header>
-    <main v-if="currentLesson" mt-20>
+    <main v-if="currentLesson" class="mt-20">
       <LessonListeningMode
         v-if="isListeningMode"
         :current-lesson="currentLesson"
