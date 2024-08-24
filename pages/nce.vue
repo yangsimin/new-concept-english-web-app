@@ -1,22 +1,6 @@
 <script setup lang="ts">
+import type { Lesson, Sentence } from '~/types/lesson'
 import { HOST, storageKeyLastLesson, storageKeyListenMode } from '~/constants'
-
-export interface Lesson {
-  id: number
-  titleEn: string
-  titleZh: string
-  sentences: Sentence[]
-  audioUrl: string
-}
-
-export interface Sentence {
-  lessonId: number
-  sentenceId: number
-  startAt: number
-  stopAt: number
-  en: string
-  zh: string
-}
 
 const route = useRoute()
 const router = useRouter()

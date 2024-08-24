@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import type { SentenceInfo } from '~/components/nce/SentencesWriting.vue'
-import SentencesWriting from '~/components/nce/SentencesWriting.vue'
-import type { Lesson } from '~/pages/nce.vue'
+import type { Lesson, SentenceInfo } from '~/types/lesson'
+import WritingModeSentences from '~/components/lesson/WritingModeSentences.vue'
 
 const props = defineProps<{
   currentLesson: Lesson
@@ -10,7 +9,7 @@ const props = defineProps<{
 const emits = defineEmits(['nextLesson', 'prevLesson'])
 const { currentLesson } = toRefs(props)
 
-const sentencesWritingRef = ref<InstanceType<typeof SentencesWriting>>()
+const sentencesWritingRef = ref<InstanceType<typeof WritingModeSentences>>()
 const storageKey = `nce-lessonId-${currentLesson.value.id}`
 const { formData } = toRefs(useLocalStorage(storageKey, {
   formData: [] as SentenceInfo[],
@@ -55,7 +54,7 @@ if (!formData.value.length) {
 </script>
 
 <template>
-  <SentencesWriting ref="sentencesWritingRef" v-model="formData" />
+  <WritingModeSentences ref="sentencesWritingRef" v-model="formData" />
   <footer class="my-10 flex flex-col items-center justify-center gap-4">
     <div v-if="sentencesWritingRef" space-x-4>
       <button class="btn-primary" @click="keyFnMap.enter.fn">
