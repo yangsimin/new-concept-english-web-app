@@ -16,7 +16,7 @@
         color="gray"
       />
     </NuxtLink>
-    <DarkToggle />
+    <LayoutDarkToggle />
     <UButton
       type="button"
       variant="ghost"

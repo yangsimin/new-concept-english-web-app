@@ -1,15 +1,6 @@
 <script setup lang="ts">
 import * as Diff from 'diff'
-import type { Sentence } from '~/pages/nce.vue'
-
-export interface SentenceInfo {
-  isAnswerVisible: boolean
-  isMarked: boolean
-  inputText: string
-  sentence: Sentence
-  diffChanges?: Diff.Change[]
-  audioUrl: string
-}
+import type { Sentence, SentenceInfo } from '~/types/lesson'
 
 const emits = defineEmits<{
   (e: 'markClick', value: { sentence: Sentence, isMarked: boolean }): void

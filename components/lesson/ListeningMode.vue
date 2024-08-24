@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Lesson, Sentence } from '~/pages/nce.vue'
+import type { Lesson, Sentence } from '~/types/lesson'
 import { storageKeySoundEnable } from '~/constants'
 
 const props = defineProps<{
