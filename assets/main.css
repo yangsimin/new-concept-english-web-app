@@ -1,8 +1,3 @@
-.btn-primary {
-  @apply: px-4 py-px rounded bg-sky-500 text-white border-(sky-700 2px) hover:bg-opacity-80
-  disabled:(cursor-default bg-gray-600 opacity-50 hover:bg-opacity-100 active:scale-100) active:scale-95 transition-150;
-}
-
 html.dark {
   color-scheme: dark;
 }

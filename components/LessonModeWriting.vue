@@ -77,7 +77,7 @@ if (!formData.value.length) {
       </button>
     </div>
   </footer>
-  <ShortcutKey :key-fn-map="keyFnMap" />
+  <!-- <ShortcutKey :key-fn-map="keyFnMap" /> -->
 </template>
 
 <style scoped>
