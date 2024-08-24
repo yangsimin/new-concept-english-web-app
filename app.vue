@@ -14,22 +14,6 @@ useHead({
 </template>
 
 <style>
-html,
-body,
-#__nuxt {
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-}
-
-html.dark {
-  background: #222;
-  color: white;
-}
-
-html {
-  @apply font-sans;
-}
 .page-enter-active,
 .page-leave-active {
   transition: all 0.3s;

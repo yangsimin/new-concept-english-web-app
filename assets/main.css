@@ -1,7 +1,15 @@
-html.dark {
-  color-scheme: dark;
-}
-
 html {
   scroll-behavior: smooth;
+}
+
+html.dark {
+  --ui-background: var(--color-gray-900);
+  --ui-foreground: var(--color-gray-200);
+}
+
+body {
+  --tw-bg-opacity: 1;
+  background-color: rgb(var(--ui-background) / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(var(--ui-foreground) / var(--tw-text-opacity))
 }
