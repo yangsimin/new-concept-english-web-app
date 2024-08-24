@@ -17,15 +17,12 @@ function onBookClick(index: number) {
 
 <template>
   <main
-    grid="~ cols-[repeat(2,150px)] rows-[repeat(2,150px)] gap-20px"
-    pointer-events-none absolute inset-0 place-content-center
+    class="h-full grid grid-cols-[repeat(2,10rem)] grid-rows-[repeat(2,10rem)] gap-6 place-content-center"
   >
     <UButton
       v-for="index in 4"
       :key="index"
-      size="xl"
-      pointer-events-auto
-      block text-xl
+      class="block text-[2rem]"
       variant="solid"
       @click="onBookClick(index)"
     >

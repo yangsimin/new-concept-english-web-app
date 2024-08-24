@@ -114,5 +114,5 @@ function onClickNextStep() {
       下一课
     </button>
   </div>
-  <ShortcutKey :key-fn-map="keyFnMap" />
+  <!-- <ShortcutKey :key-fn-map="keyFnMap" /> -->
 </template>

@@ -1,10 +1,10 @@
 <template>
-  <div flex flex-col>
-    <header class="nav-header container" h-4rem flex items-center justify-end gap-2 text-xl>
+  <div class="h-full grid grid-rows-[auto_1fr]">
+    <header class="container h-[4rem] flex items-center justify-end gap-2 text-xl">
       <UButton
         variant="ghost"
         size="xl"
-        mr-auto font-bold uppercase
+        class="mr-auto font-bold uppercase"
         @click="$router.push('/')"
       >
         New Concept English
@@ -27,10 +27,9 @@
         target="_blank"
       />
     </header>
-    <main flex-1 class="container">
+    <main class="container">
       <slot />
     </main>
-    <footer class="container" h-56px />
   </div>
 </template>
 
