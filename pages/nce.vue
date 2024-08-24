@@ -138,13 +138,13 @@ function selectLesson(lessonId: number) {
       </LessonMenu>
     </header>
     <main v-if="currentLesson" mt-20>
-      <LessonModeListening
+      <LessonListeningMode
         v-if="isListeningMode"
         :current-lesson="currentLesson"
         @next-lesson="stepLesson(1)"
         @prev-lesson="stepLesson(-1)"
       />
-      <LessonModeWriting
+      <LessonWritingMode
         v-else
         :key="currentLesson.id"
         :current-lesson="currentLesson"
