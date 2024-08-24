@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Lesson, SentenceInfo } from '~/types/lesson'
-import WritingModeSentences from '~/components/lesson/WritingModeSentences.vue'
+import type WritingModeSentences from '~/components/lesson/WritingModeSentences.vue'
 
 const props = defineProps<{
   currentLesson: Lesson
@@ -54,7 +54,7 @@ if (!formData.value.length) {
 </script>
 
 <template>
-  <WritingModeSentences ref="sentencesWritingRef" v-model="formData" />
+  <LessonWritingModeSentences ref="sentencesWritingRef" v-model="formData" />
   <footer class="my-10 flex flex-col items-center justify-center gap-4">
     <div v-if="sentencesWritingRef" space-x-4>
       <button class="btn-primary" @click="keyFnMap.enter.fn">

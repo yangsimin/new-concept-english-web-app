@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Sentence, SentenceInfo } from '~/types/lesson'
-import SentencesWriting from '~/components/lesson/WritingModeSentences.vue'
+import type SentencesWriting from '~/components/lesson/WritingModeSentences.vue'
 import { storageKeyChoice } from '~/constants'
 
 const router = useRouter()
@@ -81,7 +81,7 @@ function shuffle() {
       </div>
     </header>
     <main mt-20>
-      <SentencesWriting
+      <LessonWritingModeSentences
         v-if="markedSentences.length"
         ref="sentencesWritingRef"
         v-model="markedSentences"
@@ -95,7 +95,7 @@ function shuffle() {
             </NuxtLink>
           </span>
         </template>
-      </SentencesWriting>
+      </LessonWritingModeSentences>
       <div v-else text-center text-xl uppercase>
         Empty
       </div>
