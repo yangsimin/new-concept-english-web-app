@@ -133,7 +133,11 @@ function usePromptIcon() {
   第二句,是我所翻译的英文。
   第三句,是新概念教材的英语原文。
 
-  先丝毫不修改地重复这三句话，然后对比我的翻译和新概念的原文的差异，对差异点、薄弱点和建议这三个维度进行分析和阐述，并指导我改进。最后，给出你认为更好更地道的英文表达方式。`
+  并做一下几件事
+  1. 丝毫不修改地重复这三句话
+  2. 对比我的翻译和新概念的原文的差异，需要逐词对比，对有差异的词组，进行对比分析差异，并以表格的形式输出。
+  3. 进行整体表达的对比，对差异点、薄弱点和建议这三个维度进行分析和阐述，并在尽量不修改原文正确用词的基础上更正我的表达。
+  4. 给出你认为更好更地道的英文表达方式。`
 
     await copyToClipboard(promptTemplate)
 
@@ -189,7 +193,7 @@ defineExpose({
 </script>
 
 <template>
-  <article class="flex flex-col mx-auto w-max gap-4 text-lg">
+  <article class="left='[50%]' translate-x='[-50%]' relative flex flex-col mx-auto min-w-[300px] w-max gap-4 text-lg">
     <div v-for="(eachItem, index) of formData" :key="eachItem.sentence.startAt">
       <div class="flex items-center justify-between">
         <slot name="index" :index="index" :sentence-info="eachItem">
@@ -202,7 +206,7 @@ defineExpose({
           <UButton
             icon="carbon-clean"
             class="cursor-pointer"
-            title="清除文本"
+            title="清除文本(ctrl+r)"
             @click="clearSingle(eachItem)"
           />
           <UButton
@@ -217,7 +221,7 @@ defineExpose({
             @click="handleMarkClick(eachItem)"
           />
           <UButton
-            icon="carbon-chat-bot" cursor-pointer title="复制提示词"
+            icon="carbon-chat-bot" cursor-pointer title="复制提示词(ctrl+p)"
             @click="copySentencePrompt(eachItem)"
           />
         </div>
@@ -227,11 +231,14 @@ defineExpose({
           v-model="eachItem.inputText"
           type="text"
           class="w-full outline-none"
-          @keydown.enter.exact="submitSingle(eachItem)"
+          @keydown.enter.exact.prevent="submitSingle(eachItem)"
           @keydown.tab="keyFnMap.Tab.fn"
           @keydown.stop.exact
-          @keydown.enter.shift="keyFnMap['shift+enter'].fn"
+          @keydown.enter.shift.prevent="keyFnMap['shift+enter'].fn"
           @keydown.esc.exact="($event.target as HTMLElement).blur()"
+          @keydown.r.ctrl="clearSingle(eachItem)"
+          @keydown.m.ctrl="handleMarkClick(eachItem)"
+          @keydown.p.ctrl="copySentencePrompt(eachItem)"
         >
       </div>
       <div class="pl-1 pr-20" :class="{ opacity: 'eachItem.isAnswerVisible ? 100 : 0' }">
