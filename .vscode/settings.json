@@ -1,7 +1,7 @@
 {
   "cSpell.words": ["Nuxt"],
   // Enable the ESlint flat config support
-  "eslint.experimental.useFlatConfig": true,
+  "eslint.useFlatConfig": true,
 
   // Disable the default formatter, use eslint instead
   "prettier.enable": false,
@@ -42,5 +42,24 @@
     "toml"
   ],
 
-  "css.lint.unknownAtRules": "ignore"
+  "css.lint.unknownAtRules": "ignore",
+
+  /* tailwind config */
+  "tailwindCSS.experimental.classRegex": [
+    ["ui:\\s*{([^)]*)\\s*}", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["/\\*\\s?ui\\s?\\*/\\s*{([^;]*)}", ":\\s*[\"'`]([^\"'`]*).*?[\"'`]"]
+  ],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "tailwindCSS.experimental.configFile": ".nuxt/tailwind.config.cjs",
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "ngClass",
+    "ui"
+  ]
 }
