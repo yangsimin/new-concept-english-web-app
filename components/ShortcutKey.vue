@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
-  keyFnMap: Record<string, { name: string, fn: Function }>
+  keyFnMap: Record<string, { name: string, fn: () => void }>
 }>()
 const { keyFnMap } = toRefs(props)
 

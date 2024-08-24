@@ -1,8 +1,9 @@
-html {
+:root {
   scroll-behavior: smooth;
+  --header-height: 4rem;
 }
 
-html.dark {
+:root.dark {
   --ui-background: var(--color-gray-900);
   --ui-foreground: var(--color-gray-200);
 }

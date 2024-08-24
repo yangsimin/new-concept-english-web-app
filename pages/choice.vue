@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Sentence } from './nce.vue'
-import type { SentenceInfo } from '~/components/SentencesWriting.vue'
-import SentencesWriting from '~/components/SentencesWriting.vue'
+import type { SentenceInfo } from '~/components/nce/SentencesWriting.vue'
+import SentencesWriting from '~/components/nce/SentencesWriting.vue'
 import { storageKeyChoice } from '~/constants'
 
 const router = useRouter()

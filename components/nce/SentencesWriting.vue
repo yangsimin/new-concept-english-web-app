@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import * as Diff from 'diff'
-import type { MessageType } from './MessageBox.vue'
 import type { Sentence } from '~/pages/nce.vue'
 
 export interface SentenceInfo {
@@ -70,7 +69,7 @@ const keyFnMap: Record<string, { name: string, fn: () => void }> = {
   },
 }
 
-const { messageBoxProps, copySentencePrompt } = usePromptIcon()
+const { copySentencePrompt } = usePromptIcon()
 const { playSound, pauseSound } = useSound()
 
 onUnmounted(() => {
@@ -130,12 +129,7 @@ function checkResult(item: SentenceInfo): Diff.Change[] {
 
 function usePromptIcon() {
   const { copy: copyToClipboard } = useClipboard({ legacy: true })
-  const messageBoxProps = reactive({
-    visible: false,
-    message: '',
-    type: 'info' as MessageType,
-    html: false,
-  })
+  const toast = useToast()
   async function copySentencePrompt({ sentence, inputText }: SentenceInfo) {
     const promptTemplate = `
   你扮演一位资深的英语教育者，请看下面三段文字：
@@ -154,30 +148,25 @@ function usePromptIcon() {
 
     const url = 'https://tongyi.aliyun.com/qianwen/'
 
-    toast({
-      message: `已拷贝，请前往 <a 
-          href="${url}" target="_blank" 
+    const description = `已拷贝，请前往 <a
+          href="${url}" target="_blank"
           style="text-decoration:underline; margin:0 4px;"
         >《通义千问》</a>提问
-    `,
-      type: 'success',
-      duration: 3000,
-      html: true,
+    `
+    toast.add({
+      title: 'Success',
+      description,
+      color: 'green',
     })
-  }
-
-  function toast({ message, duration = 1000, type = 'info', html = false }: { message: string, duration?: number, type?: MessageType, html?: boolean }) {
-    messageBoxProps.message = message
-    messageBoxProps.type = type
-    messageBoxProps.visible = true
-    messageBoxProps.html = html
-    setTimeout(() => {
-      messageBoxProps.visible = false
-    }, duration)
+    // toast({
+    //   message: ,
+    //   type: 'success',
+    //   duration: 3000,
+    //   html: true,
+    // })
   }
 
   return {
-    messageBoxProps,
     copySentencePrompt,
   }
 }
@@ -209,7 +198,7 @@ defineExpose({
 </script>
 
 <template>
-  <article class="grid grid-cols-1 mx-auto min-w-300px w-max gap-2rem text-lg">
+  <article class="flex flex-col mx-auto w-max gap-4 text-lg">
     <div v-for="(eachItem, index) of formData" :key="eachItem.sentence.startAt">
       <div class="flex items-center justify-between">
         <slot name="index" :index="index" :sentence-info="eachItem">
@@ -269,7 +258,7 @@ defineExpose({
       </div>
     </div>
   </article>
-  <MessageBox v-bind="messageBoxProps" />
+  <!-- <MessageBox v-bind="messageBoxProps" /> -->
 </template>
 
 <style scoped>
