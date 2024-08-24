@@ -1,4 +1,4 @@
-export function throttle(fn: Function, delay: number) {
+export function throttle(fn: (...args: any[]) => any, delay: number) {
   let timer: NodeJS.Timeout | undefined
 
   return function (...args: any[]) {
