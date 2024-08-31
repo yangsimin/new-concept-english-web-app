@@ -83,36 +83,71 @@ function onClickNextStep() {
 </script>
 
 <template>
-  <article v-if="currentSentence" class="min-h-[14rem] flex flex-col items-center justify-center gap-8 text-[4xl] lt-sm:gap-2 lt-sm:text-lg">
-    <p class="relative flex items-center">
-      {{ currentSentence.zh }}
-      <label class="absolute right-0 mr--16 cursor-pointer text-2xl lt-sm:mr--8 lt-sm:text-base">
-        <span :icon="isSoundEnable ? 'carbon-volume-up-filled' : 'carbon-volume-mute-filled'" @click="isSoundEnable = !isSoundEnable" />
-      </label>
-    </p>
-    <p class="flex flex-wrap justify-center gap-2">
-      <span
-        v-for="(piece, index) in currentSentence.en.trim().split(/\s/)"
-        :key="index"
-        class="border-b-4 border-b-sky-500 border-b-solid py-1"
-      >
-        <span :class="{ 'opacity-0': isEnTextHidden }" class="px-2">{{ piece }}</span>
-      </span>
-    </p>
-  </article>
-  <div class="grid grid-cols-[repeat(2,115px)] mt-14 place-content-center gap-[20px] text-base lt-sm:text-sm">
-    <button class="btn-primary" :disabled="sentenceIndex === 0" @click="onClickPrevSentence">
-      上一句
-    </button>
-    <button class="btn-primary" :disabled="sentenceIndex === currentLesson!.sentences.length - 1 && !isEnTextHidden" @click="onClickNextStep">
-      下一步
-    </button>
-    <button class="btn-primary" @click="emits('prevLesson')">
-      上一课
-    </button>
-    <button class="btn-primary" @click="emits('nextLesson')">
-      下一课
-    </button>
-  </div>
-  <!-- <ShortcutKey :key-fn-map="keyFnMap" /> -->
+  <UContainer class="flex flex-col items-center justify-between h-full py-8">
+    <article v-if="currentSentence" class="flex-1 flex flex-col items-center justify-center gap-10 text-4xl lt-sm:gap-6 lt-sm:text-lg w-full">
+      <p class="relative flex items-center w-full justify-center">
+        {{ currentSentence.zh }}
+        <UButton
+          :icon="isSoundEnable ? 'i-carbon-volume-up-filled' : 'i-carbon-volume-mute-filled'"
+          color="gray"
+          variant="ghost"
+          size="sm"
+          @click="isSoundEnable = !isSoundEnable"
+        />
+      </p>
+      <p class="flex flex-wrap justify-center gap-2 w-full">
+        <span
+          v-for="(piece, index) in currentSentence.en.trim().split(/\s/)"
+          :key="index"
+          class="border-b-4 border-primary py-1"
+        >
+          <span :class="{ 'opacity-0': isEnTextHidden }" class="px-2">{{ piece }}</span>
+        </span>
+      </p>
+    </article>
+    <UContainer class="w-full max-w-md mt-16">
+      <div class="grid grid-cols-2 gap-4">
+        <UButton
+          color="primary"
+          variant="solid"
+          size="lg"
+          block
+          :disabled="sentenceIndex === 0"
+          @click="onClickPrevSentence"
+        >
+          上一句
+        </UButton>
+        <UButton
+          color="primary"
+          variant="solid"
+          size="lg"
+          block
+          :disabled="sentenceIndex === currentLesson!.sentences.length - 1 && !isEnTextHidden"
+          @click="onClickNextStep"
+        >
+          下一步
+        </UButton>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-4">
+        <UButton
+          color="gray"
+          variant="soft"
+          size="lg"
+          block
+          @click="emits('prevLesson')"
+        >
+          上一课
+        </UButton>
+        <UButton
+          color="gray"
+          variant="soft"
+          size="lg"
+          block
+          @click="emits('nextLesson')"
+        >
+          下一课
+        </UButton>
+      </div>
+    </UContainer>
+  </UContainer>
 </template>
