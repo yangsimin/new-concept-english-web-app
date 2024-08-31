@@ -135,7 +135,7 @@ function usePromptIcon() {
 
   并做一下几件事
   1. 丝毫不修改地重复这三句话
-  2. 对比我的翻译和新概念的原文的差异，需要逐词对比，对有差异的词组，进行对比分析差异，并以表格的形式输出。
+  2. 对比我的翻译和新概念的原文的差异，需要逐词对比，对有差异的词组，进行对比分析差异，并以表格的形式输���。
   3. 进行整体表达的对比，对差异点、薄弱点和建议这三个维度进行分析和阐述，并在尽量不修改原文正确用词的基础上更正我的表达。
   4. 给出你认为更好更地道的英文表达方式。`
 
@@ -193,11 +193,11 @@ defineExpose({
 </script>
 
 <template>
-  <article class="left='[50%]' translate-x='[-50%]' relative flex flex-col mx-auto min-w-[36rem] w-max gap-4 text-lg">
+  <article class="flex flex-col mx-auto min-w-[36rem] w-full gap-4 text-lg">
     <div v-for="(eachItem, index) of formData" :key="eachItem.sentence.startAt">
       <div class="flex items-center justify-between">
         <slot name="index" :index="index" :sentence-info="eachItem">
-          {{ index + 1 }}.
+          <span class="mr-2">{{ index + 1 }}.</span>
         </slot>
         <div class="mr-auto">
           {{ eachItem.sentence.zh }}
@@ -231,8 +231,9 @@ defineExpose({
         </div>
       </div>
       <div
-        class="border-b-[2px] border-b-[rgb(var(--color-gray-DEFAULT))]
-         focus-within:border-b-[rgb(var(--color-primary-400))]
+        class="border-b-[2px] border-b-[rgb(var(--color-gray-600))]
+        dark:border-b-[rgb(var(--color-gray-400))]
+        focus-within:border-b-[rgb(var(--color-primary-600))]
         pl-1 transition-colors"
       >
         <UInput
@@ -241,6 +242,7 @@ defineExpose({
           type="text"
           :style="{ fontSize: '1.125rem', lineHeight: '1.75rem' }"
           variant="none"
+          class="caret-[rgb(var(--color-primary-500))]"
           @keydown.enter.exact.prevent="submitSingle(eachItem)"
           @keydown.tab="keyFnMap.Tab.fn"
           @keydown.stop.exact
@@ -269,4 +271,9 @@ defineExpose({
   <!-- <MessageBox v-bind="messageBoxProps" /> -->
 </template>
 
-<style scoped></style>
+<style scoped>
+.custom-caret-color {
+  caret-color: rgb(var(--color-primary-500));
+  caret-shape: bar;
+}
+</style>

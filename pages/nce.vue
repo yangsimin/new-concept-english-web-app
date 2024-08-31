@@ -110,7 +110,7 @@ function selectLesson(lessonId: number) {
 </script>
 
 <template>
-  <div class="flex flex-col box-border px-4 py-4">
+  <div class="flex flex-col box-border p-4">
     <header class="flex items-center justify-start lt-sm:text-xl text-2xl">
       <h4 class="flex mr-auto">
         <strong class="mr-4">{{ `${bookId}-${lessonId % 1000}` }}</strong>
