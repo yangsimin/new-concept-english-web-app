@@ -56,22 +56,22 @@ if (!formData.value.length) {
 <template>
   <LessonWritingModeSentences ref="sentencesWritingRef" v-model="formData" />
   <footer class="my-10 flex flex-col items-center justify-center gap-4">
-    <div v-if="sentencesWritingRef" class="space-x-4">
-      <UButton color="primary" variant="solid" @click="keyFnMap.enter.fn">
+    <div v-if="sentencesWritingRef" class="flex flex-wrap justify-center gap-2">
+      <UButton class="w-32 block" color="primary" variant="solid" @click="keyFnMap.enter.fn">
         提交
       </UButton>
-      <UButton color="gray" variant="outline" @click="keyFnMap.v.fn">
+      <UButton class="w-32 block" color="gray" variant="outline" @click="keyFnMap.v.fn">
         隐藏
       </UButton>
-      <UButton color="gray" variant="outline" @click="keyFnMap.z.fn">
+      <UButton class="w-32 block" color="gray" variant="outline" @click="keyFnMap.z.fn">
         重置
       </UButton>
     </div>
-    <div class="space-x-4">
-      <UButton color="primary" variant="outline" @click="keyFnMap.h.fn">
+    <div class="flex flex-wrap justify-center gap-2">
+      <UButton class="w-32 block" color="primary" variant="outline" @click="keyFnMap.h.fn">
         上一课
       </UButton>
-      <UButton color="primary" variant="outline" @click="keyFnMap.l.fn">
+      <UButton class="w-32 block" color="primary" variant="outline" @click="keyFnMap.l.fn">
         下一课
       </UButton>
     </div>

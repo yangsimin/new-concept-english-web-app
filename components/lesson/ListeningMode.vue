@@ -106,7 +106,7 @@ function onClickNextStep() {
       </p>
     </article>
     <UContainer class="w-full max-w-md mt-16">
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-2 grid-rows-2 gap-4">
         <UButton
           color="primary"
           variant="solid"
@@ -127,8 +127,6 @@ function onClickNextStep() {
         >
           下一步
         </UButton>
-      </div>
-      <div class="grid grid-cols-2 gap-4 mt-4">
         <UButton
           color="gray"
           variant="soft"

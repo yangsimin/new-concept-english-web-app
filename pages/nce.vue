@@ -139,7 +139,7 @@ function selectLesson(lessonId: number) {
         />
       </LessonMenu>
     </header>
-    <main v-if="currentLesson" class="mt-20">
+    <main v-if="currentLesson" class="mt-8">
       <LessonListeningMode
         v-if="isListeningMode"
         :current-lesson="currentLesson"
