@@ -57,7 +57,7 @@ function handleExportCache() {
     </UButton>
     <NuxtLink to="/choice">
       <UButton
-        icon="ph-list-star"
+        icon="ph:list-star-duotone"
         title="精选句子练习"
         variant="ghost"
         color="gray"
@@ -66,14 +66,14 @@ function handleExportCache() {
     <LayoutDarkToggle />
     <UButton
       variant="ghost"
-      icon="simple-icons-github"
+      icon="mdi:github"
       color="gray"
       to="https://github.com/yangsimin/new-concept-english-web-app"
       target="_blank"
       title="Github"
     />
     <UButton
-      icon="uil-export"
+      icon="material-symbols:upload"
       title="导出缓存"
       variant="ghost"
       color="gray"
@@ -81,7 +81,7 @@ function handleExportCache() {
     />
     <UButton variant="ghost" color="gray" class="px-1.5">
       <label class="cursor-pointer h-5">
-        <UIcon name="uil-import" title="导入缓存" class="w-5 h-5" />
+        <UIcon name="material-symbols:download" title="导入缓存" class="w-5 h-5" />
         <input type="file" accept=".json" class="hidden" @change="handleImportCache">
       </label>
     </UButton>
