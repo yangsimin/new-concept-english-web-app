@@ -19,7 +19,7 @@ const keyFnMap: Record<string, { name: string, fn: () => void }> = {
   },
   'enter': {
     name: '提交',
-    fn: () => {},
+    fn: () => { },
   },
   'shift+enter': {
     name: '提交全部',
@@ -230,7 +230,11 @@ defineExpose({
           />
         </div>
       </div>
-      <div class="border-b-[2px] border-b-[var(--color-primary)] pl-1 focus-within-border-b-sky-500">
+      <div
+        class="border-b-[2px] border-b-[rgb(var(--color-gray-DEFAULT))]
+         focus-within:border-b-[rgb(var(--color-primary-400))]
+        pl-1 transition-colors"
+      >
         <UInput
           v-model="eachItem.inputText"
           :padded="false"
@@ -265,6 +269,4 @@ defineExpose({
   <!-- <MessageBox v-bind="messageBoxProps" /> -->
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
