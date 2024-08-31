@@ -62,7 +62,7 @@ if (!formData.value.length) {
 
       <template #footer>
         <div class="py-4">
-          <div v-if="sentencesWritingRef" class="flex justify-center gap-2 mb-4">
+          <div v-if="sentencesWritingRef" class="flex justify-center gap-2">
             <UButton class="w-32" block color="primary" variant="solid" @click="keyFnMap.enter.fn">
               <UIcon name="i-heroicons-check" class="mr-1" />
               提交
@@ -75,9 +75,7 @@ if (!formData.value.length) {
               <UIcon name="i-heroicons-arrow-path" class="mr-1" />
               重置
             </UButton>
-          </div>
-          <div class="flex justify-center gap-2">
-            <UButton class="w-32" block color="primary" variant="outline" @click="keyFnMap.h.fn">
+            <UButton class="w-32 order-[-1]" block color="primary" variant="outline" @click="keyFnMap.h.fn">
               <UIcon name="i-heroicons-arrow-left" class="mr-1" />
               上一课
             </UButton>
