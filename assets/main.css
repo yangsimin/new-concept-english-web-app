@@ -1,3 +1,12 @@
+@font-face {
+  font-family: NotoSansSC;
+  src: url("./fonts/NotoSansSC-VariableFont_wght.ttf");
+}
+@font-face {
+  font-family: DM Sans;
+  src: url("./fonts/DMSans-VariableFont_opsz,wght.ttf");
+}
+
 :root {
   scroll-behavior: smooth;
   --header-height: 4rem;
@@ -12,5 +21,6 @@ body {
   --tw-bg-opacity: 1;
   background-color: rgb(var(--ui-background) / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
-  color: rgb(var(--ui-foreground) / var(--tw-text-opacity))
+  color: rgb(var(--ui-foreground) / var(--tw-text-opacity));
+  font-family: NotoSansSC, DM Sans, "DM Sans Fallback: Arial",  ui-sans-serif, system-ui, sans-serif;
 }

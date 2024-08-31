@@ -24,6 +24,7 @@ function onBookClick(index: number) {
       :key="index"
       class="block text-[2rem]"
       variant="solid"
+      color="primary"
       @click="onBookClick(index)"
     >
       {{ index }}
