@@ -251,7 +251,7 @@ defineExpose({
           @keydown.p.ctrl="copySentencePrompt(eachItem)"
         />
       </div>
-      <div class="pl-1 pr-20" :class="{ opacity: 'eachItem.isAnswerVisible ? 100 : 0' }">
+      <div class="pl-1 pr-20" :class="[eachItem.isAnswerVisible ? 'opacity-100' : 'opacity-0'] ">
         <p v-if="!eachItem.diffChanges?.length">
           {{ eachItem.sentence.en }}
         </p>
