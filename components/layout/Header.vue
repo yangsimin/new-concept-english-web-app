@@ -48,6 +48,7 @@ function handleExportCache() {
   <header class="container h-[var(--header-height)] flex items-center justify-end gap-2 text-xl">
     <UButton
       variant="ghost"
+      color="primary"
       size="xl"
       class="mr-auto font-bold uppercase"
       @click="$router.push('/')"

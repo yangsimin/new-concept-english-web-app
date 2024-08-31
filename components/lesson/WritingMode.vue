@@ -56,24 +56,24 @@ if (!formData.value.length) {
 <template>
   <LessonWritingModeSentences ref="sentencesWritingRef" v-model="formData" />
   <footer class="my-10 flex flex-col items-center justify-center gap-4">
-    <div v-if="sentencesWritingRef" space-x-4>
-      <button class="btn-primary" @click="keyFnMap.enter.fn">
+    <div v-if="sentencesWritingRef" class="space-x-4">
+      <UButton color="primary" variant="solid" @click="keyFnMap.enter.fn">
         提交
-      </button>
-      <button class="btn-primary" @click="keyFnMap.v.fn">
+      </UButton>
+      <UButton color="primary" variant="solid" @click="keyFnMap.v.fn">
         隐藏
-      </button>
-      <button class="btn-primary" @click="keyFnMap.z.fn">
+      </UButton>
+      <UButton color="primary" variant="solid" @click="keyFnMap.z.fn">
         重置
-      </button>
+      </UButton>
     </div>
-    <div space-x-4>
-      <button class="btn-primary" @click="keyFnMap.h.fn">
+    <div class="space-x-4">
+      <UButton color="primary" variant="solid" @click="keyFnMap.h.fn">
         上一课
-      </button>
-      <button class="btn-primary" @click="keyFnMap.l.fn">
+      </UButton>
+      <UButton color="primary" variant="solid" @click="keyFnMap.l.fn">
         下一课
-      </button>
+      </UButton>
     </div>
   </footer>
   <!-- <ShortcutKey :key-fn-map="keyFnMap" /> -->

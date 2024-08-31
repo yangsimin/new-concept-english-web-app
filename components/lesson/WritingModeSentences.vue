@@ -193,7 +193,7 @@ defineExpose({
 </script>
 
 <template>
-  <article class="left='[50%]' translate-x='[-50%]' relative flex flex-col mx-auto min-w-[300px] w-max gap-4 text-lg">
+  <article class="left='[50%]' translate-x='[-50%]' relative flex flex-col mx-auto min-w-[36rem] w-max gap-4 text-lg">
     <div v-for="(eachItem, index) of formData" :key="eachItem.sentence.startAt">
       <div class="flex items-center justify-between">
         <slot name="index" :index="index" :sentence-info="eachItem">
@@ -202,35 +202,41 @@ defineExpose({
         <div class="mr-auto">
           {{ eachItem.sentence.zh }}
         </div>
-        <div class="mx-2 flex items-center gap-2">
+        <div class="mx-2 flex items-center">
           <UButton
-            icon="carbon-clean"
-            class="cursor-pointer"
+            icon="fluent:text-clear-formatting-16-regular"
             title="清除文本(ctrl+r)"
+            tabindex="-1"
             @click="clearSingle(eachItem)"
           />
           <UButton
-            icon="carbon-volume-up-filled"
-            class="cursor-pointer"
+            icon="solar:headphones-square-sound-bold"
             title="播放语音"
+            tabindex="-1"
             @click="playSound(eachItem)"
           />
           <UButton
-            :icon="eachItem.isMarked ? 'carbon-star-filled' : 'carbon-star'" cursor-pointer title="加入收藏"
-            :class="eachItem.isMarked ? 'text-yellow' : ''"
+            :icon="eachItem.isMarked ? 'carbon-star-filled' : 'carbon-star'"
+            title="加入收藏"
+            :color="eachItem.isMarked ? 'primary' : 'gray'"
+            tabindex="-1"
             @click="handleMarkClick(eachItem)"
           />
           <UButton
-            icon="carbon-chat-bot" cursor-pointer title="复制提示词(ctrl+p)"
+            icon="carbon-chat-bot"
+            title="复制提示词(ctrl+p)"
+            tabindex="-1"
             @click="copySentencePrompt(eachItem)"
           />
         </div>
       </div>
-      <div class="border-b-[2px] border-b-black pl-1 focus-within-border-b-sky-500">
-        <input
+      <div class="border-b-[2px] border-b-[var(--color-primary)] pl-1 focus-within-border-b-sky-500">
+        <UInput
           v-model="eachItem.inputText"
+          :padded="false"
           type="text"
-          class="w-full outline-none"
+          :style="{ fontSize: '1.125rem', lineHeight: '1.75rem' }"
+          variant="none"
           @keydown.enter.exact.prevent="submitSingle(eachItem)"
           @keydown.tab="keyFnMap.Tab.fn"
           @keydown.stop.exact
@@ -239,7 +245,7 @@ defineExpose({
           @keydown.r.ctrl="clearSingle(eachItem)"
           @keydown.m.ctrl="handleMarkClick(eachItem)"
           @keydown.p.ctrl="copySentencePrompt(eachItem)"
-        >
+        />
       </div>
       <div class="pl-1 pr-20" :class="{ opacity: 'eachItem.isAnswerVisible ? 100 : 0' }">
         <p v-if="!eachItem.diffChanges?.length">
