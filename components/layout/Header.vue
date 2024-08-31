@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const toast = useToast()
+
 function handleImportCache(event: Event) {
   const input = event.target as HTMLInputElement
   const file = input.files?.[0]
@@ -50,7 +51,7 @@ function handleExportCache() {
       variant="ghost"
       color="primary"
       size="xl"
-      class="mr-auto font-bold uppercase"
+      class="mr-auto font-bold"
       @click="$router.push('/')"
     >
       New Concept English
@@ -63,17 +64,18 @@ function handleExportCache() {
         color="gray"
       />
     </NuxtLink>
+    <LayoutColorPicker />
     <LayoutDarkToggle />
     <UButton
       variant="ghost"
-      icon="mdi:github"
+      icon="simple-icons-github"
       color="gray"
       to="https://github.com/yangsimin/new-concept-english-web-app"
       target="_blank"
       title="Github"
     />
     <UButton
-      icon="material-symbols:upload"
+      icon="uil-export"
       title="导出缓存"
       variant="ghost"
       color="gray"
@@ -81,7 +83,7 @@ function handleExportCache() {
     />
     <UButton variant="ghost" color="gray" class="px-1.5">
       <label class="cursor-pointer h-5">
-        <UIcon name="material-symbols:download" title="导入缓存" class="w-5 h-5" />
+        <UIcon name="uil-import" title="导入缓存" class="w-5 h-5" />
         <input type="file" accept=".json" class="hidden" @change="handleImportCache">
       </label>
     </UButton>
