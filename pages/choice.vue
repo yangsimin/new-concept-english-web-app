@@ -69,53 +69,58 @@ function shuffle() {
 </script>
 
 <template>
-  <div box-border p="x-4 y-4">
-    <header flex items-center justify-between>
-      <h1 text-2xl>
-        精选句子练习
-      </h1>
-      <div>
-        <button class="btn-primary py-8" @click="router.go(-1)">
-          返回
-        </button>
+  <div class="p-4">
+    <UCard>
+      <template #header>
+        <div class="flex items-center justify-between">
+          <h1 class="text-2xl font-bold">
+            精选句子练习
+          </h1>
+          <UButton icon="i-heroicons-arrow-left" label="返回" variant="ghost" @click="router.go(-1)" />
+        </div>
+      </template>
+
+      <div class="mt-4">
+        <LessonWritingModeSentences
+          v-if="markedSentences.length"
+          ref="sentencesWritingRef"
+          v-model="markedSentences"
+          @mark-click="onMarkClick"
+        >
+          <template #index="{ sentenceInfo, index }">
+            <span class="mr-2">
+              {{ index + 1 }}.
+              <NuxtLink
+                :to="`/nce/?book=${Math.floor(sentenceInfo.sentence.lessonId / 1000)}&lessonId=${sentenceInfo.sentence.lessonId}`"
+                class="underline hover:text-primary-500"
+              >
+                [{{ Math.floor(sentenceInfo.sentence.lessonId / 1000) }}-{{ sentenceInfo.sentence.lessonId % 1000 }}]
+              </NuxtLink>
+            </span>
+          </template>
+        </LessonWritingModeSentences>
+        <UAlert v-else icon="i-heroicons-information-circle" color="primary" variant="subtle" title="快去添加句子吧~" />
       </div>
-    </header>
-    <main mt-20>
-      <LessonWritingModeSentences
-        v-if="markedSentences.length"
-        ref="sentencesWritingRef"
-        v-model="markedSentences"
-        @mark-click="onMarkClick"
-      >
-        <template #index="{ sentenceInfo, index }">
-          <span mr-2>
-            {{ index + 1 }}.
-            <NuxtLink tabindex="-1" :to="`/nce/?book=${Math.floor(sentenceInfo.sentence.lessonId / 1000)}&lessonId=${sentenceInfo.sentence.lessonId}`" underline>
-              [{{ Math.floor(sentenceInfo.sentence.lessonId / 1000) }}-{{ sentenceInfo.sentence.lessonId % 1000 }}]
-            </NuxtLink>
-          </span>
-        </template>
-      </LessonWritingModeSentences>
-      <div v-else text-center text-xl uppercase>
-        Empty
-      </div>
-    </main>
-    <footer v-if="markedSentences.length" my-10 flex flex-col items-center justify-center>
-      <div v-if="sentencesWritingRef" space-x-4>
-        <button class="btn-primary" @click="sentencesWritingRef.keyFnMap['shift+enter'].fn">
-          提交
-        </button>
-        <button class="btn-primary" @click="sentencesWritingRef.keyFnMap.v.fn">
-          隐藏
-        </button>
-        <button class="btn-primary" @click="sentencesWritingRef.keyFnMap.z.fn">
-          重置
-        </button>
-        <button class="btn-primary" @click="shuffle">
-          乱序
-        </button>
-      </div>
-    </footer>
+
+      <template v-if="markedSentences.length && sentencesWritingRef" #footer>
+        <div class="py-4">
+          <div class="flex justify-center gap-2">
+            <UButton class="w-32" block color="primary" variant="solid" @click="sentencesWritingRef.keyFnMap['shift+enter'].fn">
+              提交
+            </UButton>
+            <UButton class="w-32" block color="gray" variant="outline" @click="sentencesWritingRef.keyFnMap.v.fn">
+              隐藏
+            </UButton>
+            <UButton class="w-32" block color="gray" variant="outline" @click="sentencesWritingRef.keyFnMap.z.fn">
+              重置
+            </UButton>
+            <!-- <UButton class="w-32" block color="gray" variant="outline" @click="shuffle">
+              乱序
+            </UButton> -->
+          </div>
+        </div>
+      </template>
+    </UCard>
   </div>
 </template>
 
