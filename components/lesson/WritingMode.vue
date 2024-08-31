@@ -60,18 +60,18 @@ if (!formData.value.length) {
       <UButton color="primary" variant="solid" @click="keyFnMap.enter.fn">
         提交
       </UButton>
-      <UButton color="primary" variant="solid" @click="keyFnMap.v.fn">
+      <UButton color="gray" variant="outline" @click="keyFnMap.v.fn">
         隐藏
       </UButton>
-      <UButton color="primary" variant="solid" @click="keyFnMap.z.fn">
+      <UButton color="gray" variant="outline" @click="keyFnMap.z.fn">
         重置
       </UButton>
     </div>
     <div class="space-x-4">
-      <UButton color="primary" variant="solid" @click="keyFnMap.h.fn">
+      <UButton color="primary" variant="outline" @click="keyFnMap.h.fn">
         上一课
       </UButton>
-      <UButton color="primary" variant="solid" @click="keyFnMap.l.fn">
+      <UButton color="primary" variant="outline" @click="keyFnMap.l.fn">
         下一课
       </UButton>
     </div>
