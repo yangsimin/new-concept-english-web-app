@@ -231,7 +231,7 @@ defineExpose({
         </div>
       </div>
       <div
-        class="border-b-[2px] border-b-[rgb(var(--color-gray-600))]
+        class="border-b-[2px] border-b-[rgb(var(--color-gray-200))]
         dark:border-b-[rgb(var(--color-gray-400))]
         focus-within:border-b-[rgb(var(--color-primary-600))]
         pl-1 transition-colors"

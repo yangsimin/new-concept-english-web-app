@@ -115,6 +115,7 @@ function onClickNextStep() {
           :disabled="sentenceIndex === 0"
           @click="onClickPrevSentence"
         >
+          <UIcon name="i-heroicons-arrow-up" class="mr-1" />
           上一句
         </UButton>
         <UButton
@@ -125,6 +126,7 @@ function onClickNextStep() {
           :disabled="sentenceIndex === currentLesson!.sentences.length - 1 && !isEnTextHidden"
           @click="onClickNextStep"
         >
+          <UIcon name="i-heroicons-arrow-down" class="mr-1" />
           下一步
         </UButton>
         <UButton
@@ -134,6 +136,7 @@ function onClickNextStep() {
           block
           @click="emits('prevLesson')"
         >
+          <UIcon name="i-heroicons-arrow-left" class="mr-1" />
           上一课
         </UButton>
         <UButton
@@ -144,6 +147,7 @@ function onClickNextStep() {
           @click="emits('nextLesson')"
         >
           下一课
+          <UIcon name="i-heroicons-arrow-right" class="ml-1" />
         </UButton>
       </div>
     </UContainer>

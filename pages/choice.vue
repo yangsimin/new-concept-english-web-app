@@ -106,15 +106,19 @@ function shuffle() {
         <div class="py-4">
           <div class="flex justify-center gap-2">
             <UButton class="w-32" block color="primary" variant="solid" @click="sentencesWritingRef.keyFnMap['shift+enter'].fn">
+              <UIcon name="i-heroicons-check" class="mr-1" />
               提交
             </UButton>
             <UButton class="w-32" block color="gray" variant="outline" @click="sentencesWritingRef.keyFnMap.v.fn">
+              <UIcon name="i-heroicons-eye-slash" class="mr-1" />
               隐藏
             </UButton>
             <UButton class="w-32" block color="gray" variant="outline" @click="sentencesWritingRef.keyFnMap.z.fn">
+              <UIcon name="i-heroicons-arrow-path" class="mr-1" />
               重置
             </UButton>
             <!-- <UButton class="w-32" block color="gray" variant="outline" @click="shuffle">
+              <UIcon name="i-heroicons-arrow-path-rounded-square" class="mr-1" />
               乱序
             </UButton> -->
           </div>
