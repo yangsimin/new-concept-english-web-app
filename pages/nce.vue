@@ -123,7 +123,7 @@ function selectLesson(lessonId: number) {
         variant="ghost"
         color="gray"
         title="切换模式"
-        :icon="isListeningMode ? 'carbon-edit' : 'carbon-headphones'"
+        :icon="isListeningMode ? 'material-symbols:edit-outline' : 'material-symbols:headphones-outline-rounded'"
         @click="() => isListeningMode = !isListeningMode"
       />
       <LessonMenu
@@ -135,7 +135,7 @@ function selectLesson(lessonId: number) {
           variant="ghost"
           color="gray"
           title="打开目录"
-          icon="carbon-book"
+          icon="material-symbols:menu-book-outline"
         />
       </LessonMenu>
     </header>

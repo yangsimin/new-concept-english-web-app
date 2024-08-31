@@ -88,10 +88,10 @@ function onClickNextStep() {
       <p class="relative flex items-center w-full justify-center">
         {{ currentSentence.zh }}
         <UButton
-          :icon="isSoundEnable ? 'i-carbon-volume-up-filled' : 'i-carbon-volume-mute-filled'"
+          :icon="isSoundEnable ? 'i-heroicons-speaker-wave' : 'i-heroicons-speaker-x-mark'"
           color="gray"
           variant="ghost"
-          size="sm"
+          size="xl"
           @click="isSoundEnable = !isSoundEnable"
         />
       </p>

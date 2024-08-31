@@ -135,7 +135,7 @@ function usePromptIcon() {
 
   并做一下几件事
   1. 丝毫不修改地重复这三句话
-  2. 对比我的翻译和新概念的原文的差异，需要逐词对比，对有差异的词组，进行对比分析差异，并以表格的形式输���。
+  2. 对比我的翻译和新概念的原文的差异，需要逐词对比，对有差异的词组，进行对比分析差异，并以表格的形式输。
   3. 进行整体表达的对比，对差异点、薄弱点和建议这三个维度进行分析和阐述，并在尽量不修改原文正确用词的基础上更正我的表达。
   4. 给出你认为更好更地道的英文表达方式。`
 
@@ -204,26 +204,26 @@ defineExpose({
         </div>
         <div class="mx-2 flex items-center">
           <UButton
-            icon="fluent:text-clear-formatting-16-regular"
+            icon="i-heroicons-trash"
             title="清除文本(ctrl+r)"
             tabindex="-1"
             @click="clearSingle(eachItem)"
           />
           <UButton
-            icon="solar:headphones-square-sound-bold"
+            icon="i-heroicons-speaker-wave"
             title="播放语音"
             tabindex="-1"
             @click="playSound(eachItem)"
           />
           <UButton
-            :icon="eachItem.isMarked ? 'carbon-star-filled' : 'carbon-star'"
+            :icon="eachItem.isMarked ? 'i-heroicons-star-solid' : 'i-heroicons-star'"
             title="加入收藏"
             :color="eachItem.isMarked ? 'primary' : 'gray'"
             tabindex="-1"
             @click="handleMarkClick(eachItem)"
           />
           <UButton
-            icon="carbon-chat-bot"
+            icon="heroicons:chat-bubble-left-right"
             title="复制提示词(ctrl+p)"
             tabindex="-1"
             @click="copySentencePrompt(eachItem)"
