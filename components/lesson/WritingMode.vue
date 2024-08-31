@@ -64,21 +64,26 @@ if (!formData.value.length) {
         <div class="py-4">
           <div v-if="sentencesWritingRef" class="flex justify-center gap-2 mb-4">
             <UButton class="w-32" block color="primary" variant="solid" @click="keyFnMap.enter.fn">
+              <UIcon name="i-heroicons-check" class="mr-1" />
               提交
             </UButton>
             <UButton class="w-32" block color="gray" variant="outline" @click="keyFnMap.v.fn">
+              <UIcon name="i-heroicons-eye-slash" class="mr-1" />
               隐藏
             </UButton>
             <UButton class="w-32" block color="gray" variant="outline" @click="keyFnMap.z.fn">
+              <UIcon name="i-heroicons-arrow-path" class="mr-1" />
               重置
             </UButton>
           </div>
           <div class="flex justify-center gap-2">
             <UButton class="w-32" block color="primary" variant="outline" @click="keyFnMap.h.fn">
+              <UIcon name="i-heroicons-arrow-left" class="mr-1" />
               上一课
             </UButton>
             <UButton class="w-32" block color="primary" variant="outline" @click="keyFnMap.l.fn">
               下一课
+              <UIcon name="i-heroicons-arrow-right" class="ml-1" />
             </UButton>
           </div>
         </div>
