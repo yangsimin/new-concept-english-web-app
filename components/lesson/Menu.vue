@@ -29,7 +29,7 @@ function onSelectLesson(id: number) {
             选择课程
           </div>
         </template>
-        <div class="grid max-h-[60vh] w-full grid-cols-[repeat(auto-fill,minmax(3rem,1fr))] gap-2 overflow-y-auto p-4">
+        <div class="grid w-full grid-cols-[repeat(auto-fill,minmax(2.5rem,1fr))] grid-rows-[repeat(auto-fill,minmax(2.5rem,1fr))] place-items-center gap-2 overflow-y-auto p-4">
           <UButton
             v-for="id in lessonIdList"
             :key="id"
