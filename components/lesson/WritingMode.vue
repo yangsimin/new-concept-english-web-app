@@ -56,9 +56,7 @@ if (!formData.value.length) {
 <template>
   <div>
     <UCard>
-      <div class="mt-4">
-        <LessonWritingModeSentences ref="sentencesWritingRef" v-model="formData" />
-      </div>
+      <LessonWritingModeSentences ref="sentencesWritingRef" v-model="formData" />
 
       <template #footer>
         <div class="py-4">
