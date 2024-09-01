@@ -11,11 +11,7 @@ const isDark = computed({
 </script>
 
 <template>
-  <UButton
-    variant="ghost"
-    color="gray"
-    :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
-    title="切换主题"
-    @click="isDark = !isDark"
-  />
+  <UTooltip :text="isDark ? '亮色主题' : '暗色主题'">
+    <UButton :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'" @click="isDark = !isDark" />
+  </UTooltip>
 </template>

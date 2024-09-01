@@ -64,11 +64,11 @@ if (!formData.value.length) {
           <UIcon name="i-heroicons-check" class="mr-1" />
           提交
         </UButton>
-        <UButton class="w-32" block color="gray" variant="outline" @click="keyFnMap.v.fn">
+        <UButton class="w-32" block variant="outline" @click="keyFnMap.v.fn">
           <UIcon name="i-heroicons-eye-slash" class="mr-1" />
           隐藏
         </UButton>
-        <UButton class="w-32" block color="gray" variant="outline" @click="keyFnMap.z.fn">
+        <UButton class="w-32" block variant="outline" @click="keyFnMap.z.fn">
           <UIcon name="i-heroicons-arrow-path" class="mr-1" />
           重置
         </UButton>

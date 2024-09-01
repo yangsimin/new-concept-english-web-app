@@ -34,7 +34,6 @@ function onSelectLesson(id: number) {
             v-for="id in lessonIdList"
             :key="id"
             :color="id === currentLessonId ? 'primary' : 'gray'"
-            variant="ghost"
             class="flex h-10 w-10 items-center justify-center p-0"
             @click="onSelectLesson(id)"
           >
