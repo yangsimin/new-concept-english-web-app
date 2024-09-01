@@ -11,6 +11,7 @@
   scroll-behavior: smooth;
   --header-height: 4rem;
   --ui-foreground: var(--color-gray-800);
+  --ui-background: var(--color-primary-50);
 }
 
 :root.dark {
@@ -19,7 +20,7 @@
 }
 
 body {
-  --tw-bg-opacity: 1;
+  --tw-bg-opacity: 0.3;
   background-color: rgb(var(--ui-background) / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(var(--ui-foreground) / var(--tw-text-opacity));

@@ -119,24 +119,17 @@ function selectLesson(lessonId: number) {
           <br> {{ currentLesson?.titleZh }}
         </div>
       </h4>
-      <UButton
-        variant="ghost"
-        color="gray"
-        title="切换模式"
-        :icon="isListeningMode ? 'material-symbols:edit-outline' : 'material-symbols:headphones-outline-rounded'"
-        @click="() => isListeningMode = !isListeningMode"
-      />
+      <UTooltip :text="isListeningMode ? '翻译模式' : '听力模式'">
+        <UButton :icon="isListeningMode ? 'material-symbols:edit-outline' : 'material-symbols:headphones-outline-rounded'" @click="() => isListeningMode = !isListeningMode" />
+      </UTooltip>
       <LessonMenu
         :current-lesson-id="lessonId"
         :lesson-id-list="lessonIdList"
         @select-lesson-id="selectLesson($event)"
       >
-        <UButton
-          variant="ghost"
-          color="gray"
-          title="打开目录"
-          icon="material-symbols:menu-book-outline"
-        />
+        <UTooltip text="课程目录">
+          <UButton icon="material-symbols:menu-book-outline" />
+        </UTooltip>
       </LessonMenu>
     </header>
     <main v-if="currentLesson" class="mt-8">

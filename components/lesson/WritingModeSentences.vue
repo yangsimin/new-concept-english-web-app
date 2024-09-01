@@ -203,31 +203,18 @@ defineExpose({
           {{ eachItem.sentence.zh }}
         </div>
         <div class="mx-2 flex items-center">
-          <UButton
-            icon="i-heroicons-trash"
-            title="清除文本(ctrl+r)"
-            tabindex="-1"
-            @click="clearSingle(eachItem)"
-          />
-          <UButton
-            icon="i-heroicons-speaker-wave"
-            title="播放语音"
-            tabindex="-1"
-            @click="playSound(eachItem)"
-          />
-          <UButton
-            :icon="eachItem.isMarked ? 'i-heroicons-star-solid' : 'i-heroicons-star'"
-            title="加入收藏"
-            :color="eachItem.isMarked ? 'primary' : 'gray'"
-            tabindex="-1"
-            @click="handleMarkClick(eachItem)"
-          />
-          <UButton
-            icon="heroicons:chat-bubble-left-right"
-            title="复制提示词(ctrl+p)"
-            tabindex="-1"
-            @click="copySentencePrompt(eachItem)"
-          />
+          <UTooltip text="清除文本" :shortcuts="['ctrl', 'r']">
+            <UButton icon="i-heroicons-trash" tabindex="-1" @click="clearSingle(eachItem)" />
+          </UTooltip>
+          <UTooltip text="播放语音" :shortcuts="['ctrl', 's']">
+            <UButton icon="i-heroicons-speaker-wave" tabindex="-1" @click="playSound(eachItem)" />
+          </UTooltip>
+          <UTooltip text="加入精选" :shortcuts="['ctrl', 'm']">
+            <UButton :icon="eachItem.isMarked ? 'i-heroicons-star-solid' : 'i-heroicons-star'" :color="eachItem.isMarked ? 'primary' : 'gray'" tabindex="-1" @click="handleMarkClick(eachItem)" />
+          </UTooltip>
+          <UTooltip text="复制提示词" :shortcuts="['ctrl', 'p']">
+            <UButton icon="heroicons:chat-bubble-left-right" tabindex="-1" @click="copySentencePrompt(eachItem)" />
+          </UTooltip>
         </div>
       </div>
       <div
@@ -251,6 +238,7 @@ defineExpose({
           @keydown.r.ctrl="clearSingle(eachItem)"
           @keydown.m.ctrl="handleMarkClick(eachItem)"
           @keydown.p.ctrl="copySentencePrompt(eachItem)"
+          @keydown.s.ctrl="playSound(eachItem)"
         />
       </div>
       <div class="pl-1 pr-20" :class="[eachItem.isAnswerVisible ? 'opacity-100' : 'opacity-0'] ">
@@ -268,7 +256,6 @@ defineExpose({
       </div>
     </div>
   </article>
-  <!-- <MessageBox v-bind="messageBoxProps" /> -->
 </template>
 
 <style scoped>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const toast = useToast()
+
 function handleImportCache(event: Event) {
   const input = event.target as HTMLInputElement
   const file = input.files?.[0]
@@ -47,43 +48,39 @@ function handleExportCache() {
 <template>
   <header class="container h-[var(--header-height)] flex items-center justify-end gap-2 text-xl">
     <UButton
-      variant="ghost"
       color="primary"
       size="xl"
-      class="mr-auto font-bold uppercase"
+      class="mr-auto font-bold"
       @click="$router.push('/')"
     >
       New Concept English
     </UButton>
     <NuxtLink to="/choice">
-      <UButton
-        icon="ph:list-star-duotone"
-        title="精选句子练习"
-        variant="ghost"
-        color="gray"
-      />
+      <UTooltip text="精选句子练习">
+        <UButton icon="ph:list-star-duotone" />
+      </UTooltip>
     </NuxtLink>
+    <LayoutColorPicker />
     <LayoutDarkToggle />
     <UButton
-      variant="ghost"
-      icon="mdi:github"
-      color="gray"
+      icon="simple-icons-github"
       to="https://github.com/yangsimin/new-concept-english-web-app"
       target="_blank"
       title="Github"
     />
-    <UButton
-      icon="material-symbols:upload"
-      title="导出缓存"
-      variant="ghost"
-      color="gray"
-      @click="handleExportCache"
-    />
-    <UButton variant="ghost" color="gray" class="px-1.5">
-      <label class="cursor-pointer h-5">
-        <UIcon name="material-symbols:download" title="导入缓存" class="w-5 h-5" />
-        <input type="file" accept=".json" class="hidden" @change="handleImportCache">
-      </label>
-    </UButton>
+    <UTooltip text="导出精选句子">
+      <UButton
+        icon="uil-export"
+        @click="handleExportCache"
+      />
+    </UTooltip>
+    <UTooltip text="导入精选句子">
+      <UButton class="px-1.5">
+        <label class="cursor-pointer h-5">
+          <UIcon name="uil-import" class="w-5 h-5" />
+          <input type="file" accept=".json" class="hidden" @change="handleImportCache">
+        </label>
+      </UButton>
+    </UTooltip>
   </header>
 </template>

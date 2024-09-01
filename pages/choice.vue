@@ -70,61 +70,55 @@ function shuffle() {
 
 <template>
   <div class="p-4">
-    <UCard>
-      <template #header>
-        <div class="flex items-center justify-between">
-          <h1 class="text-2xl font-bold">
-            精选句子练习
-          </h1>
-          <UButton icon="i-heroicons-arrow-left" label="返回" variant="ghost" @click="router.go(-1)" />
-        </div>
-      </template>
-
-      <div class="mt-4">
-        <LessonWritingModeSentences
-          v-if="markedSentences.length"
-          ref="sentencesWritingRef"
-          v-model="markedSentences"
-          @mark-click="onMarkClick"
-        >
-          <template #index="{ sentenceInfo, index }">
-            <span class="mr-2">
-              {{ index + 1 }}.
-              <NuxtLink
-                :to="`/nce/?book=${Math.floor(sentenceInfo.sentence.lessonId / 1000)}&lessonId=${sentenceInfo.sentence.lessonId}`"
-                class="underline hover:text-primary-500"
-              >
-                [{{ Math.floor(sentenceInfo.sentence.lessonId / 1000) }}-{{ sentenceInfo.sentence.lessonId % 1000 }}]
-              </NuxtLink>
-            </span>
-          </template>
-        </LessonWritingModeSentences>
-        <UAlert v-else icon="i-heroicons-information-circle" color="primary" variant="subtle" title="快去添加句子吧~" />
-      </div>
-
-      <template v-if="markedSentences.length && sentencesWritingRef" #footer>
-        <div class="py-4">
-          <div class="flex justify-center gap-2">
-            <UButton class="w-32" block color="primary" variant="solid" @click="sentencesWritingRef.keyFnMap['shift+enter'].fn">
-              <UIcon name="i-heroicons-check" class="mr-1" />
-              提交
-            </UButton>
-            <UButton class="w-32" block color="gray" variant="outline" @click="sentencesWritingRef.keyFnMap.v.fn">
-              <UIcon name="i-heroicons-eye-slash" class="mr-1" />
-              隐藏
-            </UButton>
-            <UButton class="w-32" block color="gray" variant="outline" @click="sentencesWritingRef.keyFnMap.z.fn">
-              <UIcon name="i-heroicons-arrow-path" class="mr-1" />
-              重置
-            </UButton>
-            <!-- <UButton class="w-32" block color="gray" variant="outline" @click="shuffle">
+    <div class="flex items-center justify-between">
+      <h1 class="text-2xl font-bold">
+        精选句子练习
+      </h1>
+      <UButton icon="i-heroicons-arrow-left" label="返回" @click="router.go(-1)" />
+    </div>
+    <UCard class="my-8">
+      <LessonWritingModeSentences
+        v-if="markedSentences.length"
+        ref="sentencesWritingRef"
+        v-model="markedSentences"
+        @mark-click="onMarkClick"
+      >
+        <template #index="{ sentenceInfo, index }">
+          <span class="mr-2">
+            {{ index + 1 }}.
+            <NuxtLink
+              :to="`/nce/?book=${Math.floor(sentenceInfo.sentence.lessonId / 1000)}&lessonId=${sentenceInfo.sentence.lessonId}`"
+              class="underline hover:text-primary-500"
+            >
+              [{{ Math.floor(sentenceInfo.sentence.lessonId / 1000) }}-{{ sentenceInfo.sentence.lessonId % 1000 }}]
+            </NuxtLink>
+          </span>
+        </template>
+      </LessonWritingModeSentences>
+      <UAlert v-else icon="i-heroicons-information-circle" color="primary" variant="subtle" title="快去添加句子吧~" />
+    </UCard>
+    <template v-if="markedSentences.length && sentencesWritingRef">
+      <div class="my-8">
+        <div class="flex justify-center gap-2">
+          <UButton class="w-32" block color="primary" variant="solid" @click="sentencesWritingRef.keyFnMap['shift+enter'].fn">
+            <UIcon name="i-heroicons-check" class="mr-1" />
+            提交
+          </UButton>
+          <UButton class="w-32" block variant="outline" @click="sentencesWritingRef.keyFnMap.v.fn">
+            <UIcon name="i-heroicons-eye-slash" class="mr-1" />
+            隐藏
+          </UButton>
+          <UButton class="w-32" block variant="outline" @click="sentencesWritingRef.keyFnMap.z.fn">
+            <UIcon name="i-heroicons-arrow-path" class="mr-1" />
+            重置
+          </UButton>
+          <!-- <UButton class="w-32" block variant="outline" @click="shuffle">
               <UIcon name="i-heroicons-arrow-path-rounded-square" class="mr-1" />
               乱序
             </UButton> -->
-          </div>
         </div>
-      </template>
-    </UCard>
+      </div>
+    </template>
   </div>
 </template>
 
