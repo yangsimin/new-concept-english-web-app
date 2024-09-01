@@ -74,7 +74,6 @@ async function requestLesson(book: number, lessonId: number): Promise<Lesson | n
         lessonId,
         sentenceId: s.IdIndex,
       } satisfies Sentence)),
-      audioUrl: `${HOST}/book${book}/${lessonId}.mp3`,
     } satisfies Lesson),
   })
   return data.value

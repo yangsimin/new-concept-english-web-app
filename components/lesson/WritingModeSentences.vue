@@ -68,6 +68,7 @@ onUnmounted(() => {
 })
 
 function submitSingle(i: SentenceInfo) {
+  // FIXME: 解决重复问题，需要加上索引判断
   formData.value = formData.value.map((item) => {
     if (i.sentence.zh === item.sentence.zh) {
       item.diffChanges = checkResult(item)
@@ -153,12 +154,6 @@ function usePromptIcon() {
       description,
       color: 'green',
     })
-    // toast({
-    //   message: ,
-    //   type: 'success',
-    //   duration: 3000,
-    //   html: true,
-    // })
   }
 
   return {
@@ -170,10 +165,9 @@ function useSound() {
   const { playAudio, pauseAudio, updateSource } = useAudio()
 
   function playSound(i: SentenceInfo) {
-    if (i.audioUrl) {
-      updateSource(i.audioUrl)
-      playAudio(i.sentence.startAt, i.sentence.stopAt)
-    }
+    const [book, lesson] = [getBookIdFromLessonId(i.sentence.lessonId), getLessonIndexFromLessonId(i.sentence.lessonId)]
+    updateSource(getAudioUrl(book, lesson))
+    playAudio(i.sentence.startAt, i.sentence.stopAt)
   }
 
   return {

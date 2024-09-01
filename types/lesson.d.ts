@@ -3,7 +3,6 @@ export interface Lesson {
   titleEn: string
   titleZh: string
   sentences: Sentence[]
-  audioUrl: string
 }
 
 export interface Sentence {
@@ -21,5 +20,4 @@ export interface SentenceInfo {
   inputText: string
   sentence: Sentence
   diffChanges?: Diff.Change[]
-  audioUrl: string
 }

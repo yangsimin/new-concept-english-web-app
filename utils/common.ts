@@ -42,3 +42,18 @@ export function downloadJson(data: string | object) {
   // 在Firefox中可能有效，在Chrome中可能无法正常工作，需要保留这一行，因为不立即释放URL可能会导致内存泄露
   URL.revokeObjectURL(url)
 }
+
+export function getAudioUrl(book: number, lesson: number) {
+  // TODO: 替换音频路径
+  // https://static.aienglish.com/static2/newconcept/1_1.mp3
+  // return `${HOST}/book${bookId}/${lessonId}.mp3`
+  return `https://static.aienglish.com/static2/newconcept/${book}_${lesson}.mp3`
+}
+
+export function getBookIdFromLessonId(lessonId: number) {
+  return Math.floor(lessonId / 1000)
+}
+
+export function getLessonIndexFromLessonId(lessonId: number) {
+  return lessonId % 1000
+}
