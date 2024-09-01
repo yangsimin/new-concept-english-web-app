@@ -74,7 +74,7 @@ function shuffle() {
       <h1 class="text-2xl font-bold">
         精选句子练习
       </h1>
-      <UButton icon="i-heroicons-arrow-left" label="返回" variant="ghost" @click="router.go(-1)" />
+      <UButton icon="i-heroicons-arrow-left" label="返回" @click="router.go(-1)" />
     </div>
     <UCard class="my-8">
       <LessonWritingModeSentences
@@ -104,15 +104,15 @@ function shuffle() {
             <UIcon name="i-heroicons-check" class="mr-1" />
             提交
           </UButton>
-          <UButton class="w-32" block color="gray" variant="outline" @click="sentencesWritingRef.keyFnMap.v.fn">
+          <UButton class="w-32" block variant="outline" @click="sentencesWritingRef.keyFnMap.v.fn">
             <UIcon name="i-heroicons-eye-slash" class="mr-1" />
             隐藏
           </UButton>
-          <UButton class="w-32" block color="gray" variant="outline" @click="sentencesWritingRef.keyFnMap.z.fn">
+          <UButton class="w-32" block variant="outline" @click="sentencesWritingRef.keyFnMap.z.fn">
             <UIcon name="i-heroicons-arrow-path" class="mr-1" />
             重置
           </UButton>
-          <!-- <UButton class="w-32" block color="gray" variant="outline" @click="shuffle">
+          <!-- <UButton class="w-32" block variant="outline" @click="shuffle">
               <UIcon name="i-heroicons-arrow-path-rounded-square" class="mr-1" />
               乱序
             </UButton> -->

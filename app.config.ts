@@ -7,6 +7,16 @@ export default defineAppConfig({
         variant: 'ghost',
         color: 'gray',
       },
+      color: {
+        gray: {
+          ghost: 'hover:bg-[#00000011] dark:hover:bg-[#ffffff11]',
+        },
+      },
+    },
+    tooltip: {
+      default: {
+        openDelay: 600,
+      } as any,
     },
   },
 })

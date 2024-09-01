@@ -89,8 +89,6 @@ function onClickNextStep() {
         {{ currentSentence.zh }}
         <UButton
           :icon="isSoundEnable ? 'i-heroicons-speaker-wave' : 'i-heroicons-speaker-x-mark'"
-          color="gray"
-          variant="ghost"
           size="xl"
           @click="isSoundEnable = !isSoundEnable"
         />
