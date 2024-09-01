@@ -16,33 +16,18 @@ function onBookClick(index: number) {
 </script>
 
 <template>
-  <main class="main">
-    <div v-for="index in 4" :key="index" class="book" @click="onBookClick(index)">
-      <span>
-        {{ index }}
-      </span>
-    </div>
+  <main
+    class="h-full grid grid-cols-[repeat(2,10rem)] grid-rows-[repeat(2,10rem)] gap-6 place-content-center"
+  >
+    <UButton
+      v-for="index in 4"
+      :key="index"
+      class="block text-[2rem]"
+      variant="solid"
+      color="primary"
+      @click="onBookClick(index)"
+    >
+      {{ index }}
+    </UButton>
   </main>
 </template>
-
-<style scoped>
-.main {
-  display: grid;
-  grid-template-columns: repeat(2, 150px);
-  grid-template-rows: repeat(2, 150px);
-  gap: 20px;
-  justify-content: center;
-  align-content: center;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
-
-.book {
-  @apply flex justify-center items-center
-  bg-sky-500 text-white text-center text-4xl
-  cursor-pointer rounded;
-}
-</style>

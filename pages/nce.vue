@@ -1,22 +1,6 @@
 <script setup lang="ts">
+import type { Lesson, Sentence } from '~/types/lesson'
 import { HOST, storageKeyLastLesson, storageKeyListenMode } from '~/constants'
-
-export interface Lesson {
-  id: number
-  titleEn: string
-  titleZh: string
-  sentences: Sentence[]
-  audioUrl: string
-}
-
-export interface Sentence {
-  lessonId: number
-  sentenceId: number
-  startAt: number
-  stopAt: number
-  en: string
-  zh: string
-}
 
 const route = useRoute()
 const router = useRouter()
@@ -126,41 +110,43 @@ function selectLesson(lessonId: number) {
 </script>
 
 <template>
-  <div flex="~ col" box-border p="x-4 y-4">
-    <header flex items-center justify-start gap-2 lt-sm="text-xl" text-2xl>
-      <div flex flex-1>
-        <strong mr-4>
-          {{ `${bookId}-${lessonId % 1000}` }}
-        </strong>
-        <span>
-          <strong>
-            {{ currentLesson?.titleEn }}
-          </strong>
-          <br>
-          {{ currentLesson?.titleZh }}
-        </span>
-      </div>
-      <button hover="bg-gray-400/20" rounded p1 transition-200 title="切换模式" @click="() => isListeningMode = !isListeningMode">
-        <span :icon="isListeningMode ? 'carbon-edit' : 'carbon-headphones'" />
-      </button>
+  <div class="flex flex-col box-border p-4">
+    <header class="flex items-center justify-start lt-sm:text-xl text-2xl">
+      <h4 class="flex mr-auto">
+        <strong class="mr-4">{{ `${bookId}-${lessonId % 1000}` }}</strong>
+        <div>
+          <strong> {{ currentLesson?.titleEn }} </strong>
+          <br> {{ currentLesson?.titleZh }}
+        </div>
+      </h4>
+      <UButton
+        variant="ghost"
+        color="gray"
+        title="切换模式"
+        :icon="isListeningMode ? 'material-symbols:edit-outline' : 'material-symbols:headphones-outline-rounded'"
+        @click="() => isListeningMode = !isListeningMode"
+      />
       <LessonMenu
         :current-lesson-id="lessonId"
         :lesson-id-list="lessonIdList"
         @select-lesson-id="selectLesson($event)"
       >
-        <button hover="bg-gray-400/20" rounded p1 transition-200 title="打开目录">
-          <span icon="carbon-book" />
-        </button>
+        <UButton
+          variant="ghost"
+          color="gray"
+          title="打开目录"
+          icon="material-symbols:menu-book-outline"
+        />
       </LessonMenu>
     </header>
-    <main v-if="currentLesson" mt-20>
-      <LessonModeListening
+    <main v-if="currentLesson" class="mt-8">
+      <LessonListeningMode
         v-if="isListeningMode"
         :current-lesson="currentLesson"
         @next-lesson="stepLesson(1)"
         @prev-lesson="stepLesson(-1)"
       />
-      <LessonModeWriting
+      <LessonWritingMode
         v-else
         :key="currentLesson.id"
         :current-lesson="currentLesson"

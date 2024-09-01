@@ -2,10 +2,7 @@ import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
   devtools: { enabled: false },
-  modules: [
-    '@unocss/nuxt',
-    '@vueuse/nuxt',
-  ],
+  modules: ['@vueuse/nuxt', '@nuxt/ui', '@nuxtjs/tailwindcss'],
   features: {
     inlineStyles: false,
   },
@@ -23,7 +20,9 @@ export default defineNuxtConfig({
     server: true,
     client: true,
   },
-  css: [
-    '@unocss/reset/tailwind.css',
-  ],
+  css: [],
+  compatibilityDate: '2024-08-22',
+  ui: { // why?
+    global: true,
+  },
 })

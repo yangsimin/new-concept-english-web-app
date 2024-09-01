@@ -1,12 +1,27 @@
-.btn-primary {
-  @apply px-4 py-px rounded bg-sky-500 text-white border-(sky-700 2px) hover:bg-opacity-80
-  disabled:(cursor-default bg-gray-600 opacity-50 hover:bg-opacity-100 active:scale-100) active:scale-95 transition-150;
+@font-face {
+  font-family: NotoSansSC;
+  src: url("./fonts/NotoSansSC-VariableFont_wght.ttf");
+}
+@font-face {
+  font-family: DM Sans;
+  src: url("./fonts/DMSans-VariableFont_opsz,wght.ttf");
 }
 
-html.dark {
-  color-scheme: dark;
-}
-
-html {
+:root {
   scroll-behavior: smooth;
+  --header-height: 4rem;
+  --ui-foreground: var(--color-gray-800);
+}
+
+:root.dark {
+  --ui-background: var(--color-gray-900);
+  --ui-foreground: var(--color-gray-200);
+}
+
+body {
+  --tw-bg-opacity: 1;
+  background-color: rgb(var(--ui-background) / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(var(--ui-foreground) / var(--tw-text-opacity));
+  font-family: NotoSansSC, DM Sans, "DM Sans Fallback: Arial",  ui-sans-serif, system-ui, sans-serif;
 }
