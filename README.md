@@ -1,3 +1,6 @@
+# Notice
+This repository is deprecated. For the latest updates, please visit our new repository at [https://github.com/yangsimin/new-concept-english](https://github.com/yangsimin/new-concept-english).
+
 ## Todo List:
 
 - [x] 增加选择课程的按扭
